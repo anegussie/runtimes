@@ -1,0 +1,504 @@
+#pragma once
+
+// Shared Qwen prefill/decode scratch layouts and allocation owners.
+
+#include "model/DFlashDraft.hpp"
+#include "model/ModelFactory.hpp"
+#include "model/QwenTarget.hpp"
+
+#include "Checked.hpp"
+#include "metal/MetalBackend.hpp"
+#include "metal/abi/Sampling.h"
+#include "ops/ExecutionPlans.hpp"
+#include "ops/PagedKv.hpp"
+
+#include <algorithm>
+#include <cmath>
+#include <array>
+#include <cstring>
+#include <cstdint>
+#include <stdexcept>
+
+namespace splash::model {
+
+inline constexpr uint32_t kLaneCount = ExecutionLimits::maximumBatchWidth;
+inline constexpr uint32_t kDecodeRows = ExecutionLimits::targetVerifyRows;
+// Per-lane sampling uniforms handed to the sampler each cycle, in the
+// layout of metal/abi/Sampling.h.
+inline constexpr uint32_t kSamplingUniformCount = SPLASH_SAMPLING_UNIFORMS;
+inline constexpr uint32_t kDraftProposalTokens = ExecutionLimits::draftProposalTokens;
+inline constexpr uint32_t kTileRows = kv::kPageTokens;
+inline constexpr uint32_t kDraftCacheStride = ExecutionLimits::draftContextTokens;
+inline constexpr uint32_t kMaximumPageTableEntries =
+    (kv::kMaximumPhysicalTokens + kv::kPageTokens - 1) / kv::kPageTokens;
+
+struct RuntimeGeometry final {
+  QwenTargetGeometry target;
+  DFlashDraftLayout draft;
+  uint32_t prefillChunkTokens = ExecutionLimits::prefillTokenBudget;
+
+  [[nodiscard]] static RuntimeGeometry from(const ModelPackage &package,
+                                            kv::Format format,
+                                            uint32_t prefillChunkTokens = ExecutionLimits::prefillTokenBudget) {
+    if (!validPrefillChunkTokens(prefillChunkTokens))
+      throw std::invalid_argument("prefill chunk must be a multiple of 128 tokens in [128, 2048]");
+    RuntimeGeometry result;
+    result.prefillChunkTokens = prefillChunkTokens;
+    result.target = std::visit(
+        [](const auto &weights) { return qwenTargetGeometry(weights); },
+        package.target);
+    result.target.kvLayout = package.targetKvLayout(format);
+    result.draft = package.draft.layout;
+    if (!result.target.valid() || !result.draft.stateLayout().valid() ||
+        result.target.hiddenSize != result.draft.hiddenSize ||
+        result.target.vocabularySize != result.draft.vocabularySize ||
+        result.target.capturedHiddenSize() != result.draft.targetHiddenSize) {
+      throw std::invalid_argument("invalid model runtime geometry");
+    }
+    return result;
+  }
+
+  [[nodiscard]] uint32_t draftRotaryPairs() const noexcept {
+    return draft.attentionHeadDimension / 2;
+  }
+  [[nodiscard]] uint32_t maskWords() const noexcept {
+    return maskWordsPerToken(target.vocabularySize);
+  }
+  [[nodiscard]] uint32_t projectionSumsWidth() const noexcept {
+    uint32_t maximumInput = std::max(
+        {target.hiddenSize, target.attentionWidth,
+         target.capturedHiddenSize(), target.ffnScratchWidth(),
+         draft.targetHiddenSize, draft.hiddenSize,
+         draft.intermediateSize});
+    return (maximumInput + kQ4GroupElements - 1) / kQ4GroupElements;
+  }
+};
+
+template <class T> constexpr uint64_t bytesFor(uint64_t elements) noexcept {
+  return elements * sizeof(T);
+}
+
+enum class PrefillTensor : uint32_t {
+  Hidden0,
+  Hidden1,
+  InputTokens,
+  Normalized,
+  Captured,
+  GdnPacked,
+  GdnQueries,
+  GdnKeys,
+  GdnValues,
+  GdnDecay,
+  GdnBeta,
+  Recurrent,
+  GdnHidden,
+  GdnOutput,
+  GateIntermediate,
+  Intermediate,
+  FullPacked,
+  FullQueries,
+  FullAttention,
+  AttentionPartials,
+  AttentionStatistics,
+  AttentionHidden,
+  AttentionOutput,
+  ProjectionSums,
+  DownProjectionSums,
+  TargetPositions,
+  DraftPositions,
+  TargetInverseFrequencies,
+  DraftInverseFrequencies,
+  RopeCos,
+  RopeSin,
+  ContextProjected,
+  ContextHidden,
+  ContextKv,
+  DraftRopeCos,
+  DraftRopeSin,
+  ChunkKeys,
+  ChunkValues,
+  // One tensor per ops::kMoeScratchFields entry, in its order (moeScratchTensor).
+  MoeScratch,
+  MoeScratchLast = MoeScratch + ops::kMoeScratchFields.size() - 1,
+  LinearPartials,
+  LinearCounters,
+  // The rotated input of a rotated projection (ops::LinearScratch::rotated).
+  LinearRotated,
+  Count,
+};
+
+constexpr uint32_t prefillTensorCount =
+    static_cast<uint32_t>(PrefillTensor::Count);
+
+// The arena tensor of MoE scratch field `field` (ops::kMoeScratchFields).
+template <class Tensor>
+constexpr Tensor moeScratchTensor(size_t field) noexcept {
+  return static_cast<Tensor>(static_cast<uint32_t>(Tensor::MoeScratch) + field);
+}
+
+// Sizes depend on the geometry and the device's operator plans.
+[[nodiscard]] std::array<uint64_t, prefillTensorCount>
+prefillTensorBytes(const RuntimeGeometry &geometry,
+                   const ops::ExecutionPlans &operators);
+[[nodiscard]] uint64_t plannedPrefillBytes(const RuntimeGeometry &geometry,
+                                           const ops::ExecutionPlans &operators);
+
+// Mixer, FFN and draft-context scratch have disjoint lifetimes in the
+// ordered prefill graph. Persistent hidden/capture/rotary buffers and the
+// mixer residual remain separate from this shared workspace.
+enum class PrefillLifetime : uint32_t {
+  Persistent, Gdn, Attention, Ffn, DraftContext, MixerResidual, Count
+};
+[[nodiscard]] PrefillLifetime prefillLifetime(PrefillTensor tensor) noexcept;
+struct PrefillArenaLayout {
+  std::array<uint64_t, prefillTensorCount> sizes{};
+  std::array<uint64_t, prefillTensorCount> offsets{};
+  uint64_t bytes = 0;
+  uint64_t workspaceOffset = 0;
+  uint64_t workspaceBytes = 0;
+};
+[[nodiscard]] PrefillArenaLayout planPrefillArena(const RuntimeGeometry &geometry,
+                                                const ops::ExecutionPlans &operators);
+
+class PrefillArena final {
+public:
+  PrefillArena(metal::MetalBackend &backend, const RuntimeGeometry &geometry,
+                const ops::ExecutionPlans &operators) {
+    const auto layout = planPrefillArena(geometry, operators);
+    bytes_ = layout.bytes;
+    const auto &sizes = layout.sizes;
+    base_ = backend.allocateBuffer(bytes_, metal::BufferStorage::Shared,
+                                   "qwen-shared-prefill");
+    workspace_ = backend.view(base_, layout.workspaceOffset, layout.workspaceBytes);
+    for (uint32_t index = 0; index < sizes.size(); ++index) {
+      if (sizes[index])
+        tensors_[index] = backend.view(base_, layout.offsets[index], sizes[index]);
+    }
+    auto *target = static_cast<float *>(
+        get(PrefillTensor::TargetInverseFrequencies).contents());
+    auto *draft = static_cast<float *>(
+        get(PrefillTensor::DraftInverseFrequencies).contents());
+    if (!target || !draft)
+      throw std::logic_error("RoPE frequencies are not CPU-visible");
+    for (uint32_t dim = 0; dim < geometry.target.rotaryPairs; ++dim) {
+      target[dim] =
+          std::pow(geometry.target.rotaryTheta,
+                   -static_cast<float>(dim) / geometry.target.rotaryPairs);
+    }
+    for (uint32_t dim = 0; dim < geometry.draftRotaryPairs(); ++dim) {
+      draft[dim] = std::pow(geometry.draft.rotaryTheta,
+                            -static_cast<float>(dim) / geometry.draftRotaryPairs());
+    }
+    // Split projections return their counters to zero; they start there.
+    if (const metal::MetalBuffer counters = get(PrefillTensor::LinearCounters))
+      std::memset(counters.contents(), 0, counters.sizeBytes());
+  }
+
+  [[nodiscard]] metal::MetalBuffer get(PrefillTensor tensor) const {
+    return tensors_[static_cast<uint32_t>(tensor)];
+  }
+  [[nodiscard]] ops::MoeScratch moeScratch() const {
+    ops::MoeScratch scratch;
+    for (size_t field = 0; field < ops::kMoeScratchFields.size(); ++field)
+      scratch.*ops::kMoeScratchFields[field].buffer =
+          get(moeScratchTensor<PrefillTensor>(field));
+    return scratch;
+  }
+  [[nodiscard]] uint64_t bytes() const noexcept { return bytes_; }
+  // Engine retires each batch before starting another. Decode attention and
+  // replay scratch can borrow this workspace; initial prefill sampling uses
+  // separate decode buffers and never reads these borrowed tensors.
+  [[nodiscard]] metal::MetalBuffer workspace() const { return workspace_; }
+
+private:
+  metal::MetalBuffer base_;
+  metal::MetalBuffer workspace_;
+  std::array<metal::MetalBuffer, prefillTensorCount> tensors_{};
+  uint64_t bytes_ = 0;
+};
+
+enum class DecodeTensor : uint32_t {
+  Hidden0,
+  Hidden1,
+  InputTokens,
+  Normalized,
+  GdnHidden,
+  GdnOutput,
+  Intermediate,
+  FullPacked,
+  FullQueries,
+  AttentionPartials,
+  AttentionStatistics,
+  FullAttention,
+  AttentionHidden,
+  AttentionOutput,
+  Positions,
+  DraftPositions,
+  RopeCos,
+  RopeSin,
+  ContextProjected,
+  ContextHidden,
+  ContextKv,
+  CapturedTargetHidden,
+  DraftQueryKeys,
+  DraftQueryValues,
+  DraftRopeCos,
+  DraftRopeSin,
+  FinalHidden,
+  Logits,
+  ArgmaxValues,
+  ArgmaxIndices,
+  TargetPartialMasses,
+  TargetVocabularyRows,
+  TargetVocabularyRanges,
+  TargetVocabularyArrivals,
+  SamplingUniforms,
+  ConstraintMasks,
+  OutputTokens,
+  RetainedCount,
+  AcceptedCount,
+  DraftInputTokens,
+  DraftHidden0,
+  DraftHidden1,
+  DraftNormalized,
+  DraftDynamic,
+  DraftConvolved,
+  DraftProposalQkv,
+  DraftAttention,
+  DraftProjected,
+  DraftResidual,
+  DraftIntermediate,
+  DraftFinalHidden,
+  SelectorHidden,
+  Candidates,
+  Unary,
+  TopPartialIds,
+  TopPartialValues,
+  ProposalProbs,
+  ProposedTokens,
+  PageTable,
+  // Indexed by state lane, like PageTable: a penalized request's penalty
+  // words (ops::Sampling::rebuildPenaltyWords).
+  PenaltyState,
+  VerifyPackedBase,
+  VerifyMixedBase,
+  VerifyDecayBase,
+  VerifyBetaBase,
+  ChunkKeysBase,
+  ChunkValuesBase,
+  // One tensor per ops::kMoeScratchFields entry, in its order (moeScratchTensor).
+  MoeScratch,
+  MoeScratchLast = MoeScratch + ops::kMoeScratchFields.size() - 1,
+  Count,
+};
+
+constexpr uint32_t decodeTensorCount =
+    static_cast<uint32_t>(DecodeTensor::Count);
+
+constexpr bool isGdnLayerTensor(DecodeTensor tensor) noexcept {
+  return tensor == DecodeTensor::VerifyPackedBase ||
+         tensor == DecodeTensor::VerifyMixedBase ||
+         tensor == DecodeTensor::VerifyDecayBase ||
+         tensor == DecodeTensor::VerifyBetaBase;
+}
+
+constexpr bool isAttentionLayerTensor(DecodeTensor tensor) noexcept {
+  return tensor == DecodeTensor::ChunkKeysBase ||
+         tensor == DecodeTensor::ChunkValuesBase;
+}
+
+constexpr bool isLayerMajorTensor(DecodeTensor tensor) noexcept {
+  return isGdnLayerTensor(tensor) || isAttentionLayerTensor(tensor);
+}
+
+constexpr bool isSharedDecodeTensor(DecodeTensor tensor) noexcept {
+  return isLayerMajorTensor(tensor) || tensor == DecodeTensor::AttentionPartials ||
+         tensor == DecodeTensor::AttentionStatistics;
+}
+
+[[nodiscard]] std::array<uint64_t, decodeTensorCount>
+decodeTensorBytes(const RuntimeGeometry &geometry,
+                  const ops::ExecutionPlans &operators);
+// Attention partials and replay storage are used only during decode, after
+// prefill's phase scratch has retired. Charge their storage to prefill once.
+[[nodiscard]] uint64_t sharedDecodeWorkspaceBytes(const RuntimeGeometry &geometry,
+                                                const ops::ExecutionPlans &operators);
+// A decode tensor is one packed M32 allocation.  B1/B2/B3/B4 are prefixes
+// containing 8/16/24/32 rows. Lanes are never separated by arena-alignment
+// holes; only whole tensor boundaries are aligned.
+[[nodiscard]] uint64_t decodeArenaBaseBytes(const RuntimeGeometry &geometry,
+                                            const ops::ExecutionPlans &operators);
+[[nodiscard]] uint64_t plannedDecodeBytes(const RuntimeGeometry &geometry,
+                                          const ops::ExecutionPlans &operators);
+
+class DecodeArena final {
+public:
+  DecodeArena(metal::MetalBackend &backend, RuntimeGeometry geometry,
+               const ops::ExecutionPlans &operators, const PrefillArena &prefill)
+      : backend_(backend), geometry_(std::move(geometry)) {
+    const uint64_t baseBytes = decodeArenaBaseBytes(geometry_, operators);
+    auto sizes = decodeTensorBytes(geometry_, operators);
+    base_ = backend_.allocateBuffer(baseBytes, metal::BufferStorage::Shared,
+                                    "qwen-shared-decode");
+    sharedBase_ = prefill.workspace();
+    if (sharedBase_.sizeBytes() < sharedDecodeWorkspaceBytes(geometry_, operators))
+      throw std::logic_error("shared decode workspace is too small");
+    uint64_t cursor = 0;
+    uint64_t sharedCursor = 0;
+    for (uint32_t tensor = 0; tensor < sizes.size(); ++tensor) {
+      uint64_t stride = sizes[tensor];
+      sizes_[tensor] = sizes[tensor];
+      const DecodeTensor kind = static_cast<DecodeTensor>(tensor);
+      uint64_t &offset = isSharedDecodeTensor(kind) ? sharedCursor : cursor;
+      offsets_[tensor] = offset;
+      if (sizes[tensor] && !isLayerMajorTensor(kind)) {
+        for (uint32_t lane = 0; lane < kLaneCount; ++lane) {
+          tensors_[lane][tensor] = backend_.view(
+              baseFor(kind), offset + uint64_t{lane} * stride, sizes[tensor]);
+        }
+      }
+      offset +=
+          alignUp(checkedMultiply(stride, kLaneCount, "decode tensor"));
+    }
+    if (cursor != baseBytes || sharedCursor != sharedDecodeWorkspaceBytes(geometry_, operators))
+      throw std::logic_error("decode arena mismatch");
+    // Sampled rows' draws return their arrival counts to zero; they start
+    // there.
+    const metal::MetalBuffer arrivals =
+        packed(DecodeTensor::TargetVocabularyArrivals, kLaneCount);
+    std::memset(arrivals.contents(), 0, arrivals.sizeBytes());
+
+    const uint64_t denseScratchBytes = gateScratchBytes(geometry_, operators);
+    if (denseScratchBytes) {
+      gateScratch_ = backend_.allocateBuffer(
+          denseScratchBytes, metal::BufferStorage::Private, "qwen-gate-scratch");
+    }
+    // Each field exists only when some plan uses it (split-only plans have
+    // partials and counters but no activation table).
+    const auto linearSize = linearScratchSize(geometry_, operators);
+    const auto allocate = [&](uint64_t bytes, metal::BufferStorage storage, const char *label) {
+      return bytes ? backend_.allocateBuffer(bytes, storage, label) : metal::MetalBuffer{};
+    };
+    linearScratch_.input = allocate(linearSize.input, metal::BufferStorage::Private, "q4-input");
+    linearScratch_.sums = allocate(linearSize.sums, metal::BufferStorage::Private, "q4-sums");
+    linearScratch_.partials =
+        allocate(linearSize.partials, metal::BufferStorage::Private, "q4-partials");
+    linearScratch_.counters =
+        allocate(linearSize.counters, metal::BufferStorage::Shared, "q4-counters");
+    linearScratch_.rotated = allocate(linearSize.rotated, metal::BufferStorage::Private, "linear-rotated");
+    if (linearSize.counters)
+      std::memset(linearScratch_.counters.contents(), 0, linearSize.counters);
+    bytes_ = plannedDecodeBytes(geometry_, operators);
+  }
+
+  [[nodiscard]] metal::MetalBuffer get(uint32_t lane, DecodeTensor tensor) const {
+    if (lane >= kLaneCount)
+      throw std::out_of_range("invalid decode lane");
+    if (isLayerMajorTensor(tensor)) {
+      throw std::logic_error(
+          "layer-major decode scratch requires a layer view");
+    }
+    return tensors_[lane][static_cast<uint32_t>(tensor)];
+  }
+
+  [[nodiscard]] metal::MetalBuffer packed(DecodeTensor tensor, uint32_t lanes) const {
+    if (!lanes || lanes > kLaneCount)
+      throw std::out_of_range("invalid packed decode width");
+    if (isLayerMajorTensor(tensor)) {
+      throw std::logic_error(
+          "layer-major decode scratch requires a layer view");
+    }
+    const uint32_t index = static_cast<uint32_t>(tensor);
+    // Model-specific scratch is represented by an empty buffer.  The
+    // selected target graph consumes either dense-FFN or MoE tensors, never
+    // both, so no dummy allocation is needed for the inactive operator.
+    if (!sizes_[index])
+      return {};
+    return backend_.view(baseFor(tensor), offsets_[index],
+                         uint64_t{lanes} * sizes_[index]);
+  }
+
+  [[nodiscard]] ops::MoeScratch moeScratch(uint32_t lanes) const {
+    ops::MoeScratch scratch;
+    for (size_t field = 0; field < ops::kMoeScratchFields.size(); ++field)
+      scratch.*ops::kMoeScratchFields[field].buffer =
+          packed(moeScratchTensor<DecodeTensor>(field), lanes);
+    return scratch;
+  }
+
+  [[nodiscard]] ops::LinearScratch linearScratch() const { return linearScratch_; }
+  static ops::LinearScratchSize linearScratchSize(const RuntimeGeometry &geometry,
+                                                 const ops::ExecutionPlans &operators);
+
+  [[nodiscard]] metal::MetalBuffer gateScratch() const { return gateScratch_; }
+
+  static uint64_t gateScratchBytes(const RuntimeGeometry &geometry,
+                                  const ops::ExecutionPlans &operators) {
+    // One private gate buffer is reused serially by the target dense FFN (when
+    // present) and the always-dense DFlash draft. Sparse target FFNs use their
+    // own route-major arena tensors, but must not remove the draft's scratch.
+    const uint64_t draft = operators.gateUpWorkspace(
+        {geometry.draft.intermediateSize, geometry.draft.hiddenSize, ops::WeightLayout::Affine64});
+    uint64_t target = 0;
+    for (const auto &p : geometry.target.gateUpProjections)
+      target = std::max(target, operators.gateUpWorkspace(p));
+    return std::max(target, draft);
+  }
+
+  [[nodiscard]] metal::MetalBuffer gdnBatchSlice(DecodeTensor base, uint32_t gdnLayer,
+                                          uint32_t lanes) const {
+    const uint32_t layers = geometry_.target.stateLayout.layers;
+    if (!lanes || lanes > kLaneCount || gdnLayer >= layers ||
+        !isGdnLayerTensor(base))
+      throw std::out_of_range("invalid batched GDN layer");
+    return layerBatchSlice(base, layers, gdnLayer, lanes);
+  }
+
+  [[nodiscard]] metal::MetalBuffer gdnStorage(DecodeTensor base) const {
+    if (!isGdnLayerTensor(base))
+      throw std::invalid_argument("tensor is not GDN replay scratch");
+    const uint32_t index = static_cast<uint32_t>(base);
+    return backend_.view(baseFor(base), offsets_[index], sizes_[index] * kLaneCount);
+  }
+
+  [[nodiscard]] metal::MetalBuffer attentionBatchSlice(DecodeTensor base,
+                                                uint32_t attentionLayer,
+                                                uint32_t lanes) const {
+    const uint32_t layers = geometry_.target.kvLayout.attentionLayers;
+    if (!lanes || lanes > kLaneCount || attentionLayer >= layers ||
+        !isAttentionLayerTensor(base)) {
+      throw std::out_of_range("invalid batched attention layer");
+    }
+    return layerBatchSlice(base, layers, attentionLayer, lanes);
+  }
+
+  [[nodiscard]] uint64_t bytes() const noexcept { return bytes_; }
+
+private:
+  [[nodiscard]] metal::MetalBuffer baseFor(DecodeTensor tensor) const {
+    return isSharedDecodeTensor(tensor) ? sharedBase_ : base_;
+  }
+  // A layer-major tensor holds one stride per lane for each of its `layers`
+  // layers, layer by layer; the planner sized it as layers x stride, so the
+  // stride is recovered here, not supplied.
+  [[nodiscard]] metal::MetalBuffer layerBatchSlice(DecodeTensor base, uint32_t layers,
+                                                   uint32_t layer, uint32_t lanes) const {
+    const uint32_t index = static_cast<uint32_t>(base);
+    const uint64_t stride = sizes_[index] / layers;
+    return backend_.view(baseFor(base), offsets_[index] + uint64_t{layer} * kLaneCount * stride,
+                         uint64_t{lanes} * stride);
+  }
+
+  metal::MetalBackend &backend_;
+  RuntimeGeometry geometry_;
+  metal::MetalBuffer base_;
+  metal::MetalBuffer sharedBase_;
+  std::array<std::array<metal::MetalBuffer, decodeTensorCount>, kLaneCount> tensors_{};
+  std::array<uint64_t, decodeTensorCount> offsets_{};
+  std::array<uint64_t, decodeTensorCount> sizes_{};
+  metal::MetalBuffer gateScratch_;
+  ops::LinearScratch linearScratch_;
+  uint64_t bytes_ = 0;
+};
+
+} // namespace splash::model

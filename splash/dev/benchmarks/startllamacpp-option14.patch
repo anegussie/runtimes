@@ -1,0 +1,308 @@
+--- a/startllamacpp.sh
++++ b/startllamacpp.sh
+@@ -10,13 +10,17 @@
+ BONSAI_27B_MODEL="/Users/mymac/.lmstudio/models/prism-ml/Ternary-Bonsai-2-27B-gguf/Ternary-Bonsai-2-27B-PTQ1_0.gguf"
+ SPLASH_BONSAI_MODEL_ID="prism-ml/Ternary-Bonsai-2-27B-gguf:PTQ1_0"
+ SPLASH_BONSAI_ALIAS="bonsai-27b-splash"
+-SPLASH_BONSAI_MAX_CONTEXT="${SPLASH_BONSAI_MAX_CONTEXT:-14K}"
+-SPLASH_BONSAI_OPENCODE_CONTEXT="${SPLASH_BONSAI_OPENCODE_CONTEXT:-12288}"
++SPLASH_BONSAI_MAX_CONTEXT="${SPLASH_BONSAI_MAX_CONTEXT:-24K}"
++SPLASH_BONSAI_OPENCODE_CONTEXT="${SPLASH_BONSAI_OPENCODE_CONTEXT:-auto}"
+ SPLASH_BONSAI_MAX_TOKENS="${SPLASH_BONSAI_MAX_TOKENS:-1024}"
+ SPLASH_BONSAI_MAX_CACHE_DISK="${SPLASH_BONSAI_MAX_CACHE_DISK:-8G}"
+ SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT="${SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT:-60}"
++SPLASH_BONSAI_PREFILL_CHUNK_TOKENS="${SPLASH_BONSAI_PREFILL_CHUNK_TOKENS:-512}"
+ SPLASH_BONSAI_MAX_ACTIVE_REQUESTS="${SPLASH_BONSAI_MAX_ACTIVE_REQUESTS:-1}"
+ SPLASH_BONSAI_STARTUP_RETRY_DELAY="${SPLASH_BONSAI_STARTUP_RETRY_DELAY:-30}"
++SPLASH_BONSAI_STARTUP_MAX_RETRIES="${SPLASH_BONSAI_STARTUP_MAX_RETRIES:-2}"
++SPLASH_BONSAI_PERSISTENT_CACHE="${SPLASH_BONSAI_PERSISTENT_CACHE:-1}"
++SPLASH_BONSAI_CACHE_DIR="${SPLASH_BONSAI_CACHE_DIR:-$HOME/Library/Caches/Splash/bonsai-option14}"
+ SPLASH_PRESSURE_RESTART_HEADROOM_BYTES="${SPLASH_PRESSURE_RESTART_HEADROOM_BYTES:-1073741824}"
+ SPLASH_PRESSURE_RESTART_INTERVAL="${SPLASH_PRESSURE_RESTART_INTERVAL:-5}"
+ SPLASH_PRESSURE_RESTART_SAMPLES="${SPLASH_PRESSURE_RESTART_SAMPLES:-3}"
+@@ -94,6 +98,17 @@
+   local mlx_mtp_status=""
+   local mlx_apc_status="APC configuration invalid"
+   local splash_status=""
++  local splash_client_context="$SPLASH_BONSAI_OPENCODE_CONTEXT"
++  if [[ "$splash_client_context" == "auto" ]]; then
++    splash_client_context="$(splash_context_tokens "$SPLASH_BONSAI_MAX_CONTEXT" 2>/dev/null)" || splash_client_context=0
++    if (( splash_client_context >= 4096 && splash_client_context <= 24576 )); then
++      splash_client_context="$((splash_client_context - 2048)) tokens"
++    else
++      splash_client_context="auto (invalid server context)"
++    fi
++  else
++    splash_client_context="${splash_client_context} tokens"
++  fi
+   [[ -e "$QWEN_9B_MODEL" ]] || qwen_9b_status=" — model not installed"
+   [[ -e "$GEMMA_12B_MODEL" ]] || gemma_status=" — model not installed"
+   [[ -e "$LFM_8B_MODEL" ]] || lfm_status=" — model not installed"
+@@ -136,21 +151,66 @@
+   echo "10) Qwen3.5 9B MLX 4-bit — MTP reasoning${mlx_status}${mlx_mtp_status}"
+   echo "   $((MLX_MTP_CONTEXT / 1024))K context | $((MLX_MTP_MAX_TOKENS / 1024))K output | reasoning on (no separate budget) | native MTP width ${MLX_MTP_DRAFT_BLOCK_SIZE} | Q4 KV | ${mlx_apc_status}"
+   echo "14) Ternary Bonsai 2 27B PTQ1_0 — Splash (downloads on first run)${splash_status}"
+-  echo "   ${SPLASH_BONSAI_MAX_CONTEXT} server / $((SPLASH_BONSAI_OPENCODE_CONTEXT / 1024))K OpenCode context | $((SPLASH_BONSAI_MAX_TOKENS / 1024))K output | INT8 KV | ${SPLASH_BONSAI_MAX_CACHE_DISK} SSD cache | ${SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT}s resource wait"
+-  echo "   Watchdog: logs sustained warning/critical pressure; Splash keeps API online and controls admission/recovery"
++  echo "   ${SPLASH_BONSAI_MAX_CONTEXT} server / ${splash_client_context} OpenCode context | $((SPLASH_BONSAI_MAX_TOKENS / 1024))K output | INT8 KV | ${SPLASH_BONSAI_PREFILL_CHUNK_TOKENS}-token prefill chunks | ${SPLASH_BONSAI_MAX_CACHE_DISK} SSD cache | ${SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT}s resource wait"
++  echo "   Persistent prefix cache: ${SPLASH_BONSAI_PERSISTENT_CACHE} (1=keep across restarts, 0=temporary) | startup retries: ${SPLASH_BONSAI_STARTUP_MAX_RETRIES}"
++  echo "   Memory pressure monitor: Splash controls admission/recovery; 24K requires room for other apps"
+   echo "   Source: ${SPLASH_BONSAI_MODEL_ID}"
+   echo "   Monitor: bash /Users/mymac/monitorsplash.sh --once (or --report 24)"
++}
++
++# Check length before arithmetic so huge decimal overrides cannot wrap.
++splash_uint_in_range() {
++  local value="$1" minimum="$2" maximum="$3"
++  [[ "$value" =~ ^(0|[1-9][0-9]*)$ ]] &&
++    [[ ${#value} -le ${#maximum} ]] &&
++    (( value >= minimum && value <= maximum ))
+ }
+ 
+ splash_context_tokens() {
+   local value="$1"
+   if [[ "$value" =~ ^([1-9][0-9]*)[Kk]$ ]]; then
+-    echo "$((${BASH_REMATCH[1]} * 1024))"
+-  elif [[ "$value" =~ ^[1-9][0-9]*$ ]]; then
++    splash_uint_in_range "${BASH_REMATCH[1]}" 1 256 || return 1
++    echo "$((${value%[Kk]} * 1024))"
++  elif splash_uint_in_range "$value" 1 262144; then
+     echo "$value"
+   else
+     return 1
+   fi
++}
++
++splash_cache_disk_bytes() {
++  local value="$1" multiplier=1 number="$1"
++  case "$value" in
++    *[Gg]) multiplier=1073741824; number="${value%[Gg]}" ;;
++    *[Mm]) multiplier=1048576; number="${value%[Mm]}" ;;
++    *[Kk]) multiplier=1024; number="${value%[Kk]}" ;;
++  esac
++  splash_uint_in_range "$number" 0 "$((8589934592 / multiplier))" || return 1
++  echo "$((number * multiplier))"
++}
++
++splash_stop_monitor() {
++  local pid="$1"
++  [[ -n "$pid" ]] || return 0
++  # Stop the monitor's outstanding curl/sleep as well as its shell.
++  pkill -TERM -P "$pid" 2>/dev/null || true
++  kill -TERM "$pid" 2>/dev/null || true
++  wait "$pid" 2>/dev/null || true
++}
++
++splash_cleanup_run() {
++  if [[ -n "$splash_server_pid" ]]; then
++    kill -TERM "$splash_server_pid" 2>/dev/null || true
++    wait "$splash_server_pid" 2>/dev/null || true
++  fi
++  # Close the parent's log writer and drain the final shutdown/cache messages.
++  exec 3>&-
++  if [[ -n "$splash_logger_pid" ]]; then
++    wait "$splash_logger_pid" 2>/dev/null || true
++  fi
++  splash_stop_monitor "$splash_pressure_watchdog_pid"
++  splash_stop_monitor "$splash_monitor_pid"
++  splash_stop_monitor "$splash_retry_pid"
+ }
+ 
+ splash_pressure_watchdog() {
+@@ -544,7 +604,7 @@
+      .agent.general_worker.temperature = 0.7 |
+      .agent.general_worker.top_p = 0.80 |
+      .compaction = ((.compaction // {}) + {
+-       auto: true, keep: {tokens: 1536}, buffer: $output
++       auto: true, keep: {tokens: ([1536, (($context - $output) / 2 | floor)] | min)}, buffer: $output
+      }) |
+      del(.compaction.prune, .compaction.tail_turns,
+          .compaction.preserve_recent_tokens, .compaction.reserved) |
+@@ -1241,64 +1301,98 @@
+     ;;
+ 
+   14)
+-    if ! splash_context_limit="$(splash_context_tokens "$SPLASH_BONSAI_MAX_CONTEXT")"; then
+-      echo "SPLASH_BONSAI_MAX_CONTEXT must be an integer or a K-suffixed value such as 12K." >&2
+-      exit 1
+-    fi
+-    if (( splash_context_limit < 4096 )); then
+-      echo "SPLASH_BONSAI_MAX_CONTEXT must be at least 4096 tokens." >&2
+-      exit 1
+-    fi
+-    if ! [[ "$SPLASH_BONSAI_OPENCODE_CONTEXT" =~ ^[1-9][0-9]*$ ]] || (( SPLASH_BONSAI_OPENCODE_CONTEXT >= splash_context_limit )); then
+-      echo "SPLASH_BONSAI_OPENCODE_CONTEXT must be positive and smaller than SPLASH_BONSAI_MAX_CONTEXT." >&2
+-      exit 1
+-    fi
+-    if ! [[ "$SPLASH_BONSAI_MAX_TOKENS" =~ ^[1-9][0-9]*$ ]] || (( SPLASH_BONSAI_MAX_TOKENS >= SPLASH_BONSAI_OPENCODE_CONTEXT )); then
++    if ! splash_context_limit="$(splash_context_tokens "$SPLASH_BONSAI_MAX_CONTEXT")" ||
++       (( splash_context_limit < 4096 || splash_context_limit > 24576 )); then
++      echo "SPLASH_BONSAI_MAX_CONTEXT must be 4096-24576 tokens (e.g. 16K or 24K)." >&2
++      exit 1
++    fi
++    if [[ "$SPLASH_BONSAI_OPENCODE_CONTEXT" == "auto" ]]; then
++      SPLASH_BONSAI_OPENCODE_CONTEXT="$((splash_context_limit - 2048))"
++    fi
++    if ! splash_uint_in_range "$SPLASH_BONSAI_OPENCODE_CONTEXT" 2 22528 ||
++       (( SPLASH_BONSAI_OPENCODE_CONTEXT >= splash_context_limit )); then
++      echo "SPLASH_BONSAI_OPENCODE_CONTEXT must be auto or 2-22528 tokens, smaller than the server context." >&2
++      exit 1
++    fi
++    if ! splash_uint_in_range "$SPLASH_BONSAI_MAX_TOKENS" 1 "$((SPLASH_BONSAI_OPENCODE_CONTEXT - 1))"; then
+       echo "SPLASH_BONSAI_MAX_TOKENS must be positive and smaller than SPLASH_BONSAI_OPENCODE_CONTEXT." >&2
+       exit 1
+     fi
+-    if ! [[ "$SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT" =~ ^[1-9][0-9]*$ ]] || (( SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT > 4294967295 )); then
++    if ! splash_uint_in_range "$SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT" 1 4294967295; then
+       echo "SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT must be 1-4294967295 seconds." >&2
++      exit 1
++    fi
++    if ! splash_uint_in_range "$SPLASH_BONSAI_PREFILL_CHUNK_TOKENS" 128 2048 ||
++       (( SPLASH_BONSAI_PREFILL_CHUNK_TOKENS % 128 != 0 )); then
++      echo "SPLASH_BONSAI_PREFILL_CHUNK_TOKENS must be a multiple of 128 in [128, 2048]." >&2
+       exit 1
+     fi
+     if [[ "$SPLASH_BONSAI_MAX_ACTIVE_REQUESTS" != "1" ]]; then
+       echo "This 16 GB safety profile requires SPLASH_BONSAI_MAX_ACTIVE_REQUESTS=1. Run one OpenCode job at a time." >&2
+       exit 1
+     fi
+-    if (( splash_context_limit > 14336 || SPLASH_BONSAI_OPENCODE_CONTEXT > 12288 )); then
+-      echo "This safety profile caps server context at 14K and OpenCode context at 12288. Smaller contexts are allowed." >&2
+-      exit 1
+-    fi
+-    if ! [[ "$SPLASH_BONSAI_STARTUP_RETRY_DELAY" =~ ^[1-9][0-9]*$ ]] || (( SPLASH_BONSAI_STARTUP_RETRY_DELAY > 120 )); then
+-      echo "SPLASH_BONSAI_STARTUP_RETRY_DELAY must be 1-120 seconds." >&2
+-      exit 1
+-    fi
+-    if ! [[ "$SPLASH_PRESSURE_RESTART_HEADROOM_BYTES" =~ ^[1-9][0-9]*$ ]] ||
+-       ! [[ "$SPLASH_PRESSURE_RESTART_INTERVAL" =~ ^[1-9][0-9]*$ ]] ||
+-       ! [[ "$SPLASH_PRESSURE_RESTART_SAMPLES" =~ ^[1-9][0-9]*$ ]] ||
+-       (( SPLASH_PRESSURE_RESTART_INTERVAL > 60 || SPLASH_PRESSURE_RESTART_SAMPLES > 12 )); then
+-      echo "Invalid Splash pressure watchdog settings; headroom must be positive, interval 1-60, and samples 1-12." >&2
+-      exit 1
+-    fi
++    if ! splash_uint_in_range "$SPLASH_BONSAI_STARTUP_RETRY_DELAY" 1 120 ||
++       ! splash_uint_in_range "$SPLASH_BONSAI_STARTUP_MAX_RETRIES" 0 3; then
++      echo "Splash startup retry delay must be 1-120 seconds and max retries 0-3." >&2
++      exit 1
++    fi
++    if ! splash_uint_in_range "$SPLASH_BONSAI_PERSISTENT_CACHE" 0 1 ||
++       ! splash_cache_disk_limit="$(splash_cache_disk_bytes "$SPLASH_BONSAI_MAX_CACHE_DISK")"; then
++      echo "Splash persistent cache must be 0 or 1, and SSD cache quota 0-8G (e.g. 4G or 512M)." >&2
++      exit 1
++    fi
++    splash_cache_args=()
++    splash_cache_mode="off"
++    if (( splash_cache_disk_limit > 0 )); then
++      splash_cache_mode="temporary"
++      if [[ "$SPLASH_BONSAI_PERSISTENT_CACHE" == "1" ]]; then
++        splash_cache_mode="persistent"
++        splash_cache_args=(--persistent-cache --cache-dir "$SPLASH_BONSAI_CACHE_DIR")
++      fi
++    fi
++    if ! splash_uint_in_range "$SPLASH_PRESSURE_RESTART_HEADROOM_BYTES" 1 17179869184 ||
++       ! splash_uint_in_range "$SPLASH_PRESSURE_RESTART_INTERVAL" 1 60 ||
++       ! splash_uint_in_range "$SPLASH_PRESSURE_RESTART_SAMPLES" 1 12; then
++      echo "Invalid Splash pressure monitor settings; headroom 1-16G bytes, interval 1-60, and samples 1-12." >&2
++      exit 1
++    fi
++    for splash_dependency in jq curl lsof pkill; do
++      command -v "$splash_dependency" >/dev/null 2>&1 || {
++        echo "Option 14 requires $splash_dependency." >&2
++        exit 1
++      }
++    done
+     prepare_splash_run
+     sync_opencode_splash
+     printf 'Native inference concurrency: %s (FIFO queue across clients; no worker tool-call budget)\n' "$SPLASH_BONSAI_MAX_ACTIVE_REQUESTS" | timestamp_log_stream | tee -a "$SPLASH_RUN_LOG"
+     printf 'Memory safety: run ONE OpenCode job at a time; multiple chats create queue waits and memory replay. Close unused memory-heavy apps before long jobs.\n' | timestamp_log_stream | tee -a "$SPLASH_RUN_LOG"
+-    printf 'Launcher: model=%s alias=%s binary=%s server_context=%s client_context=%s output=%s reasoning=none kv=int8 cache_disk=%s resource_wait=%ss host=%s port=%s\n' \
++    printf 'Launcher: model=%s alias=%s binary=%s server_context=%s client_context=%s output=%s reasoning=none kv=int8 prefill_chunk=%s cache_disk=%s cache_mode=%s resource_wait=%ss host=%s port=%s\n' \
+       "$SPLASH_BONSAI_MODEL_ID" "$SPLASH_BONSAI_ALIAS" "$SPLASH_BIN" "$SPLASH_BONSAI_MAX_CONTEXT" \
+-      "$SPLASH_BONSAI_OPENCODE_CONTEXT" "$SPLASH_BONSAI_MAX_TOKENS" "$SPLASH_BONSAI_MAX_CACHE_DISK" "$SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT" "$HOST" "$PORT" |
++      "$SPLASH_BONSAI_OPENCODE_CONTEXT" "$SPLASH_BONSAI_MAX_TOKENS" "$SPLASH_BONSAI_PREFILL_CHUNK_TOKENS" "$SPLASH_BONSAI_MAX_CACHE_DISK" "$splash_cache_mode" "$SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT" "$HOST" "$PORT" |
+       timestamp_log_stream | tee -a "$SPLASH_RUN_LOG"
+-    # The sampler belongs to this terminal launch and stops when it exits.
+-    bash /Users/mymac/monitorsplash.sh --record 600 >>"$SPLASH_RUN_LOG" 2>&1 &
+-    splash_monitor_pid=$!
++    if [[ "$splash_cache_mode" == "persistent" ]]; then
++      printf 'Prefix cache kept across restarts: %s\n' "$SPLASH_BONSAI_CACHE_DIR" | timestamp_log_stream | tee -a "$SPLASH_RUN_LOG"
++    fi
++    splash_monitor_pid=""
+     splash_pressure_watchdog_pid=""
+-    trap 'kill "$splash_monitor_pid" 2>/dev/null || true; wait "$splash_monitor_pid" 2>/dev/null || true; if [[ -n "$splash_pressure_watchdog_pid" ]]; then kill "$splash_pressure_watchdog_pid" 2>/dev/null || true; wait "$splash_pressure_watchdog_pid" 2>/dev/null || true; fi' EXIT
++    splash_server_pid=""
++    splash_logger_pid=""
++    splash_retry_pid=""
++    trap splash_cleanup_run EXIT
++    trap 'exit 130' INT
++    trap 'exit 143' TERM
++    trap 'exit 129' HUP
++    if [[ -f /Users/mymac/monitorsplash.sh ]]; then
++      bash /Users/mymac/monitorsplash.sh --record 600 >>"$SPLASH_RUN_LOG" 2>&1 &
++      splash_monitor_pid=$!
++    fi
+     splash_startup_retries=0
+     while :; do
+       splash_pressure_watchdog >>"$SPLASH_RUN_LOG" 2>&1 &
+       splash_pressure_watchdog_pid=$!
+       splash_attempt_offset="$(wc -c < "$SPLASH_RUN_LOG")"
+-      set +e
++      exec 3> >(timestamp_log_stream | tee -a "$SPLASH_RUN_LOG")
++      splash_logger_pid=$!
+       "$SPLASH_BIN" serve \
+         --model "$SPLASH_BONSAI_MODEL_ID" \
+         --served-model-name "$SPLASH_BONSAI_ALIAS" \
+@@ -1307,30 +1401,41 @@
+         --language-only \
+         --default-reasoning-effort none \
+         --kv-format int8 \
++        --prefill-chunk-tokens "$SPLASH_BONSAI_PREFILL_CHUNK_TOKENS" \
+         --resource-wait-timeout "$SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT" \
+         --max-active-requests "$SPLASH_BONSAI_MAX_ACTIVE_REQUESTS" \
+         --max-context "$SPLASH_BONSAI_MAX_CONTEXT" \
+-        --max-cache-disk "$SPLASH_BONSAI_MAX_CACHE_DISK" \
+-        2>&1 | timestamp_log_stream | tee -a "$SPLASH_RUN_LOG"
+-      splash_status="${PIPESTATUS[0]}"
+-      set -e
+-      kill "$splash_pressure_watchdog_pid" 2>/dev/null || true
+-      wait "$splash_pressure_watchdog_pid" 2>/dev/null || true
++        --max-cache-disk "$splash_cache_disk_limit" \
++        ${splash_cache_args[@]+"${splash_cache_args[@]}"} \
++        >&3 2>&1 &
++      splash_server_pid=$!
++      if wait "$splash_server_pid"; then splash_status=0; else splash_status=$?; fi
++      splash_server_pid=""
++      exec 3>&-
++      wait "$splash_logger_pid" || true
++      splash_logger_pid=""
++      splash_stop_monitor "$splash_pressure_watchdog_pid"
+       splash_pressure_watchdog_pid=""
+       if (( splash_status == 0 || splash_status >= 128 )); then
+         exit "$splash_status"
+       fi
+-      # Keep the manually launched terminal session alive only while Splash
+-      # reports that startup admission is waiting for reclaimable memory.
+-      # Any other runtime failure and user interrupt still return to the user.
++      # Retry only a startup admission failure, never a runtime/Metal failure.
+       if ! tail -c "+$((splash_attempt_offset + 1))" "$SPLASH_RUN_LOG" |
+            grep -Eq 'runtime bootstrap failed.*not enough free memory to start'; then
+         exit "$splash_status"
+       fi
++      if (( splash_startup_retries >= SPLASH_BONSAI_STARTUP_MAX_RETRIES )); then
++        echo "Splash startup stopped after ${splash_startup_retries} retries. Close memory-heavy apps or lower SPLASH_BONSAI_MAX_CONTEXT (e.g. 16K), then launch option 14 again." |
++          timestamp_log_stream | tee -a "$SPLASH_RUN_LOG"
++        exit "$splash_status"
++      fi
+       splash_startup_retries=$((splash_startup_retries + 1))
+-      echo "Splash startup needs more free memory; retry ${splash_startup_retries} in ${SPLASH_BONSAI_STARTUP_RETRY_DELAY} seconds. Close memory-heavy apps or press Ctrl-C to stop." |
++      echo "Splash startup needs more free memory; retry ${splash_startup_retries}/${SPLASH_BONSAI_STARTUP_MAX_RETRIES} in ${SPLASH_BONSAI_STARTUP_RETRY_DELAY} seconds. Close memory-heavy apps or press Ctrl-C to stop." |
+         timestamp_log_stream | tee -a "$SPLASH_RUN_LOG"
+-      sleep "$SPLASH_BONSAI_STARTUP_RETRY_DELAY"
++      sleep "$SPLASH_BONSAI_STARTUP_RETRY_DELAY" &
++      splash_retry_pid=$!
++      wait "$splash_retry_pid"
++      splash_retry_pid=""
+     done
+     ;;
+ 

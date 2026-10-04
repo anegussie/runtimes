@@ -1,0 +1,2196 @@
+{
+  "schema_version": 1,
+  "measured_date": "2026-10-04",
+  "target": {
+    "id": "prism-ml/Ternary-Bonsai-2-27B-gguf:PTQ1_0",
+    "revision": "b072e1d3b35a0a630cece372c2127528e0994386"
+  },
+  "draft": {
+    "id": "incoai/Qwen3.8-27B-DFlash2",
+    "revision": "015e795645c74b1a0eeef3b570031fb62e769bc5"
+  },
+  "workload": {
+    "benchmark": "bonsai_context.py",
+    "sampling": "greedy",
+    "reasoning": "none",
+    "active_requests": 1,
+    "kv_format": "int8",
+    "ssd_cache_bytes": 8589934592,
+    "short_records": 220,
+    "long_records": 1000,
+    "final_records": 1024,
+    "count_to": 100,
+    "final_count_to": 1000
+  },
+  "limitations": [
+    "Sequential single-run trials without randomized order or thermal control.",
+    "Native lifetime rates are after the indicated phase, not isolated request rates.",
+    "Memory allocation is Metal device allocation, not whole-process RSS.",
+    "System swap readings do not identify which process owns the swap.",
+    "High draft acceptance on repetitive counting does not predict coding throughput."
+  ],
+  "runs": [
+    {
+      "profile": "baseline",
+      "source_sha256": "881b228e5d6ea256341f7d76a403d7b856247d8502cfb2d0be955263e2bfa706",
+      "build_id": "src-74bc8891cefc30de3f6d60975072a7daa739fffbfb9e0d824e3b0e5193580b32",
+      "server_context_tokens": 14336,
+      "prefill_chunk_tokens": 512,
+      "workspace_bytes": 259162112,
+      "memory_plan": {
+        "valid": true,
+        "maximum_context_tokens": 65529,
+        "device": {
+          "device_name": "Apple M5",
+          "macos_version": "26.5.2",
+          "apple_gpu_family": 10,
+          "gpu_core_count": 8,
+          "physical_memory_bytes": 17179869184,
+          "recommended_max_working_set_bytes": 12713115648,
+          "max_buffer_length_bytes": 9534832640,
+          "max_threadgroup_memory_bytes": 32768,
+          "max_threadgroup_width": 1024,
+          "has_unified_memory": true
+        },
+        "model": {
+          "model_name": "prism-ml/Ternary-Bonsai-2-27B-gguf:PTQ1_0",
+          "maximum_context_tokens": 262144,
+          "attention_layers": 16,
+          "kv_heads": 4,
+          "head_dimension": 256,
+          "kv_page_tokens": 32,
+          "kv_format": "int8",
+          "kv_elements_per_scale": 256,
+          "kv_page_bytes": 1064960,
+          "memory": {
+            "target_weights_bytes": 6391655424,
+            "draft_weights_bytes": 1266040832,
+            "vision_weights_bytes": 0,
+            "lane_state_bytes": 350224384,
+            "shared_prefill_bytes": 259162112,
+            "shared_decode_bytes": 57180224,
+            "pipeline_reserve_bytes": 268435456,
+            "runtime_overhead_reserve_bytes": 536870912,
+            "state_staging_bytes": 196083712
+          }
+        },
+        "budget": {
+          "physical_memory_bytes": 17179869184,
+          "recommended_working_set_bytes": 12713115648,
+          "configured_memory_limit_bytes": 0,
+          "working_set_margin_bytes": 1073741824,
+          "hard_budget_bytes": 11639373824,
+          "target_weights_bytes": 6391655424,
+          "draft_weights_bytes": 1266040832,
+          "vision_weights_bytes": 0,
+          "maximum_batch_width": 4,
+          "lane_state_bytes": 350224384,
+          "shared_prefill_bytes": 259162112,
+          "shared_decode_bytes": 57180224,
+          "pipeline_reserve_bytes": 268435456,
+          "runtime_overhead_reserve_bytes": 536870912,
+          "state_staging_bytes": 196083712,
+          "fixed_runtime_bytes": 8975428672,
+          "dynamic_budget_bytes": 2663945152,
+          "kv_page_tokens": 32,
+          "kv_page_bytes": 1064960,
+          "kv_extent_pages": 128,
+          "kv_extent_bytes": 136314880,
+          "kv_capacity_pages": 2048,
+          "kv_capacity_bytes": 2181038080,
+          "kv_capacity_tokens": 65536,
+          "minimum_dynamic_bytes": 486539264,
+          "minimum_required_bytes": 9461967936,
+          "deficit_bytes": 0
+        }
+      },
+      "cold": {
+        "http_seconds": 26.986446875031106,
+        "usage": {
+          "prompt_tokens": 4892,
+          "completion_tokens": 96,
+          "total_tokens": 4988,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_timings": {
+          "prompt_n": 4892,
+          "prompt_ms": 24400.914,
+          "prompt_per_second": 200.48429333425787,
+          "predicted_n": 96,
+          "predicted_ms": 2579.463,
+          "predicted_per_second": 36.05401589400584,
+          "cache_n": 0
+        },
+        "response_metrics": {
+          "prefill": {
+            "tokens": 4892
+          },
+          "decode": {
+            "tokens": 93
+          },
+          "request_latency": {
+            "start_to_first_token_ms": 24400.914,
+            "first_token_to_done_ms": 2579.463,
+            "wall_ms": 26980.401,
+            "ttft_ms": 24400.938000000002,
+            "queue_to_start_ms": 0.024000000001251465,
+            "stream_tokens_per_second": 36.05401589400584
+          },
+          "cache": {
+            "status": "miss",
+            "matched_tokens": 0,
+            "lane": 0
+          }
+        },
+        "correct_final_code": true,
+        "finish_reason": "length",
+        "native_lifetime_metrics": {
+          "ttft_ms": {
+            "p50": 24400.93758,
+            "p95": 24400.93758,
+            "samples": 1
+          },
+          "itl_ms": {
+            "p50": 26.84324485,
+            "p95": 43.43457503,
+            "samples": 12
+          },
+          "prefill_input_tokens": 4892,
+          "prefill_wall_ms": 24117.02838,
+          "prefill_tokens_per_second": 202.8442279,
+          "decode_output_tokens": 96,
+          "decode_wall_ms": 2792.643499,
+          "decode_cycle_ms": 2796.790375,
+          "decode_tokens_per_second": 34.37603118,
+          "drafted_tokens": 91,
+          "accepted_draft_tokens": 83,
+          "draft_acceptance_rate": 0.9120879121,
+          "capacity_failures": 0,
+          "metal_failures": 0
+        },
+        "memory_actual": {
+          "allocated_bytes": 8792976448,
+          "current_bytes": 8794734592,
+          "peak_bytes": 9008644096
+        },
+        "memory_pressure": "warning",
+        "admission": {
+          "waiting": 0,
+          "waiting_memory": 0,
+          "waiting_concurrency": 0,
+          "held_behind_refusal": 0,
+          "restoring": 0,
+          "suspended": 0,
+          "draining": false,
+          "oldest_wait_ms": 0
+        },
+        "requests": {
+          "submitted": 1,
+          "completed": 1,
+          "cancelled": 0,
+          "failed": 0
+        },
+        "metal": {
+          "healthy": true,
+          "failure_reason": ""
+        },
+        "system_swap_reading": "vm.swapusage: total = 2048.00M  used = 953.06M  free = 1094.94M  (encrypted)"
+      },
+      "cached": {
+        "http_seconds": 3.1011524579953402,
+        "usage": {
+          "prompt_tokens": 4892,
+          "completion_tokens": 96,
+          "total_tokens": 4988,
+          "prompt_tokens_details": {
+            "cached_tokens": 4864
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_timings": {
+          "prompt_n": 4892,
+          "prompt_ms": 466.88,
+          "prompt_per_second": 59.972583961617545,
+          "predicted_n": 96,
+          "predicted_ms": 2579.671,
+          "predicted_per_second": 36.051108842949354,
+          "cache_n": 4864
+        },
+        "response_metrics": {
+          "prefill": {
+            "tokens": 28
+          },
+          "decode": {
+            "tokens": 93
+          },
+          "request_latency": {
+            "start_to_first_token_ms": 466.88,
+            "first_token_to_done_ms": 2579.671,
+            "wall_ms": 3099.641,
+            "ttft_ms": 519.9700000000003,
+            "queue_to_start_ms": 53.09000000000026,
+            "stream_tokens_per_second": 36.051108842949354
+          },
+          "cache": {
+            "status": "hit",
+            "matched_tokens": 4864,
+            "lane": 0
+          }
+        },
+        "correct_final_code": true,
+        "finish_reason": "length",
+        "native_lifetime_metrics": {
+          "ttft_ms": {
+            "p50": 519.969708,
+            "p95": 24400.93758,
+            "samples": 2
+          },
+          "itl_ms": {
+            "p50": 26.84424475,
+            "p95": 43.43457503,
+            "samples": 24
+          },
+          "prefill_input_tokens": 4920,
+          "prefill_wall_ms": 24366.00629,
+          "prefill_tokens_per_second": 201.920657,
+          "decode_output_tokens": 192,
+          "decode_wall_ms": 5585.834749,
+          "decode_cycle_ms": 5593.993166,
+          "decode_tokens_per_second": 34.37266024,
+          "drafted_tokens": 182,
+          "accepted_draft_tokens": 166,
+          "draft_acceptance_rate": 0.9120879121,
+          "capacity_failures": 0,
+          "metal_failures": 0
+        },
+        "memory_actual": {
+          "allocated_bytes": 8792976448,
+          "current_bytes": 8794734592,
+          "peak_bytes": 9008644096
+        },
+        "memory_pressure": "warning",
+        "admission": {
+          "waiting": 0,
+          "waiting_memory": 0,
+          "waiting_concurrency": 0,
+          "held_behind_refusal": 0,
+          "restoring": 0,
+          "suspended": 0,
+          "draining": false,
+          "oldest_wait_ms": 0
+        },
+        "requests": {
+          "submitted": 2,
+          "completed": 2,
+          "cancelled": 0,
+          "failed": 0
+        },
+        "metal": {
+          "healthy": true,
+          "failure_reason": ""
+        },
+        "system_swap_reading": "vm.swapusage: total = 2048.00M  used = 953.06M  free = 1094.94M  (encrypted)"
+      }
+    },
+    {
+      "profile": "optimized14k",
+      "source_sha256": "25f988023eff031215a159ba617f98bed36415757e06d061acb09a26e78c8b5a",
+      "build_id": "src-c4f93762c01bd7084add54150fe35e05a6ee577d2673a7a82af0d2a943e3e204",
+      "server_context_tokens": 14336,
+      "prefill_chunk_tokens": 512,
+      "workspace_bytes": 183074816,
+      "memory_plan": {
+        "valid": true,
+        "maximum_context_tokens": 69625,
+        "device": {
+          "device_name": "Apple M5",
+          "macos_version": "26.5.2",
+          "apple_gpu_family": 10,
+          "gpu_core_count": 8,
+          "physical_memory_bytes": 17179869184,
+          "recommended_max_working_set_bytes": 12713115648,
+          "max_buffer_length_bytes": 9534832640,
+          "max_threadgroup_memory_bytes": 32768,
+          "max_threadgroup_width": 1024,
+          "has_unified_memory": true
+        },
+        "model": {
+          "model_name": "prism-ml/Ternary-Bonsai-2-27B-gguf:PTQ1_0",
+          "maximum_context_tokens": 262144,
+          "attention_layers": 16,
+          "kv_heads": 4,
+          "head_dimension": 256,
+          "kv_page_tokens": 32,
+          "kv_format": "int8",
+          "kv_elements_per_scale": 256,
+          "kv_page_bytes": 1064960,
+          "memory": {
+            "target_weights_bytes": 6391655424,
+            "draft_weights_bytes": 1266040832,
+            "vision_weights_bytes": 0,
+            "lane_state_bytes": 350224384,
+            "shared_prefill_bytes": 183074816,
+            "shared_decode_bytes": 57180224,
+            "pipeline_reserve_bytes": 268435456,
+            "runtime_overhead_reserve_bytes": 536870912,
+            "state_staging_bytes": 196083712
+          }
+        },
+        "budget": {
+          "physical_memory_bytes": 17179869184,
+          "recommended_working_set_bytes": 12713115648,
+          "configured_memory_limit_bytes": 0,
+          "working_set_margin_bytes": 1073741824,
+          "hard_budget_bytes": 11639373824,
+          "target_weights_bytes": 6391655424,
+          "draft_weights_bytes": 1266040832,
+          "vision_weights_bytes": 0,
+          "maximum_batch_width": 4,
+          "lane_state_bytes": 350224384,
+          "shared_prefill_bytes": 183074816,
+          "shared_decode_bytes": 57180224,
+          "pipeline_reserve_bytes": 268435456,
+          "runtime_overhead_reserve_bytes": 536870912,
+          "state_staging_bytes": 196083712,
+          "fixed_runtime_bytes": 8899341376,
+          "dynamic_budget_bytes": 2740032448,
+          "kv_page_tokens": 32,
+          "kv_page_bytes": 1064960,
+          "kv_extent_pages": 128,
+          "kv_extent_bytes": 136314880,
+          "kv_capacity_pages": 2176,
+          "kv_capacity_bytes": 2317352960,
+          "kv_capacity_tokens": 69632,
+          "minimum_dynamic_bytes": 486539264,
+          "minimum_required_bytes": 9385880640,
+          "deficit_bytes": 0
+        }
+      },
+      "cold": {
+        "http_seconds": 27.221527292043902,
+        "usage": {
+          "prompt_tokens": 4892,
+          "completion_tokens": 96,
+          "total_tokens": 4988,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_timings": {
+          "prompt_n": 4892,
+          "prompt_ms": 24482.872,
+          "prompt_per_second": 199.8131591751164,
+          "predicted_n": 96,
+          "predicted_ms": 2730.272,
+          "predicted_per_second": 34.06254028902615,
+          "cache_n": 0
+        },
+        "response_metrics": {
+          "prefill": {
+            "tokens": 4892
+          },
+          "decode": {
+            "tokens": 93
+          },
+          "request_latency": {
+            "start_to_first_token_ms": 24482.872,
+            "first_token_to_done_ms": 2730.272,
+            "wall_ms": 27213.162,
+            "ttft_ms": 24482.89,
+            "queue_to_start_ms": 0.018000000000029104,
+            "stream_tokens_per_second": 34.06254028902615
+          },
+          "cache": {
+            "status": "miss",
+            "matched_tokens": 0,
+            "lane": 0
+          }
+        },
+        "correct_final_code": true,
+        "finish_reason": "length",
+        "native_lifetime_metrics": {
+          "ttft_ms": {
+            "p50": 24482.89,
+            "p95": 24482.89,
+            "samples": 1
+          },
+          "itl_ms": {
+            "p50": 28.41343239,
+            "p95": 46.18478341,
+            "samples": 12
+          },
+          "prefill_input_tokens": 4892,
+          "prefill_wall_ms": 24216.79712,
+          "prefill_tokens_per_second": 202.008547,
+          "decode_output_tokens": 96,
+          "decode_wall_ms": 2951.786166,
+          "decode_cycle_ms": 2959.939834,
+          "decode_tokens_per_second": 32.52268105,
+          "drafted_tokens": 91,
+          "accepted_draft_tokens": 83,
+          "draft_acceptance_rate": 0.9120879121,
+          "capacity_failures": 0,
+          "metal_failures": 0
+        },
+        "memory_actual": {
+          "allocated_bytes": 8716889152,
+          "current_bytes": 8718647296,
+          "peak_bytes": 8932556800
+        },
+        "memory_pressure": "warning",
+        "admission": {
+          "waiting": 0,
+          "waiting_memory": 0,
+          "waiting_concurrency": 0,
+          "held_behind_refusal": 0,
+          "restoring": 0,
+          "suspended": 0,
+          "draining": false,
+          "oldest_wait_ms": 0
+        },
+        "requests": {
+          "submitted": 1,
+          "completed": 1,
+          "cancelled": 0,
+          "failed": 0
+        },
+        "metal": {
+          "healthy": true,
+          "failure_reason": ""
+        },
+        "system_swap_reading": "vm.swapusage: total = 2048.00M  used = 953.06M  free = 1094.94M  (encrypted)"
+      },
+      "cached": {
+        "http_seconds": 3.297940624994226,
+        "usage": {
+          "prompt_tokens": 4892,
+          "completion_tokens": 96,
+          "total_tokens": 4988,
+          "prompt_tokens_details": {
+            "cached_tokens": 4864
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_timings": {
+          "prompt_n": 4892,
+          "prompt_ms": 487.062,
+          "prompt_per_second": 57.4875477865241,
+          "predicted_n": 96,
+          "predicted_ms": 2751.762,
+          "predicted_per_second": 33.79652746131388,
+          "cache_n": 4864
+        },
+        "response_metrics": {
+          "prefill": {
+            "tokens": 28
+          },
+          "decode": {
+            "tokens": 93
+          },
+          "request_latency": {
+            "start_to_first_token_ms": 487.062,
+            "first_token_to_done_ms": 2751.762,
+            "wall_ms": 3293.601,
+            "ttft_ms": 541.8389999999999,
+            "queue_to_start_ms": 54.77699999999993,
+            "stream_tokens_per_second": 33.79652746131388
+          },
+          "cache": {
+            "status": "hit",
+            "matched_tokens": 4864,
+            "lane": 0
+          }
+        },
+        "correct_final_code": true,
+        "finish_reason": "length",
+        "native_lifetime_metrics": {
+          "ttft_ms": {
+            "p50": 541.8386672,
+            "p95": 24482.89,
+            "samples": 2
+          },
+          "itl_ms": {
+            "p50": 28.54213536,
+            "p95": 46.18478341,
+            "samples": 24
+          },
+          "prefill_input_tokens": 4920,
+          "prefill_wall_ms": 24471.97854,
+          "prefill_tokens_per_second": 201.0462698,
+          "decode_output_tokens": 192,
+          "decode_wall_ms": 5926.673414,
+          "decode_cycle_ms": 5942.938209,
+          "decode_tokens_per_second": 32.39591362,
+          "drafted_tokens": 182,
+          "accepted_draft_tokens": 166,
+          "draft_acceptance_rate": 0.9120879121,
+          "capacity_failures": 0,
+          "metal_failures": 0
+        },
+        "memory_actual": {
+          "allocated_bytes": 8716889152,
+          "current_bytes": 8718647296,
+          "peak_bytes": 8932556800
+        },
+        "memory_pressure": "warning",
+        "admission": {
+          "waiting": 0,
+          "waiting_memory": 0,
+          "waiting_concurrency": 0,
+          "held_behind_refusal": 0,
+          "restoring": 0,
+          "suspended": 0,
+          "draining": false,
+          "oldest_wait_ms": 0
+        },
+        "requests": {
+          "submitted": 2,
+          "completed": 2,
+          "cancelled": 0,
+          "failed": 0
+        },
+        "metal": {
+          "healthy": true,
+          "failure_reason": ""
+        },
+        "system_swap_reading": "vm.swapusage: total = 2048.00M  used = 953.06M  free = 1094.94M  (encrypted)"
+      }
+    },
+    {
+      "profile": "chunk1024-14k",
+      "source_sha256": "8a039fb4a02b6f7f485e5ed3a90ed22e36c9cda130d4b683972ecf8c2f90f414",
+      "build_id": "src-0ed051954ea642e86b2977f480cd59cc27b87474c4a863df5c11eeee155ee125",
+      "server_context_tokens": 14336,
+      "prefill_chunk_tokens": 1024,
+      "workspace_bytes": 249298944,
+      "memory_plan": {
+        "valid": true,
+        "maximum_context_tokens": 69625,
+        "device": {
+          "device_name": "Apple M5",
+          "macos_version": "26.5.2",
+          "apple_gpu_family": 10,
+          "gpu_core_count": 8,
+          "physical_memory_bytes": 17179869184,
+          "recommended_max_working_set_bytes": 12713115648,
+          "max_buffer_length_bytes": 9534832640,
+          "max_threadgroup_memory_bytes": 32768,
+          "max_threadgroup_width": 1024,
+          "has_unified_memory": true
+        },
+        "model": {
+          "model_name": "prism-ml/Ternary-Bonsai-2-27B-gguf:PTQ1_0",
+          "maximum_context_tokens": 262144,
+          "attention_layers": 16,
+          "kv_heads": 4,
+          "head_dimension": 256,
+          "kv_page_tokens": 32,
+          "kv_format": "int8",
+          "kv_elements_per_scale": 256,
+          "kv_page_bytes": 1064960,
+          "memory": {
+            "target_weights_bytes": 6391655424,
+            "draft_weights_bytes": 1266040832,
+            "vision_weights_bytes": 0,
+            "lane_state_bytes": 350224384,
+            "shared_prefill_bytes": 249298944,
+            "shared_decode_bytes": 57180224,
+            "pipeline_reserve_bytes": 268435456,
+            "runtime_overhead_reserve_bytes": 536870912,
+            "state_staging_bytes": 196083712
+          }
+        },
+        "budget": {
+          "physical_memory_bytes": 17179869184,
+          "recommended_working_set_bytes": 12713115648,
+          "configured_memory_limit_bytes": 0,
+          "working_set_margin_bytes": 1073741824,
+          "hard_budget_bytes": 11639373824,
+          "target_weights_bytes": 6391655424,
+          "draft_weights_bytes": 1266040832,
+          "vision_weights_bytes": 0,
+          "maximum_batch_width": 4,
+          "lane_state_bytes": 350224384,
+          "shared_prefill_bytes": 249298944,
+          "shared_decode_bytes": 57180224,
+          "pipeline_reserve_bytes": 268435456,
+          "runtime_overhead_reserve_bytes": 536870912,
+          "state_staging_bytes": 196083712,
+          "fixed_runtime_bytes": 8965565504,
+          "dynamic_budget_bytes": 2673808320,
+          "kv_page_tokens": 32,
+          "kv_page_bytes": 1064960,
+          "kv_extent_pages": 128,
+          "kv_extent_bytes": 136314880,
+          "kv_capacity_pages": 2176,
+          "kv_capacity_bytes": 2317352960,
+          "kv_capacity_tokens": 69632,
+          "minimum_dynamic_bytes": 486539264,
+          "minimum_required_bytes": 9452104768,
+          "deficit_bytes": 0
+        }
+      },
+      "cold": {
+        "http_seconds": 29.604230625089258,
+        "usage": {
+          "prompt_tokens": 4892,
+          "completion_tokens": 96,
+          "total_tokens": 4988,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_timings": {
+          "prompt_n": 4892,
+          "prompt_ms": 26768.893,
+          "prompt_per_second": 182.74943233550974,
+          "predicted_n": 96,
+          "predicted_ms": 2825.504,
+          "predicted_per_second": 32.91448180572387,
+          "cache_n": 0
+        },
+        "response_metrics": {
+          "prefill": {
+            "tokens": 4892
+          },
+          "decode": {
+            "tokens": 93
+          },
+          "request_latency": {
+            "start_to_first_token_ms": 26768.893,
+            "first_token_to_done_ms": 2825.504,
+            "wall_ms": 29594.419,
+            "ttft_ms": 26768.915,
+            "queue_to_start_ms": 0.02200000000084401,
+            "stream_tokens_per_second": 32.91448180572387
+          },
+          "cache": {
+            "status": "miss",
+            "matched_tokens": 0,
+            "lane": 0
+          }
+        },
+        "correct_final_code": true,
+        "finish_reason": "length",
+        "native_lifetime_metrics": {
+          "ttft_ms": {
+            "p50": 26768.9155,
+            "p95": 26768.9155,
+            "samples": 1
+          },
+          "itl_ms": {
+            "p50": 29.54769263,
+            "p95": 46.80244179,
+            "samples": 12
+          },
+          "prefill_input_tokens": 4892,
+          "prefill_wall_ms": 26475.75754,
+          "prefill_tokens_per_second": 184.7728056,
+          "decode_output_tokens": 96,
+          "decode_wall_ms": 3057.978083,
+          "decode_cycle_ms": 3063.540916,
+          "decode_tokens_per_second": 31.39329236,
+          "drafted_tokens": 91,
+          "accepted_draft_tokens": 83,
+          "draft_acceptance_rate": 0.9120879121,
+          "capacity_failures": 0,
+          "metal_failures": 0
+        },
+        "memory_actual": {
+          "allocated_bytes": 8783113280,
+          "current_bytes": 8784871424,
+          "peak_bytes": 8998780928
+        },
+        "memory_pressure": "warning",
+        "admission": {
+          "waiting": 0,
+          "waiting_memory": 0,
+          "waiting_concurrency": 0,
+          "held_behind_refusal": 0,
+          "restoring": 0,
+          "suspended": 0,
+          "draining": false,
+          "oldest_wait_ms": 0
+        },
+        "requests": {
+          "submitted": 1,
+          "completed": 1,
+          "cancelled": 0,
+          "failed": 0
+        },
+        "metal": {
+          "healthy": true,
+          "failure_reason": ""
+        },
+        "system_swap_reading": "vm.swapusage: total = 2048.00M  used = 953.06M  free = 1094.94M  (encrypted)"
+      },
+      "cached": {
+        "http_seconds": 3.3119668749859557,
+        "usage": {
+          "prompt_tokens": 4892,
+          "completion_tokens": 96,
+          "total_tokens": 4988,
+          "prompt_tokens_details": {
+            "cached_tokens": 4864
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_timings": {
+          "prompt_n": 4892,
+          "prompt_ms": 492.999,
+          "prompt_per_second": 56.795247049182656,
+          "predicted_n": 96,
+          "predicted_ms": 2759.19,
+          "predicted_per_second": 33.70554401835321,
+          "cache_n": 4864
+        },
+        "response_metrics": {
+          "prefill": {
+            "tokens": 28
+          },
+          "decode": {
+            "tokens": 93
+          },
+          "request_latency": {
+            "start_to_first_token_ms": 492.999,
+            "first_token_to_done_ms": 2759.19,
+            "wall_ms": 3306.253,
+            "ttft_ms": 547.0630000000001,
+            "queue_to_start_ms": 54.06400000000008,
+            "stream_tokens_per_second": 33.70554401835321
+          },
+          "cache": {
+            "status": "hit",
+            "matched_tokens": 4864,
+            "lane": 0
+          }
+        },
+        "correct_final_code": true,
+        "finish_reason": "length",
+        "native_lifetime_metrics": {
+          "ttft_ms": {
+            "p50": 547.0634589,
+            "p95": 26768.9155,
+            "samples": 2
+          },
+          "itl_ms": {
+            "p50": 29.01176563,
+            "p95": 46.40557504,
+            "samples": 24
+          },
+          "prefill_input_tokens": 4920,
+          "prefill_wall_ms": 26737.21408,
+          "prefill_tokens_per_second": 184.0131879,
+          "decode_output_tokens": 192,
+          "decode_wall_ms": 6043.971875,
+          "decode_cycle_ms": 6053.870041,
+          "decode_tokens_per_second": 31.76718952,
+          "drafted_tokens": 182,
+          "accepted_draft_tokens": 166,
+          "draft_acceptance_rate": 0.9120879121,
+          "capacity_failures": 0,
+          "metal_failures": 0
+        },
+        "memory_actual": {
+          "allocated_bytes": 8783113280,
+          "current_bytes": 8784871424,
+          "peak_bytes": 8998780928
+        },
+        "memory_pressure": "warning",
+        "admission": {
+          "waiting": 0,
+          "waiting_memory": 0,
+          "waiting_concurrency": 0,
+          "held_behind_refusal": 0,
+          "restoring": 0,
+          "suspended": 0,
+          "draining": false,
+          "oldest_wait_ms": 0
+        },
+        "requests": {
+          "submitted": 2,
+          "completed": 2,
+          "cancelled": 0,
+          "failed": 0
+        },
+        "metal": {
+          "healthy": true,
+          "failure_reason": ""
+        },
+        "system_swap_reading": "vm.swapusage: total = 2048.00M  used = 953.06M  free = 1094.94M  (encrypted)"
+      }
+    },
+    {
+      "profile": "chunk256-14k",
+      "source_sha256": "32cbd618594d5834f457cbf73150018291114f499d649db8ab9b77d25e0f69fa",
+      "build_id": "src-5f2e2f1b895de678a9766d5501f181351abe8f30e5c9c07d6fe086fb927edc4f",
+      "server_context_tokens": 14336,
+      "prefill_chunk_tokens": 256,
+      "workspace_bytes": 149962752,
+      "memory_plan": {
+        "valid": true,
+        "maximum_context_tokens": 14336,
+        "device": {
+          "device_name": "Apple M5",
+          "macos_version": "26.5.2",
+          "apple_gpu_family": 10,
+          "gpu_core_count": 8,
+          "physical_memory_bytes": 17179869184,
+          "recommended_max_working_set_bytes": 12713115648,
+          "max_buffer_length_bytes": 9534832640,
+          "max_threadgroup_memory_bytes": 32768,
+          "max_threadgroup_width": 1024,
+          "has_unified_memory": true
+        },
+        "model": {
+          "model_name": "prism-ml/Ternary-Bonsai-2-27B-gguf:PTQ1_0",
+          "maximum_context_tokens": 14336,
+          "attention_layers": 16,
+          "kv_heads": 4,
+          "head_dimension": 256,
+          "kv_page_tokens": 32,
+          "kv_format": "int8",
+          "kv_elements_per_scale": 256,
+          "kv_page_bytes": 1064960,
+          "memory": {
+            "target_weights_bytes": 6391655424,
+            "draft_weights_bytes": 1266040832,
+            "vision_weights_bytes": 0,
+            "lane_state_bytes": 350224384,
+            "shared_prefill_bytes": 149962752,
+            "shared_decode_bytes": 57180224,
+            "pipeline_reserve_bytes": 268435456,
+            "runtime_overhead_reserve_bytes": 536870912,
+            "state_staging_bytes": 196083712
+          }
+        },
+        "budget": {
+          "physical_memory_bytes": 17179869184,
+          "recommended_working_set_bytes": 12713115648,
+          "configured_memory_limit_bytes": 0,
+          "working_set_margin_bytes": 1073741824,
+          "hard_budget_bytes": 11639373824,
+          "target_weights_bytes": 6391655424,
+          "draft_weights_bytes": 1266040832,
+          "vision_weights_bytes": 0,
+          "maximum_batch_width": 4,
+          "lane_state_bytes": 350224384,
+          "shared_prefill_bytes": 149962752,
+          "shared_decode_bytes": 57180224,
+          "pipeline_reserve_bytes": 268435456,
+          "runtime_overhead_reserve_bytes": 536870912,
+          "state_staging_bytes": 196083712,
+          "fixed_runtime_bytes": 8866229312,
+          "dynamic_budget_bytes": 2773144512,
+          "kv_page_tokens": 32,
+          "kv_page_bytes": 1064960,
+          "kv_extent_pages": 128,
+          "kv_extent_bytes": 136314880,
+          "kv_capacity_pages": 2176,
+          "kv_capacity_bytes": 2317352960,
+          "kv_capacity_tokens": 69632,
+          "minimum_dynamic_bytes": 486539264,
+          "minimum_required_bytes": 9352768576,
+          "deficit_bytes": 0
+        }
+      },
+      "cold": {
+        "http_seconds": 34.01028225000482,
+        "usage": {
+          "prompt_tokens": 4892,
+          "completion_tokens": 96,
+          "total_tokens": 4988,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_timings": {
+          "prompt_n": 4892,
+          "prompt_ms": 30724.782,
+          "prompt_per_second": 159.2200068335717,
+          "predicted_n": 96,
+          "predicted_ms": 3279.349,
+          "predicted_per_second": 28.35928716339737,
+          "cache_n": 0
+        },
+        "response_metrics": {
+          "prefill": {
+            "tokens": 4892
+          },
+          "decode": {
+            "tokens": 93
+          },
+          "request_latency": {
+            "start_to_first_token_ms": 30724.782,
+            "first_token_to_done_ms": 3279.349,
+            "wall_ms": 34004.146,
+            "ttft_ms": 30724.797,
+            "queue_to_start_ms": 0.014999999999417923,
+            "stream_tokens_per_second": 28.35928716339737
+          },
+          "cache": {
+            "status": "miss",
+            "matched_tokens": 0,
+            "lane": 0
+          }
+        },
+        "correct_final_code": true,
+        "finish_reason": "length",
+        "native_lifetime_metrics": {
+          "ttft_ms": {
+            "p50": 30724.79696,
+            "p95": 30724.79696,
+            "samples": 1
+          },
+          "itl_ms": {
+            "p50": 34.26406774,
+            "p95": 55.60940003,
+            "samples": 12
+          },
+          "prefill_input_tokens": 4892,
+          "prefill_wall_ms": 30417.5135,
+          "prefill_tokens_per_second": 160.8283991,
+          "decode_output_tokens": 96,
+          "decode_wall_ms": 3542.564544,
+          "decode_cycle_ms": 3546.678542,
+          "decode_tokens_per_second": 27.09901226,
+          "drafted_tokens": 91,
+          "accepted_draft_tokens": 83,
+          "draft_acceptance_rate": 0.9120879121,
+          "capacity_failures": 0,
+          "metal_failures": 0
+        },
+        "memory_actual": {
+          "allocated_bytes": 8683777088,
+          "current_bytes": 8685535232,
+          "peak_bytes": 8899444736
+        },
+        "memory_pressure": "warning",
+        "admission": {
+          "waiting": 0,
+          "waiting_memory": 0,
+          "waiting_concurrency": 0,
+          "held_behind_refusal": 0,
+          "restoring": 0,
+          "suspended": 0,
+          "draining": false,
+          "oldest_wait_ms": 0
+        },
+        "requests": {
+          "submitted": 1,
+          "completed": 1,
+          "cancelled": 0,
+          "failed": 0
+        },
+        "metal": {
+          "healthy": true,
+          "failure_reason": ""
+        },
+        "system_swap_reading": "vm.swapusage: total = 2048.00M  used = 953.06M  free = 1094.94M  (encrypted)"
+      },
+      "cached": {
+        "http_seconds": 3.9491085830377415,
+        "usage": {
+          "prompt_tokens": 4892,
+          "completion_tokens": 96,
+          "total_tokens": 4988,
+          "prompt_tokens_details": {
+            "cached_tokens": 4864
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_timings": {
+          "prompt_n": 4892,
+          "prompt_ms": 580.807,
+          "prompt_per_second": 48.20878536243537,
+          "predicted_n": 96,
+          "predicted_ms": 3313.018,
+          "predicted_per_second": 28.071082016457503,
+          "cache_n": 4864
+        },
+        "response_metrics": {
+          "prefill": {
+            "tokens": 28
+          },
+          "decode": {
+            "tokens": 93
+          },
+          "request_latency": {
+            "start_to_first_token_ms": 580.807,
+            "first_token_to_done_ms": 3313.018,
+            "wall_ms": 3947.583,
+            "ttft_ms": 634.565,
+            "queue_to_start_ms": 53.75800000000004,
+            "stream_tokens_per_second": 28.071082016457503
+          },
+          "cache": {
+            "status": "hit",
+            "matched_tokens": 4864,
+            "lane": 0
+          }
+        },
+        "correct_final_code": true,
+        "finish_reason": "length",
+        "native_lifetime_metrics": {
+          "ttft_ms": {
+            "p50": 634.565125,
+            "p95": 30724.79696,
+            "samples": 2
+          },
+          "itl_ms": {
+            "p50": 34.28684899,
+            "p95": 55.60940003,
+            "samples": 24
+          },
+          "prefill_input_tokens": 4920,
+          "prefill_wall_ms": 30706.63371,
+          "prefill_tokens_per_second": 160.2259644,
+          "decode_output_tokens": 192,
+          "decode_wall_ms": 7142.713962,
+          "decode_cycle_ms": 7151.024709,
+          "decode_tokens_per_second": 26.88053883,
+          "drafted_tokens": 182,
+          "accepted_draft_tokens": 166,
+          "draft_acceptance_rate": 0.9120879121,
+          "capacity_failures": 0,
+          "metal_failures": 0
+        },
+        "memory_actual": {
+          "allocated_bytes": 8683777088,
+          "current_bytes": 8685535232,
+          "peak_bytes": 8899444736
+        },
+        "memory_pressure": "warning",
+        "admission": {
+          "waiting": 0,
+          "waiting_memory": 0,
+          "waiting_concurrency": 0,
+          "held_behind_refusal": 0,
+          "restoring": 0,
+          "suspended": 0,
+          "draining": false,
+          "oldest_wait_ms": 0
+        },
+        "requests": {
+          "submitted": 2,
+          "completed": 2,
+          "cancelled": 0,
+          "failed": 0
+        },
+        "metal": {
+          "healthy": true,
+          "failure_reason": ""
+        },
+        "system_swap_reading": "vm.swapusage: total = 2048.00M  used = 953.06M  free = 1094.94M  (encrypted)"
+      }
+    },
+    {
+      "profile": "optimized24k",
+      "source_sha256": "0fd08258b869cca46f8078778cd33831031fb09c906a336f6c03c2223905b301",
+      "build_id": "src-0ed051954ea642e86b2977f480cd59cc27b87474c4a863df5c11eeee155ee125",
+      "server_context_tokens": 24576,
+      "prefill_chunk_tokens": 512,
+      "workspace_bytes": 196558848,
+      "memory_plan": {
+        "valid": true,
+        "maximum_context_tokens": 69625,
+        "device": {
+          "device_name": "Apple M5",
+          "macos_version": "26.5.2",
+          "apple_gpu_family": 10,
+          "gpu_core_count": 8,
+          "physical_memory_bytes": 17179869184,
+          "recommended_max_working_set_bytes": 12713115648,
+          "max_buffer_length_bytes": 9534832640,
+          "max_threadgroup_memory_bytes": 32768,
+          "max_threadgroup_width": 1024,
+          "has_unified_memory": true
+        },
+        "model": {
+          "model_name": "prism-ml/Ternary-Bonsai-2-27B-gguf:PTQ1_0",
+          "maximum_context_tokens": 262144,
+          "attention_layers": 16,
+          "kv_heads": 4,
+          "head_dimension": 256,
+          "kv_page_tokens": 32,
+          "kv_format": "int8",
+          "kv_elements_per_scale": 256,
+          "kv_page_bytes": 1064960,
+          "memory": {
+            "target_weights_bytes": 6391655424,
+            "draft_weights_bytes": 1266040832,
+            "vision_weights_bytes": 0,
+            "lane_state_bytes": 350224384,
+            "shared_prefill_bytes": 196558848,
+            "shared_decode_bytes": 57180224,
+            "pipeline_reserve_bytes": 268435456,
+            "runtime_overhead_reserve_bytes": 536870912,
+            "state_staging_bytes": 196083712
+          }
+        },
+        "budget": {
+          "physical_memory_bytes": 17179869184,
+          "recommended_working_set_bytes": 12713115648,
+          "configured_memory_limit_bytes": 0,
+          "working_set_margin_bytes": 1073741824,
+          "hard_budget_bytes": 11639373824,
+          "target_weights_bytes": 6391655424,
+          "draft_weights_bytes": 1266040832,
+          "vision_weights_bytes": 0,
+          "maximum_batch_width": 4,
+          "lane_state_bytes": 350224384,
+          "shared_prefill_bytes": 196558848,
+          "shared_decode_bytes": 57180224,
+          "pipeline_reserve_bytes": 268435456,
+          "runtime_overhead_reserve_bytes": 536870912,
+          "state_staging_bytes": 196083712,
+          "fixed_runtime_bytes": 8912825408,
+          "dynamic_budget_bytes": 2726548416,
+          "kv_page_tokens": 32,
+          "kv_page_bytes": 1064960,
+          "kv_extent_pages": 128,
+          "kv_extent_bytes": 136314880,
+          "kv_capacity_pages": 2176,
+          "kv_capacity_bytes": 2317352960,
+          "kv_capacity_tokens": 69632,
+          "minimum_dynamic_bytes": 486539264,
+          "minimum_required_bytes": 9399364672,
+          "deficit_bytes": 0
+        }
+      },
+      "cold": {
+        "http_seconds": 140.4335255419137,
+        "usage": {
+          "prompt_tokens": 22832,
+          "completion_tokens": 96,
+          "total_tokens": 22928,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_timings": {
+          "prompt_n": 22832,
+          "prompt_ms": 137445.395,
+          "prompt_per_second": 166.11687863387493,
+          "predicted_n": 96,
+          "predicted_ms": 2953.079,
+          "predicted_per_second": 31.49255404274657,
+          "cache_n": 0
+        },
+        "response_metrics": {
+          "prefill": {
+            "tokens": 22832
+          },
+          "decode": {
+            "tokens": 93
+          },
+          "request_latency": {
+            "start_to_first_token_ms": 137445.395,
+            "first_token_to_done_ms": 2953.079,
+            "wall_ms": 140398.534,
+            "ttft_ms": 137445.45500000002,
+            "queue_to_start_ms": 0.060000000026775524,
+            "stream_tokens_per_second": 31.49255404274657
+          },
+          "cache": {
+            "status": "miss",
+            "matched_tokens": 0,
+            "lane": 0
+          }
+        },
+        "correct_final_code": true,
+        "finish_reason": "length",
+        "native_lifetime_metrics": {
+          "ttft_ms": {
+            "p50": 137445.4545,
+            "p95": 137445.4545,
+            "samples": 1
+          },
+          "itl_ms": {
+            "p50": 30.8105365,
+            "p95": 49.78974161,
+            "samples": 12
+          },
+          "prefill_input_tokens": 22832,
+          "prefill_wall_ms": 137034.7208,
+          "prefill_tokens_per_second": 166.6147081,
+          "decode_output_tokens": 96,
+          "decode_wall_ms": 3239.802038,
+          "decode_cycle_ms": 3243.942458,
+          "decode_tokens_per_second": 29.63144009,
+          "drafted_tokens": 91,
+          "accepted_draft_tokens": 83,
+          "draft_acceptance_rate": 0.9120879121,
+          "capacity_failures": 0,
+          "metal_failures": 0
+        },
+        "memory_actual": {
+          "allocated_bytes": 9275632704,
+          "current_bytes": 9277390848,
+          "peak_bytes": 9277390848
+        },
+        "memory_pressure": "warning",
+        "admission": {
+          "waiting": 0,
+          "waiting_memory": 0,
+          "waiting_concurrency": 0,
+          "held_behind_refusal": 0,
+          "restoring": 0,
+          "suspended": 0,
+          "draining": false,
+          "oldest_wait_ms": 0
+        },
+        "requests": {
+          "submitted": 1,
+          "completed": 1,
+          "cancelled": 0,
+          "failed": 0
+        },
+        "metal": {
+          "healthy": true,
+          "failure_reason": ""
+        },
+        "system_swap_reading": "vm.swapusage: total = 2048.00M  used = 953.06M  free = 1094.94M  (encrypted)"
+      },
+      "cached": {
+        "http_seconds": 3.5078430840512738,
+        "usage": {
+          "prompt_tokens": 22832,
+          "completion_tokens": 96,
+          "total_tokens": 22928,
+          "prompt_tokens_details": {
+            "cached_tokens": 22816
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_timings": {
+          "prompt_n": 22832,
+          "prompt_ms": 467.399,
+          "prompt_per_second": 34.23199450576488,
+          "predicted_n": 96,
+          "predicted_ms": 2983.598,
+          "predicted_per_second": 31.17041907120195,
+          "cache_n": 22816
+        },
+        "response_metrics": {
+          "prefill": {
+            "tokens": 16
+          },
+          "decode": {
+            "tokens": 93
+          },
+          "request_latency": {
+            "start_to_first_token_ms": 467.399,
+            "first_token_to_done_ms": 2983.598,
+            "wall_ms": 3505.071,
+            "ttft_ms": 521.473,
+            "queue_to_start_ms": 54.073999999999955,
+            "stream_tokens_per_second": 31.17041907120195
+          },
+          "cache": {
+            "status": "hit",
+            "matched_tokens": 22816,
+            "lane": 0
+          }
+        },
+        "correct_final_code": true,
+        "finish_reason": "length",
+        "native_lifetime_metrics": {
+          "ttft_ms": {
+            "p50": 521.4734581,
+            "p95": 137445.4545,
+            "samples": 2
+          },
+          "itl_ms": {
+            "p50": 30.73591661,
+            "p95": 48.55395002,
+            "samples": 24
+          },
+          "prefill_input_tokens": 22848,
+          "prefill_wall_ms": 137261.8672,
+          "prefill_tokens_per_second": 166.4555529,
+          "decode_output_tokens": 192,
+          "decode_wall_ms": 6459.186702,
+          "decode_cycle_ms": 6467.406583,
+          "decode_tokens_per_second": 29.72510455,
+          "drafted_tokens": 182,
+          "accepted_draft_tokens": 166,
+          "draft_acceptance_rate": 0.9120879121,
+          "capacity_failures": 0,
+          "metal_failures": 0
+        },
+        "memory_actual": {
+          "allocated_bytes": 9275632704,
+          "current_bytes": 9277390848,
+          "peak_bytes": 9277390848
+        },
+        "memory_pressure": "warning",
+        "admission": {
+          "waiting": 0,
+          "waiting_memory": 0,
+          "waiting_concurrency": 0,
+          "held_behind_refusal": 0,
+          "restoring": 0,
+          "suspended": 0,
+          "draining": false,
+          "oldest_wait_ms": 0
+        },
+        "requests": {
+          "submitted": 2,
+          "completed": 2,
+          "cancelled": 0,
+          "failed": 0
+        },
+        "metal": {
+          "healthy": true,
+          "failure_reason": ""
+        },
+        "system_swap_reading": "vm.swapusage: total = 2048.00M  used = 953.06M  free = 1094.94M  (encrypted)"
+      }
+    },
+    {
+      "profile": "chunk1024-24k",
+      "source_sha256": "bd364f544870a433d90b7812bf0526d2e333a3dc561a94983c83c7c1612234ab",
+      "build_id": "src-5f2e2f1b895de678a9766d5501f181351abe8f30e5c9c07d6fe086fb927edc4f",
+      "server_context_tokens": 24576,
+      "prefill_chunk_tokens": 1024,
+      "workspace_bytes": 262782976,
+      "memory_plan": {
+        "valid": true,
+        "maximum_context_tokens": 24576,
+        "device": {
+          "device_name": "Apple M5",
+          "macos_version": "26.5.2",
+          "apple_gpu_family": 10,
+          "gpu_core_count": 8,
+          "physical_memory_bytes": 17179869184,
+          "recommended_max_working_set_bytes": 12713115648,
+          "max_buffer_length_bytes": 9534832640,
+          "max_threadgroup_memory_bytes": 32768,
+          "max_threadgroup_width": 1024,
+          "has_unified_memory": true
+        },
+        "model": {
+          "model_name": "prism-ml/Ternary-Bonsai-2-27B-gguf:PTQ1_0",
+          "maximum_context_tokens": 24576,
+          "attention_layers": 16,
+          "kv_heads": 4,
+          "head_dimension": 256,
+          "kv_page_tokens": 32,
+          "kv_format": "int8",
+          "kv_elements_per_scale": 256,
+          "kv_page_bytes": 1064960,
+          "memory": {
+            "target_weights_bytes": 6391655424,
+            "draft_weights_bytes": 1266040832,
+            "vision_weights_bytes": 0,
+            "lane_state_bytes": 350224384,
+            "shared_prefill_bytes": 262782976,
+            "shared_decode_bytes": 57180224,
+            "pipeline_reserve_bytes": 268435456,
+            "runtime_overhead_reserve_bytes": 536870912,
+            "state_staging_bytes": 196083712
+          }
+        },
+        "budget": {
+          "physical_memory_bytes": 17179869184,
+          "recommended_working_set_bytes": 12713115648,
+          "configured_memory_limit_bytes": 0,
+          "working_set_margin_bytes": 1073741824,
+          "hard_budget_bytes": 11639373824,
+          "target_weights_bytes": 6391655424,
+          "draft_weights_bytes": 1266040832,
+          "vision_weights_bytes": 0,
+          "maximum_batch_width": 4,
+          "lane_state_bytes": 350224384,
+          "shared_prefill_bytes": 262782976,
+          "shared_decode_bytes": 57180224,
+          "pipeline_reserve_bytes": 268435456,
+          "runtime_overhead_reserve_bytes": 536870912,
+          "state_staging_bytes": 196083712,
+          "fixed_runtime_bytes": 8979049536,
+          "dynamic_budget_bytes": 2660324288,
+          "kv_page_tokens": 32,
+          "kv_page_bytes": 1064960,
+          "kv_extent_pages": 128,
+          "kv_extent_bytes": 136314880,
+          "kv_capacity_pages": 2048,
+          "kv_capacity_bytes": 2181038080,
+          "kv_capacity_tokens": 65536,
+          "minimum_dynamic_bytes": 486539264,
+          "minimum_required_bytes": 9465588800,
+          "deficit_bytes": 0
+        }
+      },
+      "cold": {
+        "http_seconds": 159.59933045809157,
+        "usage": {
+          "prompt_tokens": 22832,
+          "completion_tokens": 96,
+          "total_tokens": 22928,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_timings": {
+          "prompt_n": 22832,
+          "prompt_ms": 156108.11,
+          "prompt_per_second": 146.2576159560192,
+          "predicted_n": 96,
+          "predicted_ms": 3468.556,
+          "predicted_per_second": 26.81231036777264,
+          "cache_n": 0
+        },
+        "response_metrics": {
+          "prefill": {
+            "tokens": 22832
+          },
+          "decode": {
+            "tokens": 93
+          },
+          "request_latency": {
+            "start_to_first_token_ms": 156108.11,
+            "first_token_to_done_ms": 3468.556,
+            "wall_ms": 159576.686,
+            "ttft_ms": 156108.12999999998,
+            "queue_to_start_ms": 0.01999999998952262,
+            "stream_tokens_per_second": 26.81231036777264
+          },
+          "cache": {
+            "status": "miss",
+            "matched_tokens": 0,
+            "lane": 0
+          }
+        },
+        "correct_final_code": true,
+        "finish_reason": "length",
+        "native_lifetime_metrics": {
+          "ttft_ms": {
+            "p50": 156108.1295,
+            "p95": 156108.1295,
+            "samples": 1
+          },
+          "itl_ms": {
+            "p50": 35.805177,
+            "p95": 57.9466084,
+            "samples": 12
+          },
+          "prefill_input_tokens": 22832,
+          "prefill_wall_ms": 155707.9386,
+          "prefill_tokens_per_second": 146.6334999,
+          "decode_output_tokens": 96,
+          "decode_wall_ms": 3746.009418,
+          "decode_cycle_ms": 3750.556,
+          "decode_tokens_per_second": 25.62727139,
+          "drafted_tokens": 91,
+          "accepted_draft_tokens": 83,
+          "draft_acceptance_rate": 0.9120879121,
+          "capacity_failures": 0,
+          "metal_failures": 0
+        },
+        "memory_actual": {
+          "allocated_bytes": 9341856832,
+          "current_bytes": 9343614976,
+          "peak_bytes": 9343614976
+        },
+        "memory_pressure": "warning",
+        "admission": {
+          "waiting": 0,
+          "waiting_memory": 0,
+          "waiting_concurrency": 0,
+          "held_behind_refusal": 0,
+          "restoring": 0,
+          "suspended": 0,
+          "draining": false,
+          "oldest_wait_ms": 0
+        },
+        "requests": {
+          "submitted": 1,
+          "completed": 1,
+          "cancelled": 0,
+          "failed": 0
+        },
+        "metal": {
+          "healthy": true,
+          "failure_reason": ""
+        },
+        "system_swap_reading": "vm.swapusage: total = 2048.00M  used = 953.06M  free = 1094.94M  (encrypted)"
+      },
+      "cached": {
+        "http_seconds": 4.123488040990196,
+        "usage": {
+          "prompt_tokens": 22832,
+          "completion_tokens": 96,
+          "total_tokens": 22928,
+          "prompt_tokens_details": {
+            "cached_tokens": 22816
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_timings": {
+          "prompt_n": 22832,
+          "prompt_ms": 517.397,
+          "prompt_per_second": 30.924029323710805,
+          "predicted_n": 96,
+          "predicted_ms": 3498.794,
+          "predicted_per_second": 26.58058748242966,
+          "cache_n": 22816
+        },
+        "response_metrics": {
+          "prefill": {
+            "tokens": 16
+          },
+          "decode": {
+            "tokens": 93
+          },
+          "request_latency": {
+            "start_to_first_token_ms": 517.397,
+            "first_token_to_done_ms": 3498.794,
+            "wall_ms": 4114.35,
+            "ttft_ms": 615.5560000000005,
+            "queue_to_start_ms": 98.15900000000045,
+            "stream_tokens_per_second": 26.58058748242966
+          },
+          "cache": {
+            "status": "hit",
+            "matched_tokens": 22816,
+            "lane": 0
+          }
+        },
+        "correct_final_code": true,
+        "finish_reason": "length",
+        "native_lifetime_metrics": {
+          "ttft_ms": {
+            "p50": 615.556375,
+            "p95": 156108.1295,
+            "samples": 2
+          },
+          "itl_ms": {
+            "p50": 36.03894261,
+            "p95": 56.48911657,
+            "samples": 24
+          },
+          "prefill_input_tokens": 22848,
+          "prefill_wall_ms": 155940.1927,
+          "prefill_tokens_per_second": 146.5177105,
+          "decode_output_tokens": 192,
+          "decode_wall_ms": 7525.273875,
+          "decode_cycle_ms": 7534.107833,
+          "decode_tokens_per_second": 25.51402157,
+          "drafted_tokens": 182,
+          "accepted_draft_tokens": 166,
+          "draft_acceptance_rate": 0.9120879121,
+          "capacity_failures": 0,
+          "metal_failures": 0
+        },
+        "memory_actual": {
+          "allocated_bytes": 9341856832,
+          "current_bytes": 9343614976,
+          "peak_bytes": 9343614976
+        },
+        "memory_pressure": "warning",
+        "admission": {
+          "waiting": 0,
+          "waiting_memory": 0,
+          "waiting_concurrency": 0,
+          "held_behind_refusal": 0,
+          "restoring": 0,
+          "suspended": 0,
+          "draining": false,
+          "oldest_wait_ms": 0
+        },
+        "requests": {
+          "submitted": 2,
+          "completed": 2,
+          "cancelled": 0,
+          "failed": 0
+        },
+        "metal": {
+          "healthy": true,
+          "failure_reason": ""
+        },
+        "system_swap_reading": "vm.swapusage: total = 2048.00M  used = 953.06M  free = 1094.94M  (encrypted)"
+      }
+    },
+    {
+      "profile": "chunk256-24k",
+      "source_sha256": "cbe472d0454f487e0c70a766eba0a7328518700d7d119cef1babe11b7e399796",
+      "build_id": "src-5f2e2f1b895de678a9766d5501f181351abe8f30e5c9c07d6fe086fb927edc4f",
+      "server_context_tokens": 24576,
+      "prefill_chunk_tokens": 256,
+      "workspace_bytes": 163446784,
+      "memory_plan": {
+        "valid": true,
+        "maximum_context_tokens": 24576,
+        "device": {
+          "device_name": "Apple M5",
+          "macos_version": "26.5.2",
+          "apple_gpu_family": 10,
+          "gpu_core_count": 8,
+          "physical_memory_bytes": 17179869184,
+          "recommended_max_working_set_bytes": 12713115648,
+          "max_buffer_length_bytes": 9534832640,
+          "max_threadgroup_memory_bytes": 32768,
+          "max_threadgroup_width": 1024,
+          "has_unified_memory": true
+        },
+        "model": {
+          "model_name": "prism-ml/Ternary-Bonsai-2-27B-gguf:PTQ1_0",
+          "maximum_context_tokens": 24576,
+          "attention_layers": 16,
+          "kv_heads": 4,
+          "head_dimension": 256,
+          "kv_page_tokens": 32,
+          "kv_format": "int8",
+          "kv_elements_per_scale": 256,
+          "kv_page_bytes": 1064960,
+          "memory": {
+            "target_weights_bytes": 6391655424,
+            "draft_weights_bytes": 1266040832,
+            "vision_weights_bytes": 0,
+            "lane_state_bytes": 350224384,
+            "shared_prefill_bytes": 163446784,
+            "shared_decode_bytes": 57180224,
+            "pipeline_reserve_bytes": 268435456,
+            "runtime_overhead_reserve_bytes": 536870912,
+            "state_staging_bytes": 196083712
+          }
+        },
+        "budget": {
+          "physical_memory_bytes": 17179869184,
+          "recommended_working_set_bytes": 12713115648,
+          "configured_memory_limit_bytes": 0,
+          "working_set_margin_bytes": 1073741824,
+          "hard_budget_bytes": 11639373824,
+          "target_weights_bytes": 6391655424,
+          "draft_weights_bytes": 1266040832,
+          "vision_weights_bytes": 0,
+          "maximum_batch_width": 4,
+          "lane_state_bytes": 350224384,
+          "shared_prefill_bytes": 163446784,
+          "shared_decode_bytes": 57180224,
+          "pipeline_reserve_bytes": 268435456,
+          "runtime_overhead_reserve_bytes": 536870912,
+          "state_staging_bytes": 196083712,
+          "fixed_runtime_bytes": 8879713344,
+          "dynamic_budget_bytes": 2759660480,
+          "kv_page_tokens": 32,
+          "kv_page_bytes": 1064960,
+          "kv_extent_pages": 128,
+          "kv_extent_bytes": 136314880,
+          "kv_capacity_pages": 2176,
+          "kv_capacity_bytes": 2317352960,
+          "kv_capacity_tokens": 69632,
+          "minimum_dynamic_bytes": 486539264,
+          "minimum_required_bytes": 9366252608,
+          "deficit_bytes": 0
+        }
+      },
+      "cold": {
+        "http_seconds": 168.91456779104192,
+        "usage": {
+          "prompt_tokens": 22832,
+          "completion_tokens": 96,
+          "total_tokens": 22928,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_timings": {
+          "prompt_n": 22832,
+          "prompt_ms": 165205.513,
+          "prompt_per_second": 138.20362035981208,
+          "predicted_n": 96,
+          "predicted_ms": 3686.643,
+          "predicted_per_second": 25.226201723356453,
+          "cache_n": 0
+        },
+        "response_metrics": {
+          "prefill": {
+            "tokens": 22832
+          },
+          "decode": {
+            "tokens": 93
+          },
+          "request_latency": {
+            "start_to_first_token_ms": 165205.513,
+            "first_token_to_done_ms": 3686.643,
+            "wall_ms": 168892.177,
+            "ttft_ms": 165205.53399999999,
+            "queue_to_start_ms": 0.02099999997881241,
+            "stream_tokens_per_second": 25.226201723356453
+          },
+          "cache": {
+            "status": "miss",
+            "matched_tokens": 0,
+            "lane": 0
+          }
+        },
+        "correct_final_code": true,
+        "finish_reason": "length",
+        "native_lifetime_metrics": {
+          "ttft_ms": {
+            "p50": 165205.5344,
+            "p95": 165205.5344,
+            "samples": 1
+          },
+          "itl_ms": {
+            "p50": 38.26967189,
+            "p95": 61.40880003,
+            "samples": 12
+          },
+          "prefill_input_tokens": 22832,
+          "prefill_wall_ms": 164784.4216,
+          "prefill_tokens_per_second": 138.556787,
+          "decode_output_tokens": 96,
+          "decode_wall_ms": 3974.511917,
+          "decode_cycle_ms": 3979.073167,
+          "decode_tokens_per_second": 24.15390921,
+          "drafted_tokens": 91,
+          "accepted_draft_tokens": 83,
+          "draft_acceptance_rate": 0.9120879121,
+          "capacity_failures": 0,
+          "metal_failures": 0
+        },
+        "memory_actual": {
+          "allocated_bytes": 9242520640,
+          "current_bytes": 9248735232,
+          "peak_bytes": 9267609600
+        },
+        "memory_pressure": "warning",
+        "admission": {
+          "waiting": 0,
+          "waiting_memory": 0,
+          "waiting_concurrency": 0,
+          "held_behind_refusal": 0,
+          "restoring": 0,
+          "suspended": 0,
+          "draining": false,
+          "oldest_wait_ms": 0
+        },
+        "requests": {
+          "submitted": 1,
+          "completed": 1,
+          "cancelled": 0,
+          "failed": 0
+        },
+        "metal": {
+          "healthy": true,
+          "failure_reason": ""
+        },
+        "system_swap_reading": "vm.swapusage: total = 2048.00M  used = 953.06M  free = 1094.94M  (encrypted)"
+      },
+      "cached": {
+        "http_seconds": 4.263844833010808,
+        "usage": {
+          "prompt_tokens": 22832,
+          "completion_tokens": 96,
+          "total_tokens": 22928,
+          "prompt_tokens_details": {
+            "cached_tokens": 22816
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_timings": {
+          "prompt_n": 22832,
+          "prompt_ms": 555.755,
+          "prompt_per_second": 28.78966451044075,
+          "predicted_n": 96,
+          "predicted_ms": 3650.709,
+          "predicted_per_second": 25.474503719688425,
+          "cache_n": 22816
+        },
+        "response_metrics": {
+          "prefill": {
+            "tokens": 16
+          },
+          "decode": {
+            "tokens": 93
+          },
+          "request_latency": {
+            "start_to_first_token_ms": 555.755,
+            "first_token_to_done_ms": 3650.709,
+            "wall_ms": 4259.487,
+            "ttft_ms": 608.7780000000002,
+            "queue_to_start_ms": 53.02300000000025,
+            "stream_tokens_per_second": 25.474503719688425
+          },
+          "cache": {
+            "status": "hit",
+            "matched_tokens": 22816,
+            "lane": 0
+          }
+        },
+        "correct_final_code": true,
+        "finish_reason": "length",
+        "native_lifetime_metrics": {
+          "ttft_ms": {
+            "p50": 608.778125,
+            "p95": 165205.5344,
+            "samples": 2
+          },
+          "itl_ms": {
+            "p50": 38.23293224,
+            "p95": 59.80179162,
+            "samples": 24
+          },
+          "prefill_input_tokens": 22848,
+          "prefill_wall_ms": 165037.7203,
+          "prefill_tokens_per_second": 138.4410786,
+          "decode_output_tokens": 192,
+          "decode_wall_ms": 7922.980292,
+          "decode_cycle_ms": 7931.858751,
+          "decode_tokens_per_second": 24.23330526,
+          "drafted_tokens": 182,
+          "accepted_draft_tokens": 166,
+          "draft_acceptance_rate": 0.9120879121,
+          "capacity_failures": 0,
+          "metal_failures": 0
+        },
+        "memory_actual": {
+          "allocated_bytes": 9242520640,
+          "current_bytes": 9248735232,
+          "peak_bytes": 9267609600
+        },
+        "memory_pressure": "warning",
+        "admission": {
+          "waiting": 0,
+          "waiting_memory": 0,
+          "waiting_concurrency": 0,
+          "held_behind_refusal": 0,
+          "restoring": 0,
+          "suspended": 0,
+          "draining": false,
+          "oldest_wait_ms": 0
+        },
+        "requests": {
+          "submitted": 2,
+          "completed": 2,
+          "cancelled": 0,
+          "failed": 0
+        },
+        "metal": {
+          "healthy": true,
+          "failure_reason": ""
+        },
+        "system_swap_reading": "vm.swapusage: total = 2048.00M  used = 953.06M  free = 1094.94M  (encrypted)"
+      }
+    },
+    {
+      "profile": "final",
+      "source_sha256": "a286332f87f262719ae2b613469390d93c02cbc870d521db5ea8425ab77fb473",
+      "build_id": "src-5f2e2f1b895de678a9766d5501f181351abe8f30e5c9c07d6fe086fb927edc4f",
+      "server_context_tokens": 24576,
+      "prefill_chunk_tokens": 512,
+      "workspace_bytes": 196558848,
+      "memory_plan": {
+        "valid": true,
+        "maximum_context_tokens": 24576,
+        "device": {
+          "device_name": "Apple M5",
+          "macos_version": "26.5.2",
+          "apple_gpu_family": 10,
+          "gpu_core_count": 8,
+          "physical_memory_bytes": 17179869184,
+          "recommended_max_working_set_bytes": 12713115648,
+          "max_buffer_length_bytes": 9534832640,
+          "max_threadgroup_memory_bytes": 32768,
+          "max_threadgroup_width": 1024,
+          "has_unified_memory": true
+        },
+        "model": {
+          "model_name": "prism-ml/Ternary-Bonsai-2-27B-gguf:PTQ1_0",
+          "maximum_context_tokens": 24576,
+          "attention_layers": 16,
+          "kv_heads": 4,
+          "head_dimension": 256,
+          "kv_page_tokens": 32,
+          "kv_format": "int8",
+          "kv_elements_per_scale": 256,
+          "kv_page_bytes": 1064960,
+          "memory": {
+            "target_weights_bytes": 6391655424,
+            "draft_weights_bytes": 1266040832,
+            "vision_weights_bytes": 0,
+            "lane_state_bytes": 350224384,
+            "shared_prefill_bytes": 196558848,
+            "shared_decode_bytes": 57180224,
+            "pipeline_reserve_bytes": 268435456,
+            "runtime_overhead_reserve_bytes": 536870912,
+            "state_staging_bytes": 196083712
+          }
+        },
+        "budget": {
+          "physical_memory_bytes": 17179869184,
+          "recommended_working_set_bytes": 12713115648,
+          "configured_memory_limit_bytes": 0,
+          "working_set_margin_bytes": 1073741824,
+          "hard_budget_bytes": 11639373824,
+          "target_weights_bytes": 6391655424,
+          "draft_weights_bytes": 1266040832,
+          "vision_weights_bytes": 0,
+          "maximum_batch_width": 4,
+          "lane_state_bytes": 350224384,
+          "shared_prefill_bytes": 196558848,
+          "shared_decode_bytes": 57180224,
+          "pipeline_reserve_bytes": 268435456,
+          "runtime_overhead_reserve_bytes": 536870912,
+          "state_staging_bytes": 196083712,
+          "fixed_runtime_bytes": 8912825408,
+          "dynamic_budget_bytes": 2726548416,
+          "kv_page_tokens": 32,
+          "kv_page_bytes": 1064960,
+          "kv_extent_pages": 128,
+          "kv_extent_bytes": 136314880,
+          "kv_capacity_pages": 2176,
+          "kv_capacity_bytes": 2317352960,
+          "kv_capacity_tokens": 69632,
+          "minimum_dynamic_bytes": 486539264,
+          "minimum_required_bytes": 9399364672,
+          "deficit_bytes": 0
+        }
+      },
+      "cold": {
+        "http_seconds": 197.60983895801473,
+        "usage": {
+          "prompt_tokens": 23433,
+          "completion_tokens": 1024,
+          "total_tokens": 24457,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_timings": {
+          "prompt_n": 23433,
+          "prompt_ms": 155478.405,
+          "prompt_per_second": 150.7154643115872,
+          "predicted_n": 1024,
+          "predicted_ms": 42107.362,
+          "predicted_per_second": 24.247541320684018,
+          "cache_n": 0
+        },
+        "response_metrics": {
+          "prefill": {
+            "tokens": 23433
+          },
+          "decode": {
+            "tokens": 1021
+          },
+          "request_latency": {
+            "start_to_first_token_ms": 155478.405,
+            "first_token_to_done_ms": 42107.362,
+            "wall_ms": 197585.788,
+            "ttft_ms": 155478.426,
+            "queue_to_start_ms": 0.021000000007916242,
+            "stream_tokens_per_second": 24.247541320684018
+          },
+          "cache": {
+            "status": "miss",
+            "matched_tokens": 0,
+            "lane": 0
+          }
+        },
+        "correct_final_code": true,
+        "finish_reason": "length",
+        "native_lifetime_metrics": {
+          "ttft_ms": {
+            "p50": 155478.4256,
+            "p95": 155478.4256,
+            "samples": 1
+          },
+          "itl_ms": {
+            "p50": 40.59445313,
+            "p95": 45.03614062,
+            "samples": 128
+          },
+          "prefill_input_tokens": 23433,
+          "prefill_wall_ms": 155027.9737,
+          "prefill_tokens_per_second": 151.1533657,
+          "decode_output_tokens": 1024,
+          "decode_wall_ms": 42389.19284,
+          "decode_cycle_ms": 42437.77242,
+          "decode_tokens_per_second": 24.1571007,
+          "drafted_tokens": 903,
+          "accepted_draft_tokens": 895,
+          "draft_acceptance_rate": 0.9911406423,
+          "capacity_failures": 0,
+          "metal_failures": 0
+        },
+        "memory_actual": {
+          "allocated_bytes": 9275632704,
+          "current_bytes": 9277390848,
+          "peak_bytes": 9277390848
+        },
+        "memory_pressure": "warning",
+        "admission": {
+          "waiting": 0,
+          "waiting_memory": 0,
+          "waiting_concurrency": 0,
+          "held_behind_refusal": 0,
+          "restoring": 0,
+          "suspended": 0,
+          "draining": false,
+          "oldest_wait_ms": 0
+        },
+        "requests": {
+          "submitted": 1,
+          "completed": 1,
+          "cancelled": 0,
+          "failed": 0
+        },
+        "metal": {
+          "healthy": true,
+          "failure_reason": ""
+        },
+        "system_swap_reading": "vm.swapusage: total = 2048.00M  used = 1195.56M  free = 852.44M  (encrypted)"
+      },
+      "cached": {
+        "http_seconds": 41.43817800004035,
+        "usage": {
+          "prompt_tokens": 23433,
+          "completion_tokens": 1024,
+          "total_tokens": 24457,
+          "prompt_tokens_details": {
+            "cached_tokens": 23424
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_timings": {
+          "prompt_n": 23433,
+          "prompt_ms": 606.283,
+          "prompt_per_second": 14.844552791353212,
+          "predicted_n": 1024,
+          "predicted_ms": 40770.768,
+          "predicted_per_second": 25.04245198422556,
+          "cache_n": 23424
+        },
+        "response_metrics": {
+          "prefill": {
+            "tokens": 9
+          },
+          "decode": {
+            "tokens": 1021
+          },
+          "request_latency": {
+            "start_to_first_token_ms": 606.283,
+            "first_token_to_done_ms": 40770.768,
+            "wall_ms": 41429.596,
+            "ttft_ms": 658.8280000000013,
+            "queue_to_start_ms": 52.54500000000132,
+            "stream_tokens_per_second": 25.04245198422556
+          },
+          "cache": {
+            "status": "hit",
+            "matched_tokens": 23424,
+            "lane": 0
+          }
+        },
+        "correct_final_code": true,
+        "finish_reason": "length",
+        "native_lifetime_metrics": {
+          "ttft_ms": {
+            "p50": 658.8280411,
+            "p95": 155478.4256,
+            "samples": 2
+          },
+          "itl_ms": {
+            "p50": 40.0528855,
+            "p95": 44.12494275,
+            "samples": 256
+          },
+          "prefill_input_tokens": 23442,
+          "prefill_wall_ms": 155324.0204,
+          "prefill_tokens_per_second": 150.9232116,
+          "decode_output_tokens": 2048,
+          "decode_wall_ms": 83428.52288,
+          "decode_cycle_ms": 83518.31204,
+          "decode_tokens_per_second": 24.54795949,
+          "drafted_tokens": 1806,
+          "accepted_draft_tokens": 1790,
+          "draft_acceptance_rate": 0.9911406423,
+          "capacity_failures": 0,
+          "metal_failures": 0
+        },
+        "memory_actual": {
+          "allocated_bytes": 9275632704,
+          "current_bytes": 9277390848,
+          "peak_bytes": 9277390848
+        },
+        "memory_pressure": "warning",
+        "admission": {
+          "waiting": 0,
+          "waiting_memory": 0,
+          "waiting_concurrency": 0,
+          "held_behind_refusal": 0,
+          "restoring": 0,
+          "suspended": 0,
+          "draining": false,
+          "oldest_wait_ms": 0
+        },
+        "requests": {
+          "submitted": 2,
+          "completed": 2,
+          "cancelled": 0,
+          "failed": 0
+        },
+        "metal": {
+          "healthy": true,
+          "failure_reason": ""
+        },
+        "system_swap_reading": "vm.swapusage: total = 2048.00M  used = 1195.56M  free = 852.44M  (encrypted)"
+      },
+      "overflow_rejection": {
+        "status": 400,
+        "body": {
+          "error": {
+            "message": "prompt and max_tokens exceed the context window: 13 + 24576 > 24576 tokens",
+            "type": "invalid_request_error",
+            "code": "context_length_exceeded"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "measured_date": "2026-10-04",
+  "launcher_sha256": "d0c252691740eee0a69726fe8e0cc2089ee215cae01287c3657d7e4e5c4af808",
+  "source_capture_sha256": "801f5e43eab6c83e817b9d28e2757c799f3d653e58252dcd1872b13edd8133ee",
+  "device": {
+    "device_name": "Apple M5",
+    "macos_version": "26.5.2",
+    "apple_gpu_family": 10,
+    "gpu_core_count": 8,
+    "physical_memory_bytes": 17179869184,
+    "recommended_max_working_set_bytes": 12713115648,
+    "max_buffer_length_bytes": 9534832640,
+    "max_threadgroup_memory_bytes": 32768,
+    "max_threadgroup_width": 1024,
+    "has_unified_memory": true
+  },
+  "model": {
+    "model_name": "prism-ml/Ternary-Bonsai-2-27B-gguf:PTQ1_0",
+    "maximum_context_tokens": 24576,
+    "attention_layers": 16,
+    "kv_heads": 4,
+    "head_dimension": 256,
+    "kv_page_tokens": 32,
+    "kv_format": "int8",
+    "kv_elements_per_scale": 256,
+    "kv_page_bytes": 1064960,
+    "memory": {
+      "target_weights_bytes": 6391655424,
+      "draft_weights_bytes": 1266040832,
+      "vision_weights_bytes": 0,
+      "lane_state_bytes": 350224384,
+      "shared_prefill_bytes": 196558848,
+      "shared_decode_bytes": 57180224,
+      "pipeline_reserve_bytes": 268435456,
+      "runtime_overhead_reserve_bytes": 536870912,
+      "state_staging_bytes": 196083712
+    }
+  },
+  "build_id": "src-5f2e2f1b895de678a9766d5501f181351abe8f30e5c9c07d6fe086fb927edc4f",
+  "settings": {
+    "context": 24576,
+    "client_context": 22528,
+    "prefill_chunk": 512,
+    "persistent_cache": true,
+    "cache_quota_bytes": 8589934592
+  },
+  "workload": {
+    "script": "bonsai_context.py",
+    "records": 220,
+    "count_to": 100,
+    "output_tokens": 96,
+    "temperature": 0,
+    "reasoning_effort": "none"
+  },
+  "limitations": [
+    "One measured cold request and one repeat after a clean server restart; startup time excluded.",
+    "Temporary client configuration and persistent-cache directory; all other option-14 defaults used.",
+    "Cache reuse reduces prefill; this is not a compute-speed improvement or a zero-swap claim."
+  ],
+  "runs": [
+    {
+      "phase": "first_launch",
+      "request_seconds": 27.222536999965087,
+      "usage": {
+        "prompt_tokens": 4892,
+        "completion_tokens": 96,
+        "total_tokens": 4988,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "timings": {
+        "prompt_n": 4892,
+        "prompt_ms": 24617.497,
+        "prompt_per_second": 198.72044668066783,
+        "predicted_n": 96,
+        "predicted_ms": 2589.994,
+        "predicted_per_second": 35.907419090546156,
+        "cache_n": 0
+      },
+      "request_metrics": {
+        "prefill": {
+          "tokens": 4892
+        },
+        "decode": {
+          "tokens": 93
+        },
+        "request_latency": {
+          "start_to_first_token_ms": 24617.497,
+          "first_token_to_done_ms": 2589.994,
+          "wall_ms": 27207.536,
+          "ttft_ms": 24617.542,
+          "queue_to_start_ms": 0.04500000000189175,
+          "stream_tokens_per_second": 35.907419090546156
+        },
+        "cache": {
+          "status": "miss",
+          "matched_tokens": 0,
+          "lane": 0
+        }
+      },
+      "correct_final_code": true,
+      "memory_actual": {
+        "allocated_bytes": 8730373184,
+        "current_bytes": 8736587776,
+        "peak_bytes": 9300721664
+      },
+      "native_requests": {
+        "submitted": 1,
+        "completed": 1,
+        "cancelled": 0,
+        "failed": 0
+      },
+      "metal": {
+        "healthy": true,
+        "failure_reason": ""
+      },
+      "swap": "vm.swapusage: total = 2048.00M  used = 1187.56M  free = 860.44M  (encrypted)"
+    },
+    {
+      "phase": "after_restart",
+      "request_seconds": 3.160881291027181,
+      "usage": {
+        "prompt_tokens": 4892,
+        "completion_tokens": 96,
+        "total_tokens": 4988,
+        "prompt_tokens_details": {
+          "cached_tokens": 4864
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "timings": {
+        "prompt_n": 4892,
+        "prompt_ms": 475.662,
+        "prompt_per_second": 58.86532874183769,
+        "predicted_n": 96,
+        "predicted_ms": 2589.045,
+        "predicted_per_second": 35.92058075467981,
+        "cache_n": 4864
+      },
+      "request_metrics": {
+        "prefill": {
+          "tokens": 28
+        },
+        "decode": {
+          "tokens": 93
+        },
+        "request_latency": {
+          "start_to_first_token_ms": 475.662,
+          "first_token_to_done_ms": 2589.045,
+          "wall_ms": 3153.89,
+          "ttft_ms": 564.8449999999998,
+          "queue_to_start_ms": 89.18299999999982,
+          "stream_tokens_per_second": 35.92058075467981
+        },
+        "cache": {
+          "status": "hit",
+          "matched_tokens": 4864,
+          "lane": 0
+        }
+      },
+      "correct_final_code": true,
+      "memory_actual": {
+        "allocated_bytes": 8730373184,
+        "current_bytes": 8736587776,
+        "peak_bytes": 9300721664
+      },
+      "native_requests": {
+        "submitted": 1,
+        "completed": 1,
+        "cancelled": 0,
+        "failed": 0
+      },
+      "metal": {
+        "healthy": true,
+        "failure_reason": ""
+      },
+      "swap": "vm.swapusage: total = 2048.00M  used = 1187.56M  free = 860.44M  (encrypted)"
+    }
+  ]
+}

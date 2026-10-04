@@ -1,0 +1,341 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "router",
+  "experimental": {
+    "subagent_depth": 1
+  },
+  "model": "local-llama/bonsai-27b-splash",
+  "small_model": "local-llama/bonsai-27b-splash",
+  "enabled_providers": [
+    "local-llama"
+  ],
+  "compaction": {
+    "auto": true,
+    "keep": {
+      "tokens": 1536
+    },
+    "buffer": 1024
+  },
+  "tool_output": {
+    "max_lines": 100,
+    "max_bytes": 8192
+  },
+  "watcher": {
+    "ignore": [
+      "node_modules/**",
+      ".git/**",
+      "dist/**",
+      "build/**",
+      ".cache/**"
+    ]
+  },
+  "permission": {
+    "external_directory": {
+      "*": "deny",
+      "__RUNTIME_ROOT__/scripts/md2latex.sh": "allow"
+    },
+    "doom_loop": "deny",
+    "question": "allow"
+  },
+  "agent": {
+    "router": {
+      "description": "Routes every request to an isolated worker so the parent context stays small",
+      "prompt": "{file:__OPENCODE_CONFIG_DIR__/prompts/router.md}",
+      "mode": "primary",
+      "model": "local-llama/bonsai-27b-splash",
+      "reasoningEffort": "none",
+      "tools": {
+        "*": false,
+        "task": true,
+        "question": true
+      },
+      "temperature": 0.7,
+      "top_p": 0.80,
+      "permission": {
+        "*": "deny",
+        "task": {
+          "*": "deny",
+          "context_worker": "allow",
+          "general_worker": "allow"
+        },
+        "question": "allow"
+      }
+    },
+    "general": {
+      "description": "Local coding agent with tools and selective delegation",
+      "prompt": "{file:__OPENCODE_CONFIG_DIR__/prompts/general.md}",
+      "mode": "primary",
+      "model": "local-llama/bonsai-27b-splash",
+      "reasoningEffort": "none",
+      "tools": {
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "list": true,
+        "edit": true,
+        "write": true,
+        "todowrite": true,
+        "bash": true,
+        "task": true,
+        "skill": true,
+        "question": true,
+        "webfetch": true,
+        "websearch": true
+      },
+      "permission": {
+        "read": "allow",
+        "grep": "allow",
+        "glob": "allow",
+        "list": "allow",
+        "edit": "allow",
+        "write": "allow",
+        "todowrite": "allow",
+        "bash": "allow",
+        "task": "allow",
+        "skill": "allow",
+        "question": "allow",
+        "webfetch": "allow",
+        "websearch": "allow"
+      },
+      "temperature": 0.7,
+      "top_p": 0.80
+    },
+    "long_analysis": {
+      "description": "Long-form debugging, planning, and analysis",
+      "prompt": "{file:__OPENCODE_CONFIG_DIR__/prompts/long-analysis.md}",
+      "mode": "all",
+      "model": "local-llama/bonsai-27b-splash",
+      "reasoningEffort": "none",
+      "tools": {
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "list": true,
+        "edit": true,
+        "write": true,
+        "todowrite": true,
+        "bash": true,
+        "task": true,
+        "skill": true,
+        "question": true,
+        "webfetch": true,
+        "websearch": true
+      },
+      "permission": {
+        "read": "allow",
+        "grep": "allow",
+        "glob": "allow",
+        "list": "allow",
+        "edit": "allow",
+        "write": "allow",
+        "todowrite": "allow",
+        "bash": "allow",
+        "task": "allow",
+        "skill": "allow",
+        "question": "allow",
+        "webfetch": "allow",
+        "websearch": "allow"
+      },
+      "temperature": 0.7,
+      "top_p": 0.80
+    },
+    "context_worker": {
+      "description": "Use first for section-by-section, large-document, or multi-file work; complete one slice in a separate context and return a concise handoff",
+      "prompt": "{file:__OPENCODE_CONFIG_DIR__/prompts/context-worker.md}",
+      "mode": "subagent",
+      "model": "local-llama/bonsai-27b-splash",
+      "reasoningEffort": "none",
+      "tools": {
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "list": true,
+        "edit": true,
+        "write": true,
+        "todowrite": true,
+        "bash": true,
+        "task": false,
+        "skill": true,
+        "question": false,
+        "webfetch": true,
+        "websearch": true
+      },
+      "permission": {
+        "read": "allow",
+        "grep": "allow",
+        "glob": "allow",
+        "list": "allow",
+        "edit": "allow",
+        "write": "allow",
+        "todowrite": "allow",
+        "bash": "allow",
+        "task": "deny",
+        "skill": "allow",
+        "question": "deny",
+        "webfetch": "allow",
+        "websearch": "allow"
+      },
+      "temperature": 0.7,
+      "top_p": 0.80
+    },
+    "general_worker": {
+      "description": "Completes one assigned task in a fresh child context and reports a concise result",
+      "prompt": "{file:__OPENCODE_CONFIG_DIR__/prompts/general-worker.md}",
+      "mode": "subagent",
+      "model": "local-llama/bonsai-27b-splash",
+      "reasoningEffort": "none",
+      "tools": {
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "list": true,
+        "edit": true,
+        "write": true,
+        "todowrite": true,
+        "bash": true,
+        "task": false,
+        "skill": true,
+        "question": false,
+        "webfetch": true,
+        "websearch": true
+      },
+      "permission": {
+        "read": "allow",
+        "grep": "allow",
+        "glob": "allow",
+        "list": "allow",
+        "edit": "allow",
+        "write": "allow",
+        "todowrite": "allow",
+        "bash": "allow",
+        "task": "deny",
+        "skill": "allow",
+        "question": "deny",
+        "webfetch": "allow",
+        "websearch": "allow"
+      },
+      "temperature": 0.7,
+      "top_p": 0.80
+    }
+  },
+  "provider": {
+    "local-llama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Local OpenAI-compatible server (MLX or llama.cpp)",
+      "options": {
+        "baseURL": "http://127.0.0.1:1235/v1"
+      },
+      "models": {
+        "lfm2.5-8b": {
+          "name": "Liquid LFM 2.5 8B MoE (32k)",
+          "limit": {
+            "context": 32768,
+            "output": 4096
+          }
+        },
+        "gemma-4-12b": {
+          "name": "Gemma 4 12B IQ4_XS (32k)",
+          "limit": {
+            "context": 32768,
+            "output": 4096
+          }
+        },
+        "qwen3.5-9b-planner": {
+          "name": "Qwen 3.5 9B llama.cpp Planner (30K client, 4K output)",
+          "limit": {
+            "context": 30000,
+            "output": 4096
+          }
+        },
+        "qwen3.5-9b-mlx-reasoner": {
+          "name": "Qwen 3.5 9B MLX Deep Reasoning (32K client, 12K output)",
+          "limit": {
+            "context": 32768,
+            "output": 12288
+          }
+        },
+        "qwen3.5-9b-mlx-balanced": {
+          "name": "Qwen 3.5 9B MLX Balanced Coding (32K client, 6K output)",
+          "limit": {
+            "context": 32768,
+            "output": 6144
+          }
+        },
+        "qwen3.5-9b-mlx-worker": {
+          "name": "Qwen 3.5 9B MLX Focused Worker (32K client, 4K output)",
+          "limit": {
+            "context": 32768,
+            "output": 4096
+          }
+        },
+        "qwen3.8-27b": {
+          "name": "Qwen 3.8 27B (IQ1_S - 16k Context)",
+          "limit": {
+            "context": 16384,
+            "output": 4096
+          }
+        },
+        "bonsai-27b": {
+          "name": "Ternary Bonsai 2 27B PTQ1 GGUF (20K client, 4K output, non-thinking)",
+          "limit": {
+            "context": 20480,
+            "output": 4096
+          }
+        },
+        "bonsai-27b-brief": {
+          "modelID": "bonsai-27b",
+          "name": "Ternary Bonsai 2 27B PTQ1 GGUF (legacy alias, 20K client, 4K output, non-thinking)",
+          "limit": {
+            "context": 20480,
+            "output": 4096
+          }
+        },
+        "qwen3.5-9b-mtp": {
+          "name": "Qwen 3.5 9B MTP (16k)",
+          "limit": {
+            "context": 16384,
+            "output": 2048,
+            "server": 0
+          }
+        },
+        "qwen3.5-9b-fast": {
+          "name": "Qwen 3.5 9B Q4 XL (16k)",
+          "limit": {
+            "context": 16384,
+            "output": 2048,
+            "server": 0
+          }
+        },
+        "qwen3.5-9b-mtp-32k": {
+          "name": "Qwen 3.5 9B MTP (32k)",
+          "limit": {
+            "context": 32768,
+            "output": 2048,
+            "server": 0
+          }
+        },
+        "qwen3.5-9b-mlx-mtp": {
+          "name": "Qwen 3.5 9B MLX MTP Safe Long Jobs (22K)",
+          "limit": {
+            "context": 22528,
+            "output": 3072
+          }
+        },
+        "mlx-community/Qwen3.5-9B-4bit": {
+          "name": "Qwen 3.5 9B MLX MTP Safe Long Jobs (22K)",
+          "limit": {
+            "context": 22528,
+            "output": 3072
+          }
+        },
+        "bonsai-27b-splash": {
+          "name": "Ternary Bonsai 2 27B PTQ1_0 via Splash (non-thinking, int8 KV)",
+          "limit": {
+            "context": 22528,
+            "output": 1024
+          }
+        }
+      }
+    }
+  }
+}

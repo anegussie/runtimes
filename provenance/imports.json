@@ -1,0 +1,3803 @@
+{
+  "created_utc": "2026-10-04T18:43:19.321149+00:00",
+  "splash": {
+    "source": "/Users/mymac/splash/splash",
+    "commit": "2c57ae3c11d7f77608347963408ee3e0de8920c9",
+    "branch": "splashmain",
+    "working_tree_status": [
+      " M dev/benchmarks/bonsai-16gb-context.md",
+      " M dev/benchmarks/startllamacpp-option14.patch",
+      "?? dev/benchmarks/bonsai-option14-memory-analysis.md",
+      "?? dev/benchmarks/bonsai-option14-persistence.json",
+      "?? dev/benchmarks/test_bonsai_launcher.py"
+    ]
+  },
+  "opencode_version": "2.0.20",
+  "excluded": [
+    "nested .git",
+    "models",
+    "builds",
+    "virtual environments",
+    "node_modules",
+    "OpenCode service.json (password)",
+    "auth and session databases",
+    "logs and caches",
+    "disabled plugins",
+    "backups"
+  ],
+  "imports": [
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/bonsai-option14-memory-analysis.md",
+      "path": "splash/dev/benchmarks/bonsai-option14-memory-analysis.md",
+      "source_sha256": "2eeb1e68d2c23a59ee6d2d8f74b362615a345e9c202d1c1007ed3a990d3d410a",
+      "repository_sha256": "2eeb1e68d2c23a59ee6d2d8f74b362615a345e9c202d1c1007ed3a990d3d410a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/bonsai-option14-persistence.json",
+      "path": "splash/dev/benchmarks/bonsai-option14-persistence.json",
+      "source_sha256": "8d0cba1a61f8735fff34282d84ea2b424102209f9c2bf6fbc992279d5c771f0e",
+      "repository_sha256": "8d0cba1a61f8735fff34282d84ea2b424102209f9c2bf6fbc992279d5c771f0e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/test_bonsai_launcher.py",
+      "path": "splash/dev/benchmarks/test_bonsai_launcher.py",
+      "source_sha256": "5f33442d72bd72e513cc2b4534ff145eb03694148b84ca2fb3db36acb8134e61",
+      "repository_sha256": "5f33442d72bd72e513cc2b4534ff145eb03694148b84ca2fb3db36acb8134e61",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/.gitattributes",
+      "path": "splash/.gitattributes",
+      "source_sha256": "3aef7719ff057bd85254efa3c23ecb83742a2220b0a5c39254db6ab86239e3e8",
+      "repository_sha256": "3aef7719ff057bd85254efa3c23ecb83742a2220b0a5c39254db6ab86239e3e8",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/.github/workflows/ci.yml",
+      "path": "splash/.github/workflows/ci.yml",
+      "source_sha256": "5eac44158c1be0326c0125d49f6cd9bb44c1d13882ac67c1d8b32af4656f8b4f",
+      "repository_sha256": "5eac44158c1be0326c0125d49f6cd9bb44c1d13882ac67c1d8b32af4656f8b4f",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/.github/workflows/model-catalog.yml",
+      "path": "splash/.github/workflows/model-catalog.yml",
+      "source_sha256": "4c00a16dc563983c4d84e445a40ae719b17a9ffbb72dd9a252cd7a59e9a29f30",
+      "repository_sha256": "4c00a16dc563983c4d84e445a40ae719b17a9ffbb72dd9a252cd7a59e9a29f30",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/.gitignore",
+      "path": "splash/.gitignore",
+      "source_sha256": "1ffebe97ad1a21b52278fcf2681a06d615ba68b365bfd21c7135e7a8e56e7c78",
+      "repository_sha256": "1ffebe97ad1a21b52278fcf2681a06d615ba68b365bfd21c7135e7a8e56e7c78",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/CONTRIBUTING.md",
+      "path": "splash/CONTRIBUTING.md",
+      "source_sha256": "3c3309cdc3831161ee8a94d246561ca7bd0afd821fd3b87d0984eb7bd2e733a1",
+      "repository_sha256": "3c3309cdc3831161ee8a94d246561ca7bd0afd821fd3b87d0984eb7bd2e733a1",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/DEVELOPMENT.md",
+      "path": "splash/DEVELOPMENT.md",
+      "source_sha256": "10e694a9b1a931d923f236ba4e06070d4587287c5ad3a70561f58008083cc558",
+      "repository_sha256": "10e694a9b1a931d923f236ba4e06070d4587287c5ad3a70561f58008083cc558",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/LICENSE",
+      "path": "splash/LICENSE",
+      "source_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "repository_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/Makefile",
+      "path": "splash/Makefile",
+      "source_sha256": "dceadfeceb7541385a73ce3722828c2e5ebc26c1c1e12c70938ab6c49700b1d1",
+      "repository_sha256": "dceadfeceb7541385a73ce3722828c2e5ebc26c1c1e12c70938ab6c49700b1d1",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/README.md",
+      "path": "splash/README.md",
+      "source_sha256": "1edf76c5dfd782411e7aee26dee4c38d3f55ee23bac85a6eff2b0416d10e1923",
+      "repository_sha256": "1edf76c5dfd782411e7aee26dee4c38d3f55ee23bac85a6eff2b0416d10e1923",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/SECURITY.md",
+      "path": "splash/SECURITY.md",
+      "source_sha256": "0e3ae61d897d1790ab2b814c4a39efcfc8a6e0f6657746e41d7cff09c831f0ef",
+      "repository_sha256": "0e3ae61d897d1790ab2b814c4a39efcfc8a6e0f6657746e41d7cff09c831f0ef",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/THIRD_PARTY_NOTICES",
+      "path": "splash/THIRD_PARTY_NOTICES",
+      "source_sha256": "015440b1a5b875fe2d2f86a0c32e3c34c3d3e6cfb80b6936c4aa8b60539ed092",
+      "repository_sha256": "015440b1a5b875fe2d2f86a0c32e3c34c3d3e6cfb80b6936c4aa8b60539ed092",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/Makefile",
+      "path": "splash/dev/Makefile",
+      "source_sha256": "b3c366cd0283922cf857c704dfef2b5f38ab550939d96f26d4e344d867552616",
+      "repository_sha256": "b3c366cd0283922cf857c704dfef2b5f38ab550939d96f26d4e344d867552616",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/__init__.py",
+      "path": "splash/dev/__init__.py",
+      "source_sha256": "e1886aff397710390aecf9c75d16f125ee3504fc1c4c7db06dfba4b61a20be87",
+      "repository_sha256": "e1886aff397710390aecf9c75d16f125ee3504fc1c4c7db06dfba4b61a20be87",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/DispatchReplay.hpp",
+      "path": "splash/dev/benchmarks/DispatchReplay.hpp",
+      "source_sha256": "2e116f97e443767254745780b27ea265dc6976b9448275d43b56be96d6ddffc4",
+      "repository_sha256": "2e116f97e443767254745780b27ea265dc6976b9448275d43b56be96d6ddffc4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/PrefillWork.hpp",
+      "path": "splash/dev/benchmarks/PrefillWork.hpp",
+      "source_sha256": "7d9abd447e972002a53633ff202dae3a4eb2f1178d81cb28677264c81e5d7d29",
+      "repository_sha256": "7d9abd447e972002a53633ff202dae3a4eb2f1178d81cb28677264c81e5d7d29",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/abba.py",
+      "path": "splash/dev/benchmarks/abba.py",
+      "source_sha256": "7afc7b4fa24916acfc41745fc29cc659b5edada0bfa1ce55e19a685808475c0d",
+      "repository_sha256": "7afc7b4fa24916acfc41745fc29cc659b5edada0bfa1ce55e19a685808475c0d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/apple9-simdgroup.md",
+      "path": "splash/dev/benchmarks/apple9-simdgroup.md",
+      "source_sha256": "58d2b93677872838a1e2b05d03b548359a0253e11d359b874b61101401808ce7",
+      "repository_sha256": "58d2b93677872838a1e2b05d03b548359a0253e11d359b874b61101401808ce7",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/attention_sweep.mm",
+      "path": "splash/dev/benchmarks/attention_sweep.mm",
+      "source_sha256": "988e6fabd4ee8feea8ac95299b7c47538a200bff4c0082bfaa0f80ff6b1110a1",
+      "repository_sha256": "988e6fabd4ee8feea8ac95299b7c47538a200bff4c0082bfaa0f80ff6b1110a1",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/backend_benchmark.mm",
+      "path": "splash/dev/benchmarks/backend_benchmark.mm",
+      "source_sha256": "82fe4bf44462bb99594fbe7bf773f1601027e1f7ce34f1392fe2a895dbf6f9bb",
+      "repository_sha256": "82fe4bf44462bb99594fbe7bf773f1601027e1f7ce34f1392fe2a895dbf6f9bb",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/backend_regression.py",
+      "path": "splash/dev/benchmarks/backend_regression.py",
+      "source_sha256": "6d062f08f858aca7838c54743c66436e72a4f288e303e5eb17beb58bbe196730",
+      "repository_sha256": "6d062f08f858aca7838c54743c66436e72a4f288e303e5eb17beb58bbe196730",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/bonsai-16gb-context.json",
+      "path": "splash/dev/benchmarks/bonsai-16gb-context.json",
+      "source_sha256": "b74854c7e022951bf263aae3052644bbf120c49fe7f8894b2ef48f6854d26523",
+      "repository_sha256": "b74854c7e022951bf263aae3052644bbf120c49fe7f8894b2ef48f6854d26523",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/bonsai-16gb-context.md",
+      "path": "splash/dev/benchmarks/bonsai-16gb-context.md",
+      "source_sha256": "00a2561bc741e357a8d880eb46ada5dec0e4ba03c4e2b90bbc2b0b0cf56ef950",
+      "repository_sha256": "00a2561bc741e357a8d880eb46ada5dec0e4ba03c4e2b90bbc2b0b0cf56ef950",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/bonsai_context.py",
+      "path": "splash/dev/benchmarks/bonsai_context.py",
+      "source_sha256": "bfd6b4f2f00cd44dcbf505f4609a573ec8a5497ad0e623bb05e3b336a2ca8ee5",
+      "repository_sha256": "bfd6b4f2f00cd44dcbf505f4609a573ec8a5497ad0e623bb05e3b336a2ca8ee5",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/decode_profile.mm",
+      "path": "splash/dev/benchmarks/decode_profile.mm",
+      "source_sha256": "53cca0b2ab48bcd473c632b8052c599b7ef099fe3245e4ce4be9a52c504c1076",
+      "repository_sha256": "53cca0b2ab48bcd473c632b8052c599b7ef099fe3245e4ce4be9a52c504c1076",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/device-policy.md",
+      "path": "splash/dev/benchmarks/device-policy.md",
+      "source_sha256": "3c0acb4d1f9bb86b314d6a70195c0b16b41dd32814c7696906cf9c2ceefc7b6e",
+      "repository_sha256": "3c0acb4d1f9bb86b314d6a70195c0b16b41dd32814c7696906cf9c2ceefc7b6e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/gguf_moe_benchmark.mm",
+      "path": "splash/dev/benchmarks/gguf_moe_benchmark.mm",
+      "source_sha256": "7a63e2b9c5741f5637cbf7c4985a4a1c08a3a2b6c93ec584de0fe1c4e40e91cc",
+      "repository_sha256": "7a63e2b9c5741f5637cbf7c4985a4a1c08a3a2b6c93ec584de0fe1c4e40e91cc",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/gguf_projection_benchmark.mm",
+      "path": "splash/dev/benchmarks/gguf_projection_benchmark.mm",
+      "source_sha256": "67aa3ae22f0dbf1205849309f1cc29a90cc78a744ed782955a0aec3db24b7971",
+      "repository_sha256": "67aa3ae22f0dbf1205849309f1cc29a90cc78a744ed782955a0aec3db24b7971",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/http_regression.py",
+      "path": "splash/dev/benchmarks/http_regression.py",
+      "source_sha256": "c039645f37d83d12303801087307cba0a28e868cb05517f8f000d2d85670c9a2",
+      "repository_sha256": "c039645f37d83d12303801087307cba0a28e868cb05517f8f000d2d85670c9a2",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/kv-formats.md",
+      "path": "splash/dev/benchmarks/kv-formats.md",
+      "source_sha256": "dd0780c0dc2a965ecbf9f93b8ddf99e3a56584bb0f50d6bee84de38e9187c01c",
+      "repository_sha256": "dd0780c0dc2a965ecbf9f93b8ddf99e3a56584bb0f50d6bee84de38e9187c01c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/q4_decode_profile.mm",
+      "path": "splash/dev/benchmarks/q4_decode_profile.mm",
+      "source_sha256": "dbdb0faec40e73ba3954179fb0b09a34cf50cf76afc66b01ff6ec403c1e149cc",
+      "repository_sha256": "dbdb0faec40e73ba3954179fb0b09a34cf50cf76afc66b01ff6ec403c1e149cc",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/q4_prefill_profile.mm",
+      "path": "splash/dev/benchmarks/q4_prefill_profile.mm",
+      "source_sha256": "ff74633284004787d5be6ee953a2e0d4f6cf51245ebd7c1cc95ce8f54bf1b0b4",
+      "repository_sha256": "ff74633284004787d5be6ee953a2e0d4f6cf51245ebd7c1cc95ce8f54bf1b0b4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/remaining-decode-optimizations.md",
+      "path": "splash/dev/benchmarks/remaining-decode-optimizations.md",
+      "source_sha256": "cf56e408b0d0519d526050d80cfd6ded656a314e0fbc4b8bb44289064431ca76",
+      "repository_sha256": "cf56e408b0d0519d526050d80cfd6ded656a314e0fbc4b8bb44289064431ca76",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/startllamacpp-option14.patch",
+      "path": "splash/dev/benchmarks/startllamacpp-option14.patch",
+      "source_sha256": "d3d3808ca8cbfdd445f4a6664c8b3209c3594ef30329d01907d9635a8a4c438e",
+      "repository_sha256": "d3d3808ca8cbfdd445f4a6664c8b3209c3594ef30329d01907d9635a8a4c438e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/upstream-loading.md",
+      "path": "splash/dev/benchmarks/upstream-loading.md",
+      "source_sha256": "fcd81956f7554545b59c163eb32d8b95e2341a87b639c7ce176ff933ef9226d6",
+      "repository_sha256": "fcd81956f7554545b59c163eb32d8b95e2341a87b639c7ce176ff933ef9226d6",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/benchmarks/weights.py",
+      "path": "splash/dev/benchmarks/weights.py",
+      "source_sha256": "eee8ce705f3badfd86a97e5d2f1e37e730b8474ca15e3d28873505f88bc67094",
+      "repository_sha256": "eee8ce705f3badfd86a97e5d2f1e37e730b8474ca15e3d28873505f88bc67094",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/native.mk",
+      "path": "splash/dev/native.mk",
+      "source_sha256": "59e0106c2a3d8073eb4291b029529ace44fa50714b4dcffacdec716a9514d69e",
+      "repository_sha256": "59e0106c2a3d8073eb4291b029529ace44fa50714b4dcffacdec716a9514d69e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/requirements.txt",
+      "path": "splash/dev/requirements.txt",
+      "source_sha256": "b0a1e3d21c87cfe9042dc637a696a1639953c0c056cd35969e032ef58ce77118",
+      "repository_sha256": "b0a1e3d21c87cfe9042dc637a696a1639953c0c056cd35969e032ef58ce77118",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/ruff.toml",
+      "path": "splash/dev/ruff.toml",
+      "source_sha256": "3c1210ac6bbb2267e1bb030788620ccb05682367d48b1f5c6a90f54f692b088d",
+      "repository_sha256": "3c1210ac6bbb2267e1bb030788620ccb05682367d48b1f5c6a90f54f692b088d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/__init__.py",
+      "path": "splash/dev/tests/__init__.py",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "repository_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/agent_real.py",
+      "path": "splash/dev/tests/agent_real.py",
+      "source_sha256": "e7ba3188329ffca1577ddbde84fb4ce47b5951e7a938e74ef45641d8a4552306",
+      "repository_sha256": "e7ba3188329ffca1577ddbde84fb4ce47b5951e7a938e74ef45641d8a4552306",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/attention_sweep_cli.sh",
+      "path": "splash/dev/tests/attention_sweep_cli.sh",
+      "source_sha256": "18f201923ded7feef89c5d0fc7e0ac615b1875e40468f88c3b4d830ff15c2a16",
+      "repository_sha256": "18f201923ded7feef89c5d0fc7e0ac615b1875e40468f88c3b4d830ff15c2a16",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/AffineQ4Fixture.hpp",
+      "path": "splash/dev/tests/engine/AffineQ4Fixture.hpp",
+      "source_sha256": "a70ec00beb79bbd93d7e0d700a7fcb411e78ef40a64d1b7a669f7742e1a3b4a0",
+      "repository_sha256": "a70ec00beb79bbd93d7e0d700a7fcb411e78ef40a64d1b7a669f7742e1a3b4a0",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/AllocationFailure.hpp",
+      "path": "splash/dev/tests/engine/AllocationFailure.hpp",
+      "source_sha256": "bb17ebbbf91b168f68d627e8c7972e3cd9d04cec4c7a14445461eaeaccfa796e",
+      "repository_sha256": "bb17ebbbf91b168f68d627e8c7972e3cd9d04cec4c7a14445461eaeaccfa796e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/GgufFixtures.hpp",
+      "path": "splash/dev/tests/engine/GgufFixtures.hpp",
+      "source_sha256": "f274fa5ff7f681e949b94adf5e8b4c72553df2ddf183bb9b45f9ace220d035f2",
+      "repository_sha256": "f274fa5ff7f681e949b94adf5e8b4c72553df2ddf183bb9b45f9ace220d035f2",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/GgufFormatReference.hpp",
+      "path": "splash/dev/tests/engine/GgufFormatReference.hpp",
+      "source_sha256": "250e47fcaaa1f906acb6e981132ae17d22c6373cfdd8461701314ae276b6f745",
+      "repository_sha256": "250e47fcaaa1f906acb6e981132ae17d22c6373cfdd8461701314ae276b6f745",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/LinearInputReference.hpp",
+      "path": "splash/dev/tests/engine/LinearInputReference.hpp",
+      "source_sha256": "91aab3eec64c609c76a94b87692eae8d0821c8f4fa96f9188bd5abfc0c1b6b3d",
+      "repository_sha256": "91aab3eec64c609c76a94b87692eae8d0821c8f4fa96f9188bd5abfc0c1b6b3d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/NormReference.hpp",
+      "path": "splash/dev/tests/engine/NormReference.hpp",
+      "source_sha256": "04bc6601e46872fbc1e98c5a8e68282ffe3e59ba87b10e40e1d68b08bd98f067",
+      "repository_sha256": "04bc6601e46872fbc1e98c5a8e68282ffe3e59ba87b10e40e1d68b08bd98f067",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/ProtocolPeer.cpp",
+      "path": "splash/dev/tests/engine/ProtocolPeer.cpp",
+      "source_sha256": "2f4b92b7a1da09ad6c94942a1e8261334a7e433dd64853a6bc038cfb938f7115",
+      "repository_sha256": "2f4b92b7a1da09ad6c94942a1e8261334a7e433dd64853a6bc038cfb938f7115",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/ProtocolPeer.hpp",
+      "path": "splash/dev/tests/engine/ProtocolPeer.hpp",
+      "source_sha256": "ca87980086ce5d4f3cfd3d673fd68ff54eceb3d41852a01a958f256758b171a9",
+      "repository_sha256": "ca87980086ce5d4f3cfd3d673fd68ff54eceb3d41852a01a958f256758b171a9",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/Q8PageFormatReference.hpp",
+      "path": "splash/dev/tests/engine/Q8PageFormatReference.hpp",
+      "source_sha256": "72bafe8f1bd15a74e995a0d12702cf83baa71a58787e8dd45262ef82b8854381",
+      "repository_sha256": "72bafe8f1bd15a74e995a0d12702cf83baa71a58787e8dd45262ef82b8854381",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/ScopedTestConfig.hpp",
+      "path": "splash/dev/tests/engine/ScopedTestConfig.hpp",
+      "source_sha256": "843a1b7100792fb891e5bd8bc818361318e54b673b86746373809186cf1396f8",
+      "repository_sha256": "843a1b7100792fb891e5bd8bc818361318e54b673b86746373809186cf1396f8",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/TestBuffers.hpp",
+      "path": "splash/dev/tests/engine/TestBuffers.hpp",
+      "source_sha256": "c96ecce549174deaf97f8bdd4e4ff82d4acfc116e40209a7761e3bd94f502f57",
+      "repository_sha256": "c96ecce549174deaf97f8bdd4e4ff82d4acfc116e40209a7761e3bd94f502f57",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/TestCache.hpp",
+      "path": "splash/dev/tests/engine/TestCache.hpp",
+      "source_sha256": "c4b9237895d5c0a86fcd810aca575d21d6151f02536feb9b8e8dd99811f55491",
+      "repository_sha256": "c4b9237895d5c0a86fcd810aca575d21d6151f02536feb9b8e8dd99811f55491",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/TestChecks.hpp",
+      "path": "splash/dev/tests/engine/TestChecks.hpp",
+      "source_sha256": "dede5515ee19f8298c6249c0601d07ba19b547eb08350f365285c3e8b9bdb4f5",
+      "repository_sha256": "dede5515ee19f8298c6249c0601d07ba19b547eb08350f365285c3e8b9bdb4f5",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/TestFiles.hpp",
+      "path": "splash/dev/tests/engine/TestFiles.hpp",
+      "source_sha256": "0b4f4bb098c9d91535808781f07e88fd8b29718a42c2980758bfc2c925d2a50e",
+      "repository_sha256": "0b4f4bb098c9d91535808781f07e88fd8b29718a42c2980758bfc2c925d2a50e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/TestGguf.hpp",
+      "path": "splash/dev/tests/engine/TestGguf.hpp",
+      "source_sha256": "a982ac7c5fac834ca5ca5e256cea1d49959dfafd27d020b47430e3ffb07b11fa",
+      "repository_sha256": "a982ac7c5fac834ca5ca5e256cea1d49959dfafd27d020b47430e3ffb07b11fa",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/TestImmediateTicket.hpp",
+      "path": "splash/dev/tests/engine/TestImmediateTicket.hpp",
+      "source_sha256": "78f433b818c08a5412e35b36ded3cb54fb385b5f77f82cb0554e527862641e38",
+      "repository_sha256": "78f433b818c08a5412e35b36ded3cb54fb385b5f77f82cb0554e527862641e38",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/TestKvPool.hpp",
+      "path": "splash/dev/tests/engine/TestKvPool.hpp",
+      "source_sha256": "c972037943aea41347a058bbd307fc11113c68c2cbb4d2fd0ef45bad8a9c953b",
+      "repository_sha256": "c972037943aea41347a058bbd307fc11113c68c2cbb4d2fd0ef45bad8a9c953b",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/TestKvTier.hpp",
+      "path": "splash/dev/tests/engine/TestKvTier.hpp",
+      "source_sha256": "a8074dc4a0187c8362e48e9796e7ebec6ec21ef54732cdb9c8bf8e6774876c0a",
+      "repository_sha256": "a8074dc4a0187c8362e48e9796e7ebec6ec21ef54732cdb9c8bf8e6774876c0a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/TestMetalMemory.hpp",
+      "path": "splash/dev/tests/engine/TestMetalMemory.hpp",
+      "source_sha256": "52033c937a3a6a9d7766593dd0cd230e59ac466032a553ac25ead3baeac320da",
+      "repository_sha256": "52033c937a3a6a9d7766593dd0cd230e59ac466032a553ac25ead3baeac320da",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/TestModel.hpp",
+      "path": "splash/dev/tests/engine/TestModel.hpp",
+      "source_sha256": "87613f2c4dd8058064c91ca1322964754f4e437d92c581e527daba6a2f5a9018",
+      "repository_sha256": "87613f2c4dd8058064c91ca1322964754f4e437d92c581e527daba6a2f5a9018",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/TestPageEntries.hpp",
+      "path": "splash/dev/tests/engine/TestPageEntries.hpp",
+      "source_sha256": "27608e1687c83821b6bb3a184809f2022e446aac41fb56b85152b38e11298921",
+      "repository_sha256": "27608e1687c83821b6bb3a184809f2022e446aac41fb56b85152b38e11298921",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/TestRuntimeGeometry.hpp",
+      "path": "splash/dev/tests/engine/TestRuntimeGeometry.hpp",
+      "source_sha256": "1a2579b7f697e62697f205f749b4d0868ce460a0fc5280560ce981357356e548",
+      "repository_sha256": "1a2579b7f697e62697f205f749b4d0868ce460a0fc5280560ce981357356e548",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/TestStatus.hpp",
+      "path": "splash/dev/tests/engine/TestStatus.hpp",
+      "source_sha256": "0ce77c86592077b3caff47676f577a7ee894f49156e2fd7e219734e7076efa5d",
+      "repository_sha256": "0ce77c86592077b3caff47676f577a7ee894f49156e2fd7e219734e7076efa5d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/__init__.py",
+      "path": "splash/dev/tests/engine/__init__.py",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "repository_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/affine_checkpoint_test.cpp",
+      "path": "splash/dev/tests/engine/affine_checkpoint_test.cpp",
+      "source_sha256": "f429c543ff1702d1477347f1b18f2cbf1eaf12c512f924be5edb99a6e28056c7",
+      "repository_sha256": "f429c543ff1702d1477347f1b18f2cbf1eaf12c512f924be5edb99a6e28056c7",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/affine_preparation_test.mm",
+      "path": "splash/dev/tests/engine/affine_preparation_test.mm",
+      "source_sha256": "feb2d79e2b0b507691bdc9bcc6fc8bd76e009d7bc6ee92fceb4e22a60d145453",
+      "repository_sha256": "feb2d79e2b0b507691bdc9bcc6fc8bd76e009d7bc6ee92fceb4e22a60d145453",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/affine_source_oracle_test.mm",
+      "path": "splash/dev/tests/engine/affine_source_oracle_test.mm",
+      "source_sha256": "9f656cca5d8e7b327cd37c2a185cbbc228615b15f4aeacc4cfd9b4317406d7a4",
+      "repository_sha256": "9f656cca5d8e7b327cd37c2a185cbbc228615b15f4aeacc4cfd9b4317406d7a4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/cache_directory_test.cpp",
+      "path": "splash/dev/tests/engine/cache_directory_test.cpp",
+      "source_sha256": "c8bc9ff73deb1e8f33940323c4de5cf0a703b067e2a27c01ff291f982eb9d7f4",
+      "repository_sha256": "c8bc9ff73deb1e8f33940323c4de5cf0a703b067e2a27c01ff291f982eb9d7f4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/dflash_batch_control_metal_test.mm",
+      "path": "splash/dev/tests/engine/dflash_batch_control_metal_test.mm",
+      "source_sha256": "e1875bc526ca4ee4e2281752fe3ccf7d0b7a3afd76799ffc37c00be0310dfbc0",
+      "repository_sha256": "e1875bc526ca4ee4e2281752fe3ccf7d0b7a3afd76799ffc37c00be0310dfbc0",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/draft_attention_metal_test.mm",
+      "path": "splash/dev/tests/engine/draft_attention_metal_test.mm",
+      "source_sha256": "03593ffe5bfdce5137ec6a715e1236445af70f9507372f8d15a44e02529a3565",
+      "repository_sha256": "03593ffe5bfdce5137ec6a715e1236445af70f9507372f8d15a44e02529a3565",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/draft_context_plan_test.cpp",
+      "path": "splash/dev/tests/engine/draft_context_plan_test.cpp",
+      "source_sha256": "ad2398397eafd49a3050f480720326d314591fedd04e0a870b26fd2e08360e65",
+      "repository_sha256": "ad2398397eafd49a3050f480720326d314591fedd04e0a870b26fd2e08360e65",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/draft_selector_metal_test.mm",
+      "path": "splash/dev/tests/engine/draft_selector_metal_test.mm",
+      "source_sha256": "b84586d604e5e4973412e28de4d11e5a9a2a3eaf38164c81b10e7d77f1a40e64",
+      "repository_sha256": "b84586d604e5e4973412e28de4d11e5a9a2a3eaf38164c81b10e7d77f1a40e64",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/elastic_kv_pool_test.cpp",
+      "path": "splash/dev/tests/engine/elastic_kv_pool_test.cpp",
+      "source_sha256": "cd579f9cb6962e67279c94a78ca3f99a4611000443d9d4592a3d922bcf9b13d1",
+      "repository_sha256": "cd579f9cb6962e67279c94a78ca3f99a4611000443d9d4592a3d922bcf9b13d1",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/engine_memory_plan_test.cpp",
+      "path": "splash/dev/tests/engine/engine_memory_plan_test.cpp",
+      "source_sha256": "b432a66a7ba8ee3ea12ec18c65c4d4d0866583ecc13deac3424fad813eb633ce",
+      "repository_sha256": "b432a66a7ba8ee3ea12ec18c65c4d4d0866583ecc13deac3424fad813eb633ce",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/execution_plans_test.cc",
+      "path": "splash/dev/tests/engine/execution_plans_test.cc",
+      "source_sha256": "4ea06b4724ceca7a69f1b884737f20a60e7571335d629f4f98136a2dc3fef39f",
+      "repository_sha256": "4ea06b4724ceca7a69f1b884737f20a60e7571335d629f4f98136a2dc3fef39f",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/gdn_decode_metal_test.mm",
+      "path": "splash/dev/tests/engine/gdn_decode_metal_test.mm",
+      "source_sha256": "9188c0ee2c6e8f3a12b5cbb45fad665bc2ccb8ee4976efdd8f22672b428acdb3",
+      "repository_sha256": "9188c0ee2c6e8f3a12b5cbb45fad665bc2ccb8ee4976efdd8f22672b428acdb3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/gdn_metal_test.mm",
+      "path": "splash/dev/tests/engine/gdn_metal_test.mm",
+      "source_sha256": "19f986649624a4b0fc063f41dbcfd1379f839445ef00810865b7582e417c03b0",
+      "repository_sha256": "19f986649624a4b0fc063f41dbcfd1379f839445ef00810865b7582e417c03b0",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/gguf_dequant_test.metal",
+      "path": "splash/dev/tests/engine/gguf_dequant_test.metal",
+      "source_sha256": "053975cf5a04ed013550472831b6f2489f5599648a77f7294491fd740021359b",
+      "repository_sha256": "053975cf5a04ed013550472831b6f2489f5599648a77f7294491fd740021359b",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/gguf_dequant_test.mm",
+      "path": "splash/dev/tests/engine/gguf_dequant_test.mm",
+      "source_sha256": "39f16b74afdc0f760b34ab5006ce36d3ca3e67dd3f127d20738fb399cb910856",
+      "repository_sha256": "39f16b74afdc0f760b34ab5006ce36d3ca3e67dd3f127d20738fb399cb910856",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/gguf_file_test.cpp",
+      "path": "splash/dev/tests/engine/gguf_file_test.cpp",
+      "source_sha256": "cedf74d94ca5d483eaef4a36cd533bfbe6dc0b694f5478976b5101ccda0ba8c7",
+      "repository_sha256": "cedf74d94ca5d483eaef4a36cd533bfbe6dc0b694f5478976b5101ccda0ba8c7",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/gguf_moe_test.mm",
+      "path": "splash/dev/tests/engine/gguf_moe_test.mm",
+      "source_sha256": "78f4bdff0970cec5c2b0a0c2903f7ddddea99af0de8cf079e47a5ca5325f0ea5",
+      "repository_sha256": "78f4bdff0970cec5c2b0a0c2903f7ddddea99af0de8cf079e47a5ca5325f0ea5",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/gguf_planner_test.mm",
+      "path": "splash/dev/tests/engine/gguf_planner_test.mm",
+      "source_sha256": "45b6a8e8b4edd43b64936776b3576799d12358ab17d57b30be2f4fed60a1a58c",
+      "repository_sha256": "45b6a8e8b4edd43b64936776b3576799d12358ab17d57b30be2f4fed60a1a58c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/gguf_preparation_test.mm",
+      "path": "splash/dev/tests/engine/gguf_preparation_test.mm",
+      "source_sha256": "384680a4e2978331fce8712f97258aae2f0c7ea7d725cb646be49153307577ab",
+      "repository_sha256": "384680a4e2978331fce8712f97258aae2f0c7ea7d725cb646be49153307577ab",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/gguf_projection_test.mm",
+      "path": "splash/dev/tests/engine/gguf_projection_test.mm",
+      "source_sha256": "4976fef35d1a56becc930dbaf61d3fd868b87920e0d3d43672886bff01bab16c",
+      "repository_sha256": "4976fef35d1a56becc930dbaf61d3fd868b87920e0d3d43672886bff01bab16c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/gguf_reference_test.mm",
+      "path": "splash/dev/tests/engine/gguf_reference_test.mm",
+      "source_sha256": "93481fb88015b49827b845352fc0b374da45915d99649e372d56abc7a07277c4",
+      "repository_sha256": "93481fb88015b49827b845352fc0b374da45915d99649e372d56abc7a07277c4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/gguf_rotation_test.mm",
+      "path": "splash/dev/tests/engine/gguf_rotation_test.mm",
+      "source_sha256": "93d926c83bc8bbe216f20a479732d596f63e18b1bdb99e1cd88403ed82ce84b5",
+      "repository_sha256": "93d926c83bc8bbe216f20a479732d596f63e18b1bdb99e1cd88403ed82ce84b5",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/kv_first_cache_test.cpp",
+      "path": "splash/dev/tests/engine/kv_first_cache_test.cpp",
+      "source_sha256": "73cdbe726d9ad5786eabe502d63f6c594fb9c8bc275f6caa8c581116253e97f2",
+      "repository_sha256": "73cdbe726d9ad5786eabe502d63f6c594fb9c8bc275f6caa8c581116253e97f2",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/kv_first_engine_test.cpp",
+      "path": "splash/dev/tests/engine/kv_first_engine_test.cpp",
+      "source_sha256": "63d79301fdceed191c8203ed34408df0634bf471ee503c922754e63b80d7a6e4",
+      "repository_sha256": "63d79301fdceed191c8203ed34408df0634bf471ee503c922754e63b80d7a6e4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/kv_page_cache_test.cpp",
+      "path": "splash/dev/tests/engine/kv_page_cache_test.cpp",
+      "source_sha256": "3df19c7b077a60bc4b114d0de7b492d3afcbb36ef263b9ab0d10ee812b5b6ec8",
+      "repository_sha256": "3df19c7b077a60bc4b114d0de7b492d3afcbb36ef263b9ab0d10ee812b5b6ec8",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/kv_page_tier_test.mm",
+      "path": "splash/dev/tests/engine/kv_page_tier_test.mm",
+      "source_sha256": "fa833bdca43d9af5d972fc66511170bc66095170a4486bb451cc707c486f696f",
+      "repository_sha256": "fa833bdca43d9af5d972fc66511170bc66095170a4486bb451cc707c486f696f",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/linear_plan_test.mm",
+      "path": "splash/dev/tests/engine/linear_plan_test.mm",
+      "source_sha256": "43fbb7f63e8cd5c0b4dc06eaf81497f9f28ad53999c3221bf1eede8b795134d0",
+      "repository_sha256": "43fbb7f63e8cd5c0b4dc06eaf81497f9f28ad53999c3221bf1eede8b795134d0",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/linear_tuning_test.cc",
+      "path": "splash/dev/tests/engine/linear_tuning_test.cc",
+      "source_sha256": "f5ec194d2c55a6091c68e1588847bff029a88b1bafdea38142d1fe3b11520cea",
+      "repository_sha256": "f5ec194d2c55a6091c68e1588847bff029a88b1bafdea38142d1fe3b11520cea",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/memory_audit_test.cpp",
+      "path": "splash/dev/tests/engine/memory_audit_test.cpp",
+      "source_sha256": "f6706a12db5c394b3a39bdfe9a71600cbff362a56fc51a3d46965ae8e6a08942",
+      "repository_sha256": "f6706a12db5c394b3a39bdfe9a71600cbff362a56fc51a3d46965ae8e6a08942",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/memory_governor_test.cpp",
+      "path": "splash/dev/tests/engine/memory_governor_test.cpp",
+      "source_sha256": "0c348265bb0fb059fe66ee196f97d666341d62ff92daa4b5e858556be480d78c",
+      "repository_sha256": "0c348265bb0fb059fe66ee196f97d666341d62ff92daa4b5e858556be480d78c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/metal_backend_test.metal",
+      "path": "splash/dev/tests/engine/metal_backend_test.metal",
+      "source_sha256": "97f36333b60f05fd28793b5eb386fa165db73b46dcd5b32d7fc7fedaafa39992",
+      "repository_sha256": "97f36333b60f05fd28793b5eb386fa165db73b46dcd5b32d7fc7fedaafa39992",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/metal_backend_test.mm",
+      "path": "splash/dev/tests/engine/metal_backend_test.mm",
+      "source_sha256": "72e3cd6bfa4936bf19f0d3851c92a857dcb89fa184a164e98c9c4a324a78d6e0",
+      "repository_sha256": "72e3cd6bfa4936bf19f0d3851c92a857dcb89fa184a164e98c9c4a324a78d6e0",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/model_execution_plan_test.cpp",
+      "path": "splash/dev/tests/engine/model_execution_plan_test.cpp",
+      "source_sha256": "290df4326e827131471f26e6c26bee80694399af534817d746946bb002cb95bc",
+      "repository_sha256": "290df4326e827131471f26e6c26bee80694399af534817d746946bb002cb95bc",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/model_package_test.cpp",
+      "path": "splash/dev/tests/engine/model_package_test.cpp",
+      "source_sha256": "7202efc9c503f65372a5eb1123dddc1d399118973cfd69997c7ac3c5bd0b2288",
+      "repository_sha256": "7202efc9c503f65372a5eb1123dddc1d399118973cfd69997c7ac3c5bd0b2288",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/model_runtime_oracle_test.mm",
+      "path": "splash/dev/tests/engine/model_runtime_oracle_test.mm",
+      "source_sha256": "d1359c3725d804cb8ed6b2c6dd2d428aad1ddcab10accb317e6c80f1c23a65fa",
+      "repository_sha256": "d1359c3725d804cb8ed6b2c6dd2d428aad1ddcab10accb317e6c80f1c23a65fa",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/moe_metal_test.mm",
+      "path": "splash/dev/tests/engine/moe_metal_test.mm",
+      "source_sha256": "ab92b65fbc3a226135a640d21b751fe76aee386a8f5ef88fcfe3d5b5a43341d3",
+      "repository_sha256": "ab92b65fbc3a226135a640d21b751fe76aee386a8f5ef88fcfe3d5b5a43341d3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/native_engine_loop_test.cpp",
+      "path": "splash/dev/tests/engine/native_engine_loop_test.cpp",
+      "source_sha256": "df75434d543f826fae05abd509c624accb93f2226585f95ab4011de5a9f94e2c",
+      "repository_sha256": "df75434d543f826fae05abd509c624accb93f2226585f95ab4011de5a9f94e2c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/native_fd_transport_test.cpp",
+      "path": "splash/dev/tests/engine/native_fd_transport_test.cpp",
+      "source_sha256": "4043576ae51bfa948bf4bb2f25ed5b98af969d51662e3345051e1d13b5b0418c",
+      "repository_sha256": "4043576ae51bfa948bf4bb2f25ed5b98af969d51662e3345051e1d13b5b0418c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/native_peer.py",
+      "path": "splash/dev/tests/engine/native_peer.py",
+      "source_sha256": "135c9f060d739827bdbb2f7128c8dd10c606e51878422bd9ca5f3cb067f28c4f",
+      "repository_sha256": "135c9f060d739827bdbb2f7128c8dd10c606e51878422bd9ca5f3cb067f28c4f",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/operator_measurement_test.cpp",
+      "path": "splash/dev/tests/engine/operator_measurement_test.cpp",
+      "source_sha256": "9fd5d7272f03ecab7a614738f27c37919d22e4f1e408b4e77e9f4125520624aa",
+      "repository_sha256": "9fd5d7272f03ecab7a614738f27c37919d22e4f1e408b4e77e9f4125520624aa",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/operator_tuning_test.cpp",
+      "path": "splash/dev/tests/engine/operator_tuning_test.cpp",
+      "source_sha256": "a16b70126aa13f6342a30939f89754c5fc8846d7c750de35a70e72810163c338",
+      "repository_sha256": "a16b70126aa13f6342a30939f89754c5fc8846d7c750de35a70e72810163c338",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/operator_workspace_test.cc",
+      "path": "splash/dev/tests/engine/operator_workspace_test.cc",
+      "source_sha256": "f233895f8c6db631ca597a7ac11c540c591a3fdae28e1c778f71c6ba85f37e90",
+      "repository_sha256": "f233895f8c6db631ca597a7ac11c540c591a3fdae28e1c778f71c6ba85f37e90",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/paged_attention_plan_test.mm",
+      "path": "splash/dev/tests/engine/paged_attention_plan_test.mm",
+      "source_sha256": "d9bf982ef57d2f2fc3fe73ce2c1626b009cf1977137e28480c74004d8768a103",
+      "repository_sha256": "d9bf982ef57d2f2fc3fe73ce2c1626b009cf1977137e28480c74004d8768a103",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/persistent_cache_test.cpp",
+      "path": "splash/dev/tests/engine/persistent_cache_test.cpp",
+      "source_sha256": "1b31ccf7d773ccfc26f504e094ff2fdbfc78bbfce278f2d4e3c985a2ab834b03",
+      "repository_sha256": "1b31ccf7d773ccfc26f504e094ff2fdbfc78bbfce278f2d4e3c985a2ab834b03",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/protocol_golden.txt",
+      "path": "splash/dev/tests/engine/protocol_golden.txt",
+      "source_sha256": "1edd3492a3a43f1d9de6667cc8d328f586492000a607161ae4c22029b5c0472e",
+      "repository_sha256": "1edd3492a3a43f1d9de6667cc8d328f586492000a607161ae4c22029b5c0472e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/protocol_test.cpp",
+      "path": "splash/dev/tests/engine/protocol_test.cpp",
+      "source_sha256": "587a62fc02ad087561296faacd4adddfef04b54bb1d720eac107669771d5cafe",
+      "repository_sha256": "587a62fc02ad087561296faacd4adddfef04b54bb1d720eac107669771d5cafe",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/q4_batched_projection_metal_test.mm",
+      "path": "splash/dev/tests/engine/q4_batched_projection_metal_test.mm",
+      "source_sha256": "dca8f837a96e965331216c8bb50cc6434e3fe29f5b7965cb03d95bd9b3e05446",
+      "repository_sha256": "dca8f837a96e965331216c8bb50cc6434e3fe29f5b7965cb03d95bd9b3e05446",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/q4_prefill_projection_metal_test.mm",
+      "path": "splash/dev/tests/engine/q4_prefill_projection_metal_test.mm",
+      "source_sha256": "6c962c60f78ae2e21d62abf1e8d6074a34d7fffdc44b11869a1045886e934c9c",
+      "repository_sha256": "6c962c60f78ae2e21d62abf1e8d6074a34d7fffdc44b11869a1045886e934c9c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/q4_sgmatrix_metal_test.mm",
+      "path": "splash/dev/tests/engine/q4_sgmatrix_metal_test.mm",
+      "source_sha256": "ae4cd36083d33a9e056d5f1147f5edf61aacb78a17da7c0a924d741e4fd117ea",
+      "repository_sha256": "ae4cd36083d33a9e056d5f1147f5edf61aacb78a17da7c0a924d741e4fd117ea",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/q8_chunked_prefill_metal_test.mm",
+      "path": "splash/dev/tests/engine/q8_chunked_prefill_metal_test.mm",
+      "source_sha256": "e31ad43b9fdbcd50bcaa514eb2f8e644735a0a4b28f6f7ec418d5ac897c769b9",
+      "repository_sha256": "e31ad43b9fdbcd50bcaa514eb2f8e644735a0a4b28f6f7ec418d5ac897c769b9",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/q8_flash_attention_metal_test.mm",
+      "path": "splash/dev/tests/engine/q8_flash_attention_metal_test.mm",
+      "source_sha256": "ebc68d9979001b45c315d742a0221ac939a1ca86e75f41f6aa24841acf07dc5a",
+      "repository_sha256": "ebc68d9979001b45c315d742a0221ac939a1ca86e75f41f6aa24841acf07dc5a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/q8_page_format_oracle.metal",
+      "path": "splash/dev/tests/engine/q8_page_format_oracle.metal",
+      "source_sha256": "95da794c1c7c5fa4948bae2dfdd06b52339aafd7ebf59bf9d94446ec56b95aa1",
+      "repository_sha256": "95da794c1c7c5fa4948bae2dfdd06b52339aafd7ebf59bf9d94446ec56b95aa1",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/q8_page_storage_test.mm",
+      "path": "splash/dev/tests/engine/q8_page_storage_test.mm",
+      "source_sha256": "072ab51d001fd355f0c1b0a9504d7e882d78473fd85694e5ea01199accc51d32",
+      "repository_sha256": "072ab51d001fd355f0c1b0a9504d7e882d78473fd85694e5ea01199accc51d32",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/q8_paged_kv_metal_test.mm",
+      "path": "splash/dev/tests/engine/q8_paged_kv_metal_test.mm",
+      "source_sha256": "fae5bef80d705b4f6a0d8622b76755bc7d05891cb692a91cb57ce1a61048f82e",
+      "repository_sha256": "fae5bef80d705b4f6a0d8622b76755bc7d05891cb692a91cb57ce1a61048f82e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/q8_paged_kv_test.cc",
+      "path": "splash/dev/tests/engine/q8_paged_kv_test.cc",
+      "source_sha256": "4fdde1983fc998d58f0a6a030c85e2243abe4b07f54c888acf4dd48349292aa7",
+      "repository_sha256": "4fdde1983fc998d58f0a6a030c85e2243abe4b07f54c888acf4dd48349292aa7",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/qwen_state_storage_test.mm",
+      "path": "splash/dev/tests/engine/qwen_state_storage_test.mm",
+      "source_sha256": "4e6cfe987dd43fea4da0af6b883be14a175cfccaf41c999fc632855017dc4a95",
+      "repository_sha256": "4e6cfe987dd43fea4da0af6b883be14a175cfccaf41c999fc632855017dc4a95",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/ragged_scheduler_test.cpp",
+      "path": "splash/dev/tests/engine/ragged_scheduler_test.cpp",
+      "source_sha256": "40c90a64fbb63bf062dfe6a93fd54bdaa88fd7bfbf98276022cc4cdd959f3f93",
+      "repository_sha256": "40c90a64fbb63bf062dfe6a93fd54bdaa88fd7bfbf98276022cc4cdd959f3f93",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/run_affine_preparation.py",
+      "path": "splash/dev/tests/engine/run_affine_preparation.py",
+      "source_sha256": "ab4d15d99bf98f8c3212727cdd38316833c056e869606e614ccb57c54a45aab4",
+      "repository_sha256": "ab4d15d99bf98f8c3212727cdd38316833c056e869606e614ccb57c54a45aab4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/run_vision_preparation.py",
+      "path": "splash/dev/tests/engine/run_vision_preparation.py",
+      "source_sha256": "9a2b7cede2b9a85a11b4fee2ce38aecc155036e6a6d1344276cd1d81124dd9c4",
+      "repository_sha256": "9a2b7cede2b9a85a11b4fee2ce38aecc155036e6a6d1344276cd1d81124dd9c4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/runtime_bootstrap_test.mm",
+      "path": "splash/dev/tests/engine/runtime_bootstrap_test.mm",
+      "source_sha256": "c0691532a470dafd1682cfd208954a9eb5fd6cd4b777e5836ff6033037340bf5",
+      "repository_sha256": "c0691532a470dafd1682cfd208954a9eb5fd6cd4b777e5836ff6033037340bf5",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/runtime_metrics_test.cpp",
+      "path": "splash/dev/tests/engine/runtime_metrics_test.cpp",
+      "source_sha256": "9f4e24d3163d720d87068374778487c64089e7a75475c2658561fd487ab0943c",
+      "repository_sha256": "9f4e24d3163d720d87068374778487c64089e7a75475c2658561fd487ab0943c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/runtime_resources_test.mm",
+      "path": "splash/dev/tests/engine/runtime_resources_test.mm",
+      "source_sha256": "c06314650c1a98d9f10e860c1aeea6d0ca7c42eacffd0ea2c5427b7d3f6b2cdb",
+      "repository_sha256": "c06314650c1a98d9f10e860c1aeea6d0ca7c42eacffd0ea2c5427b7d3f6b2cdb",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/runtime_status_test.cpp",
+      "path": "splash/dev/tests/engine/runtime_status_test.cpp",
+      "source_sha256": "c162f8509e9b6d4b09c820939bac6838e04c9650a82841abd40dcc6adf45276d",
+      "repository_sha256": "c162f8509e9b6d4b09c820939bac6838e04c9650a82841abd40dcc6adf45276d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/slot_file_test.cpp",
+      "path": "splash/dev/tests/engine/slot_file_test.cpp",
+      "source_sha256": "7d045ed000bc82e444db566b3e6a900af857394f807fe2b11b765150946eb74c",
+      "repository_sha256": "7d045ed000bc82e444db566b3e6a900af857394f807fe2b11b765150946eb74c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/target_sampling_metal_test.mm",
+      "path": "splash/dev/tests/engine/target_sampling_metal_test.mm",
+      "source_sha256": "16dcae7989dd59b3e8bf1106109c713841dcedcd634ee5b2360742fc37a4925d",
+      "repository_sha256": "16dcae7989dd59b3e8bf1106109c713841dcedcd634ee5b2360742fc37a4925d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_abba.py",
+      "path": "splash/dev/tests/engine/test_abba.py",
+      "source_sha256": "b2a1852dfdd37b33152960210304d7ccae81ee5663d5d35d12891a7798bbce71",
+      "repository_sha256": "b2a1852dfdd37b33152960210304d7ccae81ee5663d5d35d12891a7798bbce71",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_agent_real.py",
+      "path": "splash/dev/tests/engine/test_agent_real.py",
+      "source_sha256": "63e721be7643ed18827a5ca24778d54c178b25442d6df36b8480db003749e5e4",
+      "repository_sha256": "63e721be7643ed18827a5ca24778d54c178b25442d6df36b8480db003749e5e4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_anthropic_contract.py",
+      "path": "splash/dev/tests/engine/test_anthropic_contract.py",
+      "source_sha256": "b709caeb8cc17c43c6f58e359469afec2730b5f86e157358ecf60aff783a63f9",
+      "repository_sha256": "b709caeb8cc17c43c6f58e359469afec2730b5f86e157358ecf60aff783a63f9",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_architecture.py",
+      "path": "splash/dev/tests/engine/test_architecture.py",
+      "source_sha256": "575b9135fdc2e8abbf8012955e48df48d1021e212714631312e6f4e68e795fc0",
+      "repository_sha256": "575b9135fdc2e8abbf8012955e48df48d1021e212714631312e6f4e68e795fc0",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_backend_regression.py",
+      "path": "splash/dev/tests/engine/test_backend_regression.py",
+      "source_sha256": "1dce302dcabeea4e30547dd0214743a074e3ea90bddd8ed847d1556f51756076",
+      "repository_sha256": "1dce302dcabeea4e30547dd0214743a074e3ea90bddd8ed847d1556f51756076",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_build_identity.py",
+      "path": "splash/dev/tests/engine/test_build_identity.py",
+      "source_sha256": "d56135ec6064f067c6377294d3e4e250aaaadc06d565fa05f65b372dafb94ab1",
+      "repository_sha256": "d56135ec6064f067c6377294d3e4e250aaaadc06d565fa05f65b372dafb94ab1",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_chat.py",
+      "path": "splash/dev/tests/engine/test_chat.py",
+      "source_sha256": "e6c08c75d36ea99a545e5b0ffe0612b6f46af5bcd16be46d512049be76da26a2",
+      "repository_sha256": "e6c08c75d36ea99a545e5b0ffe0612b6f46af5bcd16be46d512049be76da26a2",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_chat_templates.py",
+      "path": "splash/dev/tests/engine/test_chat_templates.py",
+      "source_sha256": "940ce71cff836ec0639d2d08cd7871dabc9188319707724bab720fbb6f0832f4",
+      "repository_sha256": "940ce71cff836ec0639d2d08cd7871dabc9188319707724bab720fbb6f0832f4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_clients.py",
+      "path": "splash/dev/tests/engine/test_clients.py",
+      "source_sha256": "9b62fb65d51a4d50bd7510f227877334bd86642bda21f7d3e298ac0184337e97",
+      "repository_sha256": "9b62fb65d51a4d50bd7510f227877334bd86642bda21f7d3e298ac0184337e97",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_completion.py",
+      "path": "splash/dev/tests/engine/test_completion.py",
+      "source_sha256": "936013244e1580a9a4ed6462543f9501d0e835e3a1cb13d18bd2e840807ba88d",
+      "repository_sha256": "936013244e1580a9a4ed6462543f9501d0e835e3a1cb13d18bd2e840807ba88d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_constraint_cache.py",
+      "path": "splash/dev/tests/engine/test_constraint_cache.py",
+      "source_sha256": "5e14ceb407de0020f5744c494e0fdbedc685c4724087ab3f04588b24ded332d4",
+      "repository_sha256": "5e14ceb407de0020f5744c494e0fdbedc685c4724087ab3f04588b24ded332d4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_crash_trace.py",
+      "path": "splash/dev/tests/engine/test_crash_trace.py",
+      "source_sha256": "b0722e52524d70c8a4582f3d706d49e337158f753fdbb45b6f2c7fa9afbfa6de",
+      "repository_sha256": "b0722e52524d70c8a4582f3d706d49e337158f753fdbb45b6f2c7fa9afbfa6de",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_default_reasoning.py",
+      "path": "splash/dev/tests/engine/test_default_reasoning.py",
+      "source_sha256": "4b3fd54b335def09e8716a79c801aadf502b785939b2c74f47dafd71bf8ee554",
+      "repository_sha256": "4b3fd54b335def09e8716a79c801aadf502b785939b2c74f47dafd71bf8ee554",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_document_worker.py",
+      "path": "splash/dev/tests/engine/test_document_worker.py",
+      "source_sha256": "28fff58513f0948e6a74fe6a8994aaf56e6c2c83b3565637286af553c4ee167d",
+      "repository_sha256": "28fff58513f0948e6a74fe6a8994aaf56e6c2c83b3565637286af553c4ee167d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_documents.py",
+      "path": "splash/dev/tests/engine/test_documents.py",
+      "source_sha256": "4c179638e474edf688db9dad3c49a61f176b41ae4717947bc0f1910bd4e51103",
+      "repository_sha256": "4c179638e474edf688db9dad3c49a61f176b41ae4717947bc0f1910bd4e51103",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_http_body_budget.py",
+      "path": "splash/dev/tests/engine/test_http_body_budget.py",
+      "source_sha256": "2fce2013e449959d7d1f2542abf79f6bfaef12d7d556d4c6ac0681b4abc55e6a",
+      "repository_sha256": "2fce2013e449959d7d1f2542abf79f6bfaef12d7d556d4c6ac0681b4abc55e6a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_http_boundaries.py",
+      "path": "splash/dev/tests/engine/test_http_boundaries.py",
+      "source_sha256": "000e1f0f87a233c37635bf5f9cf9ef37a55ca82e422bce7e22ee533dc4e57128",
+      "repository_sha256": "000e1f0f87a233c37635bf5f9cf9ef37a55ca82e422bce7e22ee533dc4e57128",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_http_regression.py",
+      "path": "splash/dev/tests/engine/test_http_regression.py",
+      "source_sha256": "740807fa85f9143b435ea17f5feb0de85643d5d56fe0c28f837554cd823d0d79",
+      "repository_sha256": "740807fa85f9143b435ea17f5feb0de85643d5d56fe0c28f837554cd823d0d79",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_ignore_eos.py",
+      "path": "splash/dev/tests/engine/test_ignore_eos.py",
+      "source_sha256": "9e1966f9b950e898847f8bc1a92940a6eb1d41afee9894d069625bf6c4ec8f54",
+      "repository_sha256": "9e1966f9b950e898847f8bc1a92940a6eb1d41afee9894d069625bf6c4ec8f54",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_images.py",
+      "path": "splash/dev/tests/engine/test_images.py",
+      "source_sha256": "0d4023a7b866d85020d36c9651ee8cb5b212da197275be5138df7406c4502415",
+      "repository_sha256": "0d4023a7b866d85020d36c9651ee8cb5b212da197275be5138df7406c4502415",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_json_codec.py",
+      "path": "splash/dev/tests/engine/test_json_codec.py",
+      "source_sha256": "4a70b6545b7ec902edc2600fda233af09798883f0c2bb1557b2e897324240836",
+      "repository_sha256": "4a70b6545b7ec902edc2600fda233af09798883f0c2bb1557b2e897324240836",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_json_responses.py",
+      "path": "splash/dev/tests/engine/test_json_responses.py",
+      "source_sha256": "7f2afe6e2bc7f3c40053afae1f009109628b41727014e7b95c1c5d95ba930ad2",
+      "repository_sha256": "7f2afe6e2bc7f3c40053afae1f009109628b41727014e7b95c1c5d95ba930ad2",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_latency_metrics.py",
+      "path": "splash/dev/tests/engine/test_latency_metrics.py",
+      "source_sha256": "f8b69ef32bae5dadd259089a0944d24d1f459dc4e3b37bbbfcc51389cb882c95",
+      "repository_sha256": "f8b69ef32bae5dadd259089a0944d24d1f459dc4e3b37bbbfcc51389cb882c95",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_launcher.py",
+      "path": "splash/dev/tests/engine/test_launcher.py",
+      "source_sha256": "54bd0df2298b7cb4d4402edd287a4ec4ef9d9c858c024dcea05fbe53704cfa18",
+      "repository_sha256": "54bd0df2298b7cb4d4402edd287a4ec4ef9d9c858c024dcea05fbe53704cfa18",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_makefile.py",
+      "path": "splash/dev/tests/engine/test_makefile.py",
+      "source_sha256": "60a469602e167c661ae82cde3697af55f4cf699d28109e52d62f435c3f47edf5",
+      "repository_sha256": "60a469602e167c661ae82cde3697af55f4cf699d28109e52d62f435c3f47edf5",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_model_catalog.py",
+      "path": "splash/dev/tests/engine/test_model_catalog.py",
+      "source_sha256": "7793d18870996d166489e38afccedb4722fbc899d901ca749259230cb02025c3",
+      "repository_sha256": "7793d18870996d166489e38afccedb4722fbc899d901ca749259230cb02025c3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_native_backend.py",
+      "path": "splash/dev/tests/engine/test_native_backend.py",
+      "source_sha256": "6efd5d6d53b41459d70d41832ab70abdccbe441a244e4fa72f01de8ac0243d40",
+      "repository_sha256": "6efd5d6d53b41459d70d41832ab70abdccbe441a244e4fa72f01de8ac0243d40",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_native_fifo.py",
+      "path": "splash/dev/tests/engine/test_native_fifo.py",
+      "source_sha256": "1a44bd36e55fe93543c94fe385ae647020b6e0c00cc3c39609ef7360210ec922",
+      "repository_sha256": "1a44bd36e55fe93543c94fe385ae647020b6e0c00cc3c39609ef7360210ec922",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_output_validation.py",
+      "path": "splash/dev/tests/engine/test_output_validation.py",
+      "source_sha256": "9dc465206ecef495423f49495c419da23a9d2b19fbac6389630b8db2ad27f9d8",
+      "repository_sha256": "9dc465206ecef495423f49495c419da23a9d2b19fbac6389630b8db2ad27f9d8",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_package.py",
+      "path": "splash/dev/tests/engine/test_package.py",
+      "source_sha256": "35e8fe6471390890741d5ef52ab428a779644b1f8f9852c608f0abaf26a09ceb",
+      "repository_sha256": "35e8fe6471390890741d5ef52ab428a779644b1f8f9852c608f0abaf26a09ceb",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_packaged_server.py",
+      "path": "splash/dev/tests/engine/test_packaged_server.py",
+      "source_sha256": "de6d9d5dbcbf89aa8d4cb65e8a4d85164282a51097690e00d042682610916d75",
+      "repository_sha256": "de6d9d5dbcbf89aa8d4cb65e8a4d85164282a51097690e00d042682610916d75",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_partial_tool_output.py",
+      "path": "splash/dev/tests/engine/test_partial_tool_output.py",
+      "source_sha256": "ee46984b0a886aa348cbe1f0c30e2ecafa5564d173c1965b70c8356d1c119631",
+      "repository_sha256": "ee46984b0a886aa348cbe1f0c30e2ecafa5564d173c1965b70c8356d1c119631",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_pdf_protocols.py",
+      "path": "splash/dev/tests/engine/test_pdf_protocols.py",
+      "source_sha256": "e2962bdb995350e747652a260d33bea8305775d18d066b70f3884daec05c1f9b",
+      "repository_sha256": "e2962bdb995350e747652a260d33bea8305775d18d066b70f3884daec05c1f9b",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_prompt_progress.py",
+      "path": "splash/dev/tests/engine/test_prompt_progress.py",
+      "source_sha256": "64359cf57acb7badbaf3b430c8d283a25e972d7243f0381aae15856a9b5950a7",
+      "repository_sha256": "64359cf57acb7badbaf3b430c8d283a25e972d7243f0381aae15856a9b5950a7",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_prompt_tokenization.py",
+      "path": "splash/dev/tests/engine/test_prompt_tokenization.py",
+      "source_sha256": "7aaf1f546fb42e8c88ff4080badbb0462d203937a330362a2327b881ba59998b",
+      "repository_sha256": "7aaf1f546fb42e8c88ff4080badbb0462d203937a330362a2327b881ba59998b",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_prompt_tools.py",
+      "path": "splash/dev/tests/engine/test_prompt_tools.py",
+      "source_sha256": "f4845c0e7e22fb0829a869ad7480139450c00fc6522c592c0d79132cefef7f4b",
+      "repository_sha256": "f4845c0e7e22fb0829a869ad7480139450c00fc6522c592c0d79132cefef7f4b",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_protocol_python.py",
+      "path": "splash/dev/tests/engine/test_protocol_python.py",
+      "source_sha256": "5753e156de22cca5adece44f7db1d5bdbc5c9390a58f41d2d6e4af05bd5da9d4",
+      "repository_sha256": "5753e156de22cca5adece44f7db1d5bdbc5c9390a58f41d2d6e4af05bd5da9d4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_protocol_recovery.py",
+      "path": "splash/dev/tests/engine/test_protocol_recovery.py",
+      "source_sha256": "1322b543a73770b8d29d739fe2d84d946950918c5a1105819040aabe6b9562f0",
+      "repository_sha256": "1322b543a73770b8d29d739fe2d84d946950918c5a1105819040aabe6b9562f0",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_request_contract.py",
+      "path": "splash/dev/tests/engine/test_request_contract.py",
+      "source_sha256": "35be6e2f65bdf9a8481dea5be0543b80e9a64c23bc45c33dbceb88f7f0e7d5a4",
+      "repository_sha256": "35be6e2f65bdf9a8481dea5be0543b80e9a64c23bc45c33dbceb88f7f0e7d5a4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_request_lifetime.py",
+      "path": "splash/dev/tests/engine/test_request_lifetime.py",
+      "source_sha256": "f293aacf8b370147577823fd5245369ff164f83d56132a20e4bb7698b1df64ef",
+      "repository_sha256": "f293aacf8b370147577823fd5245369ff164f83d56132a20e4bb7698b1df64ef",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_response_lifecycle.py",
+      "path": "splash/dev/tests/engine/test_response_lifecycle.py",
+      "source_sha256": "f0b65660ba445cc86db46b159f1eaf5e66dfa17c9c7907fb2744e3253f2642df",
+      "repository_sha256": "f0b65660ba445cc86db46b159f1eaf5e66dfa17c9c7907fb2744e3253f2642df",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_response_timings.py",
+      "path": "splash/dev/tests/engine/test_response_timings.py",
+      "source_sha256": "b8e42cef20bc97c7dda881b08563e963ed188e7379c720ce2e01fe4e2509d41d",
+      "repository_sha256": "b8e42cef20bc97c7dda881b08563e963ed188e7379c720ce2e01fe4e2509d41d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_runtime.py",
+      "path": "splash/dev/tests/engine/test_runtime.py",
+      "source_sha256": "9df42985b016d71215b270c577ed08a66fd7bbddb9f3646bd3b4ed0ed239fd43",
+      "repository_sha256": "9df42985b016d71215b270c577ed08a66fd7bbddb9f3646bd3b4ed0ed239fd43",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_schema_fallback.py",
+      "path": "splash/dev/tests/engine/test_schema_fallback.py",
+      "source_sha256": "0d6e4165a369859ef0a09fac0360684c5c7d7820da552c5d923388e302a6a069",
+      "repository_sha256": "0d6e4165a369859ef0a09fac0360684c5c7d7820da552c5d923388e302a6a069",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_schema_validator_cache.py",
+      "path": "splash/dev/tests/engine/test_schema_validator_cache.py",
+      "source_sha256": "21f7322827c43f78da284fdecb188236d431c1481f0873e2b9f21e3797f018d6",
+      "repository_sha256": "21f7322827c43f78da284fdecb188236d431c1481f0873e2b9f21e3797f018d6",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_serve_options.py",
+      "path": "splash/dev/tests/engine/test_serve_options.py",
+      "source_sha256": "687ed5476018eae216e1d42521a79ae3bd863c812374332f7c49d3d796c7fc4a",
+      "repository_sha256": "687ed5476018eae216e1d42521a79ae3bd863c812374332f7c49d3d796c7fc4a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_served_model_names.py",
+      "path": "splash/dev/tests/engine/test_served_model_names.py",
+      "source_sha256": "a59b6be272a26774973b24e696c2050c7fb659b4f5a5d7905287d73702d3d78e",
+      "repository_sha256": "a59b6be272a26774973b24e696c2050c7fb659b4f5a5d7905287d73702d3d78e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_server_access.py",
+      "path": "splash/dev/tests/engine/test_server_access.py",
+      "source_sha256": "38aabc4709120bacfe009e06b56b79a13575fa3535dfd4319ac023ea4c069e81",
+      "repository_sha256": "38aabc4709120bacfe009e06b56b79a13575fa3535dfd4319ac023ea4c069e81",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_server_recovery.py",
+      "path": "splash/dev/tests/engine/test_server_recovery.py",
+      "source_sha256": "ab363719299f6ae30ee9390b0c74fbb8d93daa8666173beeb20718f59eace352",
+      "repository_sha256": "ab363719299f6ae30ee9390b0c74fbb8d93daa8666173beeb20718f59eace352",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_smoke_real.py",
+      "path": "splash/dev/tests/engine/test_smoke_real.py",
+      "source_sha256": "5b6411831cb4eb7838aadb1b120c242877e736896dff3c9bb53d89cc5b1fc374",
+      "repository_sha256": "5b6411831cb4eb7838aadb1b120c242877e736896dff3c9bb53d89cc5b1fc374",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_structured_tools.py",
+      "path": "splash/dev/tests/engine/test_structured_tools.py",
+      "source_sha256": "08f75cd242d8ecb52182bb3bad402cf916b3e6bc1654c6566f636f45d3c30ad6",
+      "repository_sha256": "08f75cd242d8ecb52182bb3bad402cf916b3e6bc1654c6566f636f45d3c30ad6",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_text_completions.py",
+      "path": "splash/dev/tests/engine/test_text_completions.py",
+      "source_sha256": "ea2a3eb5ded5021923a5b517cf94c5dc785851645a537e19666b9a07e62f2597",
+      "repository_sha256": "ea2a3eb5ded5021923a5b517cf94c5dc785851645a537e19666b9a07e62f2597",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_thinking_key.py",
+      "path": "splash/dev/tests/engine/test_thinking_key.py",
+      "source_sha256": "e6c11cb14bc6c910d2953f0224a5ebd46df847a4a4f2fbed8f62838a69d8c1cd",
+      "repository_sha256": "e6c11cb14bc6c910d2953f0224a5ebd46df847a4a4f2fbed8f62838a69d8c1cd",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_token_constraint.py",
+      "path": "splash/dev/tests/engine/test_token_constraint.py",
+      "source_sha256": "e58a72c47a7cc0602334e5c85996cfee7382cc444fc4f9869d6bc5b37e346bba",
+      "repository_sha256": "e58a72c47a7cc0602334e5c85996cfee7382cc444fc4f9869d6bc5b37e346bba",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_tokenizer_contract.py",
+      "path": "splash/dev/tests/engine/test_tokenizer_contract.py",
+      "source_sha256": "40345233086410224e20e9dcab38c0cd3cd03c9cd3676cba6d70cd283c567da3",
+      "repository_sha256": "40345233086410224e20e9dcab38c0cd3cd03c9cd3676cba6d70cd283c567da3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_tool_schema_composition.py",
+      "path": "splash/dev/tests/engine/test_tool_schema_composition.py",
+      "source_sha256": "62ecc9cd1a339f2b1550b25a91f9277e2dc6e845496963b11d6a5b422f98bde3",
+      "repository_sha256": "62ecc9cd1a339f2b1550b25a91f9277e2dc6e845496963b11d6a5b422f98bde3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_tool_unicode.py",
+      "path": "splash/dev/tests/engine/test_tool_unicode.py",
+      "source_sha256": "8a35341722f105387e9e5af0401c282f038d2de94e0d8626039e73bf7fa596bc",
+      "repository_sha256": "8a35341722f105387e9e5af0401c282f038d2de94e0d8626039e73bf7fa596bc",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/test_weights.py",
+      "path": "splash/dev/tests/engine/test_weights.py",
+      "source_sha256": "1ea94a56f5b529a142240177a35765e5e0ff796abf1f58617949f61fcc60864a",
+      "repository_sha256": "1ea94a56f5b529a142240177a35765e5e0ff796abf1f58617949f61fcc60864a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/tuning_workloads_test.cpp",
+      "path": "splash/dev/tests/engine/tuning_workloads_test.cpp",
+      "source_sha256": "b27df2e606c247287edd441d4fb16bb1b93c759a3c2568f7916df0ad16501f96",
+      "repository_sha256": "b27df2e606c247287edd441d4fb16bb1b93c759a3c2568f7916df0ad16501f96",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/vision_encoder_test.mm",
+      "path": "splash/dev/tests/engine/vision_encoder_test.mm",
+      "source_sha256": "ff8aa52acb6fa40b5d839d1d3cdcc44f75fa342f4cdcf111aec64d2653f1cfb8",
+      "repository_sha256": "ff8aa52acb6fa40b5d839d1d3cdcc44f75fa342f4cdcf111aec64d2653f1cfb8",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/vision_preparation_test.cpp",
+      "path": "splash/dev/tests/engine/vision_preparation_test.cpp",
+      "source_sha256": "a989a0775df819c71385cd45b88ee6ac63cebcbc5b92da661ab5a930353dd27a",
+      "repository_sha256": "a989a0775df819c71385cd45b88ee6ac63cebcbc5b92da661ab5a930353dd27a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/engine/weight_source_test.cpp",
+      "path": "splash/dev/tests/engine/weight_source_test.cpp",
+      "source_sha256": "ccd9720d9062eea8b817d859217583d038515c1414b5490d7dc8609690f30daa",
+      "repository_sha256": "ccd9720d9062eea8b817d859217583d038515c1414b5490d7dc8609690f30daa",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixture_files.py",
+      "path": "splash/dev/tests/fixture_files.py",
+      "source_sha256": "a9bb17c8f778c72277ab53b52485edf97688464ceb1eaae6cc97a77e00cbfa58",
+      "repository_sha256": "a9bb17c8f778c72277ab53b52485edf97688464ceb1eaae6cc97a77e00cbfa58",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixtures/chat_templates/README.md",
+      "path": "splash/dev/tests/fixtures/chat_templates/README.md",
+      "source_sha256": "c3b0156b112740e86799d8bdd2d4d516af1b281d27ed76858b087fb2eba83d22",
+      "repository_sha256": "c3b0156b112740e86799d8bdd2d4d516af1b281d27ed76858b087fb2eba83d22",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixtures/chat_templates/qwen36.jinja",
+      "path": "splash/dev/tests/fixtures/chat_templates/qwen36.jinja",
+      "source_sha256": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
+      "repository_sha256": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixtures/chat_templates/qwen36_gguf.jinja",
+      "path": "splash/dev/tests/fixtures/chat_templates/qwen36_gguf.jinja",
+      "source_sha256": "55d4931433fe502b794226ee7f4d206a6bdd436ac9f80eb7d8ebb4c639f9ea0c",
+      "repository_sha256": "55d4931433fe502b794226ee7f4d206a6bdd436ac9f80eb7d8ebb4c639f9ea0c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixtures/chat_templates/qwen38.jinja",
+      "path": "splash/dev/tests/fixtures/chat_templates/qwen38.jinja",
+      "source_sha256": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "repository_sha256": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixtures/chat_templates/qwen38_gguf.jinja",
+      "path": "splash/dev/tests/fixtures/chat_templates/qwen38_gguf.jinja",
+      "source_sha256": "12827f24b742ea4e80cdc12dbcf9622227056b9f797252a3149263d4f9aaadce",
+      "repository_sha256": "12827f24b742ea4e80cdc12dbcf9622227056b9f797252a3149263d4f9aaadce",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixtures/documents/open-password.pdf",
+      "path": "splash/dev/tests/fixtures/documents/open-password.pdf",
+      "source_sha256": "5231dcb8f590085470c694b5285a0172e9c6a6e8604c79063d1a928760355d19",
+      "repository_sha256": "5231dcb8f590085470c694b5285a0172e9c6a6e8604c79063d1a928760355d19",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixtures/documents/owner-password.pdf",
+      "path": "splash/dev/tests/fixtures/documents/owner-password.pdf",
+      "source_sha256": "f4dc7b5458a6d0525582ca47ba828c76478b75c106a1c69474c3cc8f40fba56b",
+      "repository_sha256": "f4dc7b5458a6d0525582ca47ba828c76478b75c106a1c69474c3cc8f40fba56b",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixtures/documents/plain.pdf",
+      "path": "splash/dev/tests/fixtures/documents/plain.pdf",
+      "source_sha256": "58691e009f7372beb0e280de27f6d1c7e47f9c89786ebf6433cb9b90a3a5a46c",
+      "repository_sha256": "58691e009f7372beb0e280de27f6d1c7e47f9c89786ebf6433cb9b90a3a5a46c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixtures/vision-parity/qwen3.6-35b-a3b/expected_fp32.bin",
+      "path": "splash/dev/tests/fixtures/vision-parity/qwen3.6-35b-a3b/expected_fp32.bin",
+      "source_sha256": "9d39a960dd1d419936a793a2818de6c70f9a55a3a35ccbe8b7d47633b6eda9b7",
+      "repository_sha256": "9d39a960dd1d419936a793a2818de6c70f9a55a3a35ccbe8b7d47633b6eda9b7",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixtures/vision-parity/qwen3.6-35b-a3b/grid.txt",
+      "path": "splash/dev/tests/fixtures/vision-parity/qwen3.6-35b-a3b/grid.txt",
+      "source_sha256": "9fed8f11cdeb175f3cbbaf89fbb9e856cddced2031649ee60bc75c896a70910b",
+      "repository_sha256": "9fed8f11cdeb175f3cbbaf89fbb9e856cddced2031649ee60bc75c896a70910b",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixtures/vision-parity/qwen3.6-35b-a3b/pixels.bin",
+      "path": "splash/dev/tests/fixtures/vision-parity/qwen3.6-35b-a3b/pixels.bin",
+      "source_sha256": "d91c9767eb1062ce8fc5066c968141cdbc42c2667ac8c0450047c2d29ced7b7f",
+      "repository_sha256": "d91c9767eb1062ce8fc5066c968141cdbc42c2667ac8c0450047c2d29ced7b7f",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixtures/vision-parity/qwen3.8-27b/expected_fp32.bin",
+      "path": "splash/dev/tests/fixtures/vision-parity/qwen3.8-27b/expected_fp32.bin",
+      "source_sha256": "65fa998b11db4087da22fbaa453bc0ebabd8b636cce0cae30a3d79a489b52432",
+      "repository_sha256": "65fa998b11db4087da22fbaa453bc0ebabd8b636cce0cae30a3d79a489b52432",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixtures/vision-parity/qwen3.8-27b/grid.txt",
+      "path": "splash/dev/tests/fixtures/vision-parity/qwen3.8-27b/grid.txt",
+      "source_sha256": "0b3753260cdf5c407a76c142b1651b61feb77068c97b495ca3c627b2bdb6e184",
+      "repository_sha256": "0b3753260cdf5c407a76c142b1651b61feb77068c97b495ca3c627b2bdb6e184",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixtures/vision-parity/qwen3.8-27b/pixels.bin",
+      "path": "splash/dev/tests/fixtures/vision-parity/qwen3.8-27b/pixels.bin",
+      "source_sha256": "38cab53f6191f26d0864847a64aa95515b6919744ee9de3f54d629e337f89287",
+      "repository_sha256": "38cab53f6191f26d0864847a64aa95515b6919744ee9de3f54d629e337f89287",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixtures/weight-goldens/README.md",
+      "path": "splash/dev/tests/fixtures/weight-goldens/README.md",
+      "source_sha256": "6107bc44fae5aabd9785f3c0827fe4a88dbff72056309ed6c01a1952a27dec1f",
+      "repository_sha256": "6107bc44fae5aabd9785f3c0827fe4a88dbff72056309ed6c01a1952a27dec1f",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/fixtures/weight-goldens/goldens.json",
+      "path": "splash/dev/tests/fixtures/weight-goldens/goldens.json",
+      "source_sha256": "ef9cdf49f103abe7fa0f4be2ff8640bf13669fc30111d414b1b9fe8a79ba5ebb",
+      "repository_sha256": "ef9cdf49f103abe7fa0f4be2ff8640bf13669fc30111d414b1b9fe8a79ba5ebb",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/installer_fixtures.py",
+      "path": "splash/dev/tests/installer_fixtures.py",
+      "source_sha256": "ed93c16dccbf6400246181bd80d8d9c351abc943fde23fcd98381d6ce33e2491",
+      "repository_sha256": "ed93c16dccbf6400246181bd80d8d9c351abc943fde23fcd98381d6ce33e2491",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/smoke_real.py",
+      "path": "splash/dev/tests/smoke_real.py",
+      "source_sha256": "47213d8b6024d0e50d2ca5462e69a0786c0e564a9b8103fa6fd9a3f49f24ae43",
+      "repository_sha256": "47213d8b6024d0e50d2ca5462e69a0786c0e564a9b8103fa6fd9a3f49f24ae43",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/test_gguf_metadata.py",
+      "path": "splash/dev/tests/test_gguf_metadata.py",
+      "source_sha256": "3325015a9abcc4216916fbb556925c0c95b2fc3ae2567acaf5e21ca3977afea8",
+      "repository_sha256": "3325015a9abcc4216916fbb556925c0c95b2fc3ae2567acaf5e21ca3977afea8",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/test_installer_restarts.py",
+      "path": "splash/dev/tests/test_installer_restarts.py",
+      "source_sha256": "594d93d25746b41734fdc34c8d9fa2fc07698d1bf6b7f7d00b3ae1d9b17028cd",
+      "repository_sha256": "594d93d25746b41734fdc34c8d9fa2fc07698d1bf6b7f7d00b3ae1d9b17028cd",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/test_models.py",
+      "path": "splash/dev/tests/test_models.py",
+      "source_sha256": "57420d41a0f6fedb51c99a9a3e04d45ee2da98f763e1fc9fd2dce3d4b46574f6",
+      "repository_sha256": "57420d41a0f6fedb51c99a9a3e04d45ee2da98f763e1fc9fd2dce3d4b46574f6",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/test_server.py",
+      "path": "splash/dev/tests/test_server.py",
+      "source_sha256": "66af2fb716ea3fb91e1c9c54077715ec5aed635d7db27fbf09db4f928fdb899e",
+      "repository_sha256": "66af2fb716ea3fb91e1c9c54077715ec5aed635d7db27fbf09db4f928fdb899e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/test_upstream.py",
+      "path": "splash/dev/tests/test_upstream.py",
+      "source_sha256": "af85ce805b3d634784bc89ab24aeabff16c8fa23f197884949c7cc7c58e9e3e6",
+      "repository_sha256": "af85ce805b3d634784bc89ab24aeabff16c8fa23f197884949c7cc7c58e9e3e6",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/tool_output.py",
+      "path": "splash/dev/tests/tool_output.py",
+      "source_sha256": "121327dd47b2dbe06f798f99750279990fad999942dee4bd7ef3f13ea104dd91",
+      "repository_sha256": "121327dd47b2dbe06f798f99750279990fad999942dee4bd7ef3f13ea104dd91",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tests/tune_kernels_cli.sh",
+      "path": "splash/dev/tests/tune_kernels_cli.sh",
+      "source_sha256": "0924fda0666109e63dd1c579ccec659d4b228d489145d2acac80ee943ef17bbc",
+      "repository_sha256": "0924fda0666109e63dd1c579ccec659d4b228d489145d2acac80ee943ef17bbc",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tools/__init__.py",
+      "path": "splash/dev/tools/__init__.py",
+      "source_sha256": "58f48219227a648a758fb4f1c93f60403014b31109dfe410d52a891612693ced",
+      "repository_sha256": "58f48219227a648a758fb4f1c93f60403014b31109dfe410d52a891612693ced",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tools/build_config.py",
+      "path": "splash/dev/tools/build_config.py",
+      "source_sha256": "b1a4f302d6d5ffd661cc4bfba56fc2db751c9b56311e6730144be4eece034a11",
+      "repository_sha256": "b1a4f302d6d5ffd661cc4bfba56fc2db751c9b56311e6730144be4eece034a11",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tools/build_identity.py",
+      "path": "splash/dev/tools/build_identity.py",
+      "source_sha256": "2749e71a4a8567a7131f9ef70fa83b1079308fbec6c282dc7b3e0feac158f74c",
+      "repository_sha256": "2749e71a4a8567a7131f9ef70fa83b1079308fbec6c282dc7b3e0feac158f74c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tools/check_architecture.py",
+      "path": "splash/dev/tools/check_architecture.py",
+      "source_sha256": "695202f215e006cc4aff8a83eec00df7a488f804ad86bf6b5fbca7b5ffc5547a",
+      "repository_sha256": "695202f215e006cc4aff8a83eec00df7a488f804ad86bf6b5fbca7b5ffc5547a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tools/install.sh",
+      "path": "splash/dev/tools/install.sh",
+      "source_sha256": "288b6e3dd648e8039a51496b27ad598fc465a02cbe46b074156a7437db255788",
+      "repository_sha256": "288b6e3dd648e8039a51496b27ad598fc465a02cbe46b074156a7437db255788",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tools/installer_restarts.py",
+      "path": "splash/dev/tools/installer_restarts.py",
+      "source_sha256": "50ff27d79934134fe39c24db503c1a209a7ecd64fdfd138e79816cbe197442e7",
+      "repository_sha256": "50ff27d79934134fe39c24db503c1a209a7ecd64fdfd138e79816cbe197442e7",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tools/package.py",
+      "path": "splash/dev/tools/package.py",
+      "source_sha256": "928a14d90b88f90b2e5e1622719d69c403cfee80f7c4337ecb469b0fb9ed8138",
+      "repository_sha256": "928a14d90b88f90b2e5e1622719d69c403cfee80f7c4337ecb469b0fb9ed8138",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tools/package_brew.py",
+      "path": "splash/dev/tools/package_brew.py",
+      "source_sha256": "5439046b74baba7ef7e0cce960586ed2ed69f1c082d98d1a3da19decca7dfd69",
+      "repository_sha256": "5439046b74baba7ef7e0cce960586ed2ed69f1c082d98d1a3da19decca7dfd69",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tools/publish_test.py",
+      "path": "splash/dev/tools/publish_test.py",
+      "source_sha256": "d5fd16b257162629c8b4e9055fb06de257a80eb1c0da84fc6e7fd2ad45f4dbb5",
+      "repository_sha256": "d5fd16b257162629c8b4e9055fb06de257a80eb1c0da84fc6e7fd2ad45f4dbb5",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tools/update_model_catalog.py",
+      "path": "splash/dev/tools/update_model_catalog.py",
+      "source_sha256": "2b0a737e72ddb0bd6f738e32fbf796e5ef7438ca71ec4bdd266c77ff256ebd56",
+      "repository_sha256": "2b0a737e72ddb0bd6f738e32fbf796e5ef7438ca71ec4bdd266c77ff256ebd56",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tools/vision_reference.py",
+      "path": "splash/dev/tools/vision_reference.py",
+      "source_sha256": "c2afa3344893cfbc625e7f312395bbc8c366537c4fc9be8490ad6db67a7ec8ea",
+      "repository_sha256": "c2afa3344893cfbc625e7f312395bbc8c366537c4fc9be8490ad6db67a7ec8ea",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tools/weight_digests.mm",
+      "path": "splash/dev/tools/weight_digests.mm",
+      "source_sha256": "ad9536f5aebf9ea7e0d5194223dd1004ada25615559438df237c0baaae6dacb2",
+      "repository_sha256": "ad9536f5aebf9ea7e0d5194223dd1004ada25615559438df237c0baaae6dacb2",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tuning/AttentionFixture.hpp",
+      "path": "splash/dev/tuning/AttentionFixture.hpp",
+      "source_sha256": "70c1017c07573e73c39be1f7dd31354a3efdb8579a9dd3e667a5bccd758bf46b",
+      "repository_sha256": "70c1017c07573e73c39be1f7dd31354a3efdb8579a9dd3e667a5bccd758bf46b",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tuning/HostKvExtents.hpp",
+      "path": "splash/dev/tuning/HostKvExtents.hpp",
+      "source_sha256": "f3b00510a7a3e809fc6eab07bf0b6a2b019106648fc4d748bb22a306665596ce",
+      "repository_sha256": "f3b00510a7a3e809fc6eab07bf0b6a2b019106648fc4d748bb22a306665596ce",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tuning/LinearNumerics.hpp",
+      "path": "splash/dev/tuning/LinearNumerics.hpp",
+      "source_sha256": "0b4e694f2ec82b4593b6e36e52f3b0a2397d64be427688114178695d99c333cc",
+      "repository_sha256": "0b4e694f2ec82b4593b6e36e52f3b0a2397d64be427688114178695d99c333cc",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tuning/LinearTuning.cpp",
+      "path": "splash/dev/tuning/LinearTuning.cpp",
+      "source_sha256": "212fe3ebc2d793398466b076c89e58cd9a4ad9e4fb9792b16691baa19e434ad9",
+      "repository_sha256": "212fe3ebc2d793398466b076c89e58cd9a4ad9e4fb9792b16691baa19e434ad9",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tuning/LinearTuning.hpp",
+      "path": "splash/dev/tuning/LinearTuning.hpp",
+      "source_sha256": "66c61a97c330d1c4c80e9d2e804740dc52be6e7c23a7e23633e328d29d51fdd8",
+      "repository_sha256": "66c61a97c330d1c4c80e9d2e804740dc52be6e7c23a7e23633e328d29d51fdd8",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tuning/Measurement.cpp",
+      "path": "splash/dev/tuning/Measurement.cpp",
+      "source_sha256": "53fa5d6a4da6f8fe451f4df113012ead82e404d1e544ed7961fc59aa83b6b8ee",
+      "repository_sha256": "53fa5d6a4da6f8fe451f4df113012ead82e404d1e544ed7961fc59aa83b6b8ee",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tuning/Measurement.hpp",
+      "path": "splash/dev/tuning/Measurement.hpp",
+      "source_sha256": "d525979923b7a48a8d62112a1b367592bb016a1d0d17cf9ac07f29058aacf4e7",
+      "repository_sha256": "d525979923b7a48a8d62112a1b367592bb016a1d0d17cf9ac07f29058aacf4e7",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tuning/Tuning.cpp",
+      "path": "splash/dev/tuning/Tuning.cpp",
+      "source_sha256": "a7a818f9ccf533a50ca30f1c69935be5e5d072ca3dfa51194670999617f97277",
+      "repository_sha256": "a7a818f9ccf533a50ca30f1c69935be5e5d072ca3dfa51194670999617f97277",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tuning/Tuning.hpp",
+      "path": "splash/dev/tuning/Tuning.hpp",
+      "source_sha256": "34f1a888d2fd9f7b82502aaea84767fafbb6284163ab50d74b8c3bc0c79407a9",
+      "repository_sha256": "34f1a888d2fd9f7b82502aaea84767fafbb6284163ab50d74b8c3bc0c79407a9",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tuning/TuningWorkloads.cpp",
+      "path": "splash/dev/tuning/TuningWorkloads.cpp",
+      "source_sha256": "0c2720a4471203f0a090e6002197ff84971ad4c280d26c8f6909569c3fe267a3",
+      "repository_sha256": "0c2720a4471203f0a090e6002197ff84971ad4c280d26c8f6909569c3fe267a3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tuning/TuningWorkloads.hpp",
+      "path": "splash/dev/tuning/TuningWorkloads.hpp",
+      "source_sha256": "b6bb0c6ec307c9bcea20e97bc9b8badfbdbfa74138da037d41ccc31435847108",
+      "repository_sha256": "b6bb0c6ec307c9bcea20e97bc9b8badfbdbfa74138da037d41ccc31435847108",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/dev/tuning/tune_kernels.mm",
+      "path": "splash/dev/tuning/tune_kernels.mm",
+      "source_sha256": "30595998e44f58100b9fa8b786894c6d5a68236143a47a1164c6ecc9bf5bfb70",
+      "repository_sha256": "30595998e44f58100b9fa8b786894c6d5a68236143a47a1164c6ecc9bf5bfb70",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/docs/performance.md",
+      "path": "splash/docs/performance.md",
+      "source_sha256": "21cdebc3132f9b8773bb1334b03dfe76c54c957e76ced64ba48912fc354c926e",
+      "repository_sha256": "21cdebc3132f9b8773bb1334b03dfe76c54c957e76ced64ba48912fc354c926e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/docs/ptq1_0-support-plan.md",
+      "path": "splash/docs/ptq1_0-support-plan.md",
+      "source_sha256": "1ca49a6c98f8e668ce6651355a1227b871e2f38291da6399e5d14e8d3d223ed0",
+      "repository_sha256": "1ca49a6c98f8e668ce6651355a1227b871e2f38291da6399e5d14e8d3d223ed0",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/docs/upstream-integration.md",
+      "path": "splash/docs/upstream-integration.md",
+      "source_sha256": "f28a7acaaa6ac8a2d3bc8e9372aa1d47d3b453c7de4743f60f332552e3034b4d",
+      "repository_sha256": "f28a7acaaa6ac8a2d3bc8e9372aa1d47d3b453c7de4743f60f332552e3034b4d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/__init__.py",
+      "path": "splash/install/__init__.py",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "repository_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/assembly.py",
+      "path": "splash/install/assembly.py",
+      "source_sha256": "e68c8974d1b74b836b1c41be2e1cfb1ae7310ec54453f4d45cc0fee7261b78f7",
+      "repository_sha256": "e68c8974d1b74b836b1c41be2e1cfb1ae7310ec54453f4d45cc0fee7261b78f7",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/catalog.py",
+      "path": "splash/install/catalog.py",
+      "source_sha256": "8af80ee22c30283ad9e3b95db3bc76a5e94b4088ec5a4c2af20c306d9ec54e87",
+      "repository_sha256": "8af80ee22c30283ad9e3b95db3bc76a5e94b4088ec5a4c2af20c306d9ec54e87",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/clients.py",
+      "path": "splash/install/clients.py",
+      "source_sha256": "dd776234f21dfc8a42e80838ad320e56b7da69137553fe2c7ed4c613e877d8a0",
+      "repository_sha256": "dd776234f21dfc8a42e80838ad320e56b7da69137553fe2c7ed4c613e877d8a0",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/completions/_splash",
+      "path": "splash/install/completions/_splash",
+      "source_sha256": "6f8d9b178aec32a9956998392fcfbb80f46b306341108736cf5f7aed534c402f",
+      "repository_sha256": "6f8d9b178aec32a9956998392fcfbb80f46b306341108736cf5f7aed534c402f",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/completions/models",
+      "path": "splash/install/completions/models",
+      "source_sha256": "2e9cbd8cd285abb25fefe6fc970e786dcbc35d20df6e5e239f64d09cbea6bd56",
+      "repository_sha256": "2e9cbd8cd285abb25fefe6fc970e786dcbc35d20df6e5e239f64d09cbea6bd56",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/completions/official-models.txt",
+      "path": "splash/install/completions/official-models.txt",
+      "source_sha256": "246f800036cd9733d06cb4a7fb24992565103c9389d0c14f08ddd71b9d743029",
+      "repository_sha256": "246f800036cd9733d06cb4a7fb24992565103c9389d0c14f08ddd71b9d743029",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/completions/splash.bash",
+      "path": "splash/install/completions/splash.bash",
+      "source_sha256": "c2f9ee53211e2bce2d306bc9d4757603ab361f42d6c6230b2d4619da82d9d31d",
+      "repository_sha256": "c2f9ee53211e2bce2d306bc9d4757603ab361f42d6c6230b2d4619da82d9d31d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/completions/splash.fish",
+      "path": "splash/install/completions/splash.fish",
+      "source_sha256": "c33bce602bf75ef0cde3968d6d0b696e0087ae644d6ce35037c7413ad5f690e1",
+      "repository_sha256": "c33bce602bf75ef0cde3968d6d0b696e0087ae644d6ce35037c7413ad5f690e1",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/completions/suggested-models.txt",
+      "path": "splash/install/completions/suggested-models.txt",
+      "source_sha256": "e086177293e9b39cc9dc2288edb889df9d6c8e9b8039136607e8014de257a359",
+      "repository_sha256": "e086177293e9b39cc9dc2288edb889df9d6c8e9b8039136607e8014de257a359",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/families.py",
+      "path": "splash/install/families.py",
+      "source_sha256": "aceb57a6111ff792373912f68b29569f5a0a41b94ae6d56426ca3647e7a1703f",
+      "repository_sha256": "aceb57a6111ff792373912f68b29569f5a0a41b94ae6d56426ca3647e7a1703f",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/gguf.py",
+      "path": "splash/install/gguf.py",
+      "source_sha256": "176656dfa6e1fa89373de0c8fc9c291e5131f21570f0cf17863616c7218566ad",
+      "repository_sha256": "176656dfa6e1fa89373de0c8fc9c291e5131f21570f0cf17863616c7218566ad",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/hub.py",
+      "path": "splash/install/hub.py",
+      "source_sha256": "a9a214b0430f8357039945c686f964316cbf608f47ce34c01bdf2d4770f0ec65",
+      "repository_sha256": "a9a214b0430f8357039945c686f964316cbf608f47ce34c01bdf2d4770f0ec65",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/launcher.py",
+      "path": "splash/install/launcher.py",
+      "source_sha256": "984477ec4cb8facd2f4ded7921ce5b6fbd69f914b9782583cdfc9a8bd086f0d4",
+      "repository_sha256": "984477ec4cb8facd2f4ded7921ce5b6fbd69f914b9782583cdfc9a8bd086f0d4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/legacy.py",
+      "path": "splash/install/legacy.py",
+      "source_sha256": "61ca2e210971013df7a30869d827b3b143f8426e97f69738fed3026c77f05162",
+      "repository_sha256": "61ca2e210971013df7a30869d827b3b143f8426e97f69738fed3026c77f05162",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/models.py",
+      "path": "splash/install/models.py",
+      "source_sha256": "9bc7cefb15e9c2dc8bff5be04ed8fc85cfe75bb51b21055f74a79ba5c88bdaf6",
+      "repository_sha256": "9bc7cefb15e9c2dc8bff5be04ed8fc85cfe75bb51b21055f74a79ba5c88bdaf6",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/paths.py",
+      "path": "splash/install/paths.py",
+      "source_sha256": "0bad8120f06a24865bc2cac7602e9dad72e113c728430b68c7af06eed9c50c85",
+      "repository_sha256": "0bad8120f06a24865bc2cac7602e9dad72e113c728430b68c7af06eed9c50c85",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/requirements.txt",
+      "path": "splash/install/requirements.txt",
+      "source_sha256": "e67b228e4f8964e355938d9085d22e09235285a3173d988dda5e39fde0723ff1",
+      "repository_sha256": "e67b228e4f8964e355938d9085d22e09235285a3173d988dda5e39fde0723ff1",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/install/upstream.py",
+      "path": "splash/install/upstream.py",
+      "source_sha256": "93802a7070ac3f1a8d668bb2c85cbdc00fba093edbaca3867374a2b91510922d",
+      "repository_sha256": "93802a7070ac3f1a8d668bb2c85cbdc00fba093edbaca3867374a2b91510922d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/Checked.hpp",
+      "path": "splash/runtime/Checked.hpp",
+      "source_sha256": "d34fa15f8731c43e33d7750cf011388ecbb04d191362e5317016f89a11ffce40",
+      "repository_sha256": "d34fa15f8731c43e33d7750cf011388ecbb04d191362e5317016f89a11ffce40",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/StderrLine.hpp",
+      "path": "splash/runtime/StderrLine.hpp",
+      "source_sha256": "80343e32330c06a47da1c215138cc2c85da32ce99890b1db4a8ef35cb21bfe46",
+      "repository_sha256": "80343e32330c06a47da1c215138cc2c85da32ce99890b1db4a8ef35cb21bfe46",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/TestConfig.hpp",
+      "path": "splash/runtime/TestConfig.hpp",
+      "source_sha256": "e9bdec2f301d663e14ecc16adda653e6933ca44c835675a6da52d6eb86a25caa",
+      "repository_sha256": "e9bdec2f301d663e14ecc16adda653e6933ca44c835675a6da52d6eb86a25caa",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/Bootstrap.hpp",
+      "path": "splash/runtime/engine/Bootstrap.hpp",
+      "source_sha256": "cfb50abe0e41a80728b474a37bf2a99208725fc6e099d8d90dbd6d28f6d64a6d",
+      "repository_sha256": "cfb50abe0e41a80728b474a37bf2a99208725fc6e099d8d90dbd6d28f6d64a6d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/Bootstrap.mm",
+      "path": "splash/runtime/engine/Bootstrap.mm",
+      "source_sha256": "7466599357c65179452a6d3d6e02d37225398e0e8b3ea52a14e8b21544002795",
+      "repository_sha256": "7466599357c65179452a6d3d6e02d37225398e0e8b3ea52a14e8b21544002795",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/Cache.cpp",
+      "path": "splash/runtime/engine/Cache.cpp",
+      "source_sha256": "87576da644c929b66ffb95b79dc0e04fd188cb92d8f30bc44fcbcd1574c8d538",
+      "repository_sha256": "87576da644c929b66ffb95b79dc0e04fd188cb92d8f30bc44fcbcd1574c8d538",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/Cache.hpp",
+      "path": "splash/runtime/engine/Cache.hpp",
+      "source_sha256": "78ac391db5aa5cc85797cff871e90650524f7bc33b29ba7ba0d26cbe72bdefe3",
+      "repository_sha256": "78ac391db5aa5cc85797cff871e90650524f7bc33b29ba7ba0d26cbe72bdefe3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/CacheDirectory.cpp",
+      "path": "splash/runtime/engine/CacheDirectory.cpp",
+      "source_sha256": "a6db83d7bff444b324d291a00f4a04c5e7c508bb72f6deb895ed5d6ab1d8aa69",
+      "repository_sha256": "a6db83d7bff444b324d291a00f4a04c5e7c508bb72f6deb895ed5d6ab1d8aa69",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/CacheDirectory.hpp",
+      "path": "splash/runtime/engine/CacheDirectory.hpp",
+      "source_sha256": "487b5f0f958a5ccdaa3111c464607b339769417f598cdd192d11a4b7902ecf04",
+      "repository_sha256": "487b5f0f958a5ccdaa3111c464607b339769417f598cdd192d11a4b7902ecf04",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/CacheRecency.hpp",
+      "path": "splash/runtime/engine/CacheRecency.hpp",
+      "source_sha256": "77bf37b62aa46526e8e4e4b3f390ec4c27c0395892cf324088df0d6e73a71c6e",
+      "repository_sha256": "77bf37b62aa46526e8e4e4b3f390ec4c27c0395892cf324088df0d6e73a71c6e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/DiskLabels.hpp",
+      "path": "splash/runtime/engine/DiskLabels.hpp",
+      "source_sha256": "900b1eed7ef6b1b013df9cedb9c6c365b702180785938cb969fd04619d25596d",
+      "repository_sha256": "900b1eed7ef6b1b013df9cedb9c6c365b702180785938cb969fd04619d25596d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/Engine.cpp",
+      "path": "splash/runtime/engine/Engine.cpp",
+      "source_sha256": "0c5042e1dbc5fc438c376d451341862783d9fa17e1c331c52709b854ed1bd3a3",
+      "repository_sha256": "0c5042e1dbc5fc438c376d451341862783d9fa17e1c331c52709b854ed1bd3a3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/Engine.hpp",
+      "path": "splash/runtime/engine/Engine.hpp",
+      "source_sha256": "0feea8bcf4e4b0fd9492f04811dd24feadda4c93cbfe05e9d089276a4e841c75",
+      "repository_sha256": "0feea8bcf4e4b0fd9492f04811dd24feadda4c93cbfe05e9d089276a4e841c75",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/FdTransport.cpp",
+      "path": "splash/runtime/engine/FdTransport.cpp",
+      "source_sha256": "eac8d8656ac22c9f9649d959235817d975459c90cc8c9dbc6f66f8deeba6a1e1",
+      "repository_sha256": "eac8d8656ac22c9f9649d959235817d975459c90cc8c9dbc6f66f8deeba6a1e1",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/FdTransport.hpp",
+      "path": "splash/runtime/engine/FdTransport.hpp",
+      "source_sha256": "d8ff89f07634d8bacfe33b31cd8f1e766f887e3f9b3451a979bc7b27020bbd1a",
+      "repository_sha256": "d8ff89f07634d8bacfe33b31cd8f1e766f887e3f9b3451a979bc7b27020bbd1a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/Json.hpp",
+      "path": "splash/runtime/engine/Json.hpp",
+      "source_sha256": "6f55c72f00a9030ba67fcfdbd677e5516d44566f94235958c71b4821f3622ef9",
+      "repository_sha256": "6f55c72f00a9030ba67fcfdbd677e5516d44566f94235958c71b4821f3622ef9",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/KvCache.cpp",
+      "path": "splash/runtime/engine/KvCache.cpp",
+      "source_sha256": "ea7818c4434ad1fa8fce601073b3677bbb9afdf051a661d096d266664ebaf578",
+      "repository_sha256": "ea7818c4434ad1fa8fce601073b3677bbb9afdf051a661d096d266664ebaf578",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/KvCache.hpp",
+      "path": "splash/runtime/engine/KvCache.hpp",
+      "source_sha256": "0970ee9de3ee94ec9bc55ce4ad963a8ccdb0dc2b00c3c262be4d315f97d87f39",
+      "repository_sha256": "0970ee9de3ee94ec9bc55ce4ad963a8ccdb0dc2b00c3c262be4d315f97d87f39",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/KvPageTier.cpp",
+      "path": "splash/runtime/engine/KvPageTier.cpp",
+      "source_sha256": "7122a8e35466194666a161b8a54176dc8a07d8526f5a050f110f9e68aaa14f9c",
+      "repository_sha256": "7122a8e35466194666a161b8a54176dc8a07d8526f5a050f110f9e68aaa14f9c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/KvPageTier.hpp",
+      "path": "splash/runtime/engine/KvPageTier.hpp",
+      "source_sha256": "47a825210537f246c723fec83bbfac10614584032ce2ffde3525c0c4666e4961",
+      "repository_sha256": "47a825210537f246c723fec83bbfac10614584032ce2ffde3525c0c4666e4961",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/KvPool.cpp",
+      "path": "splash/runtime/engine/KvPool.cpp",
+      "source_sha256": "c6628bb7039013af1ce553d013a691557bb3ab7c38acc93324f042ef7509164c",
+      "repository_sha256": "c6628bb7039013af1ce553d013a691557bb3ab7c38acc93324f042ef7509164c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/KvPool.hpp",
+      "path": "splash/runtime/engine/KvPool.hpp",
+      "source_sha256": "f21dfbabf8b7bad70c0a49c1ac748187632d2c42166a0154fb536650b58d2e20",
+      "repository_sha256": "f21dfbabf8b7bad70c0a49c1ac748187632d2c42166a0154fb536650b58d2e20",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/KvTier.hpp",
+      "path": "splash/runtime/engine/KvTier.hpp",
+      "source_sha256": "4e4bca95c8410fb1a17ba329bbf779e8fafb2f5d31146c2e851467b0a6253171",
+      "repository_sha256": "4e4bca95c8410fb1a17ba329bbf779e8fafb2f5d31146c2e851467b0a6253171",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/MemoryAudit.cpp",
+      "path": "splash/runtime/engine/MemoryAudit.cpp",
+      "source_sha256": "8b4c9903df3df4d591537e8f5d135fea8dd78c1471187c397b0fbb08e9d10bb1",
+      "repository_sha256": "8b4c9903df3df4d591537e8f5d135fea8dd78c1471187c397b0fbb08e9d10bb1",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/MemoryAudit.hpp",
+      "path": "splash/runtime/engine/MemoryAudit.hpp",
+      "source_sha256": "7a640da83786ca776396cbb73e1fdb0ded5576750909a551b65528c058a15ece",
+      "repository_sha256": "7a640da83786ca776396cbb73e1fdb0ded5576750909a551b65528c058a15ece",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/MemoryControl.cpp",
+      "path": "splash/runtime/engine/MemoryControl.cpp",
+      "source_sha256": "9cb6fb8e52464d4373b7284a6ac1f62f9ddd3cf976b5293a9984a2a22f7f0983",
+      "repository_sha256": "9cb6fb8e52464d4373b7284a6ac1f62f9ddd3cf976b5293a9984a2a22f7f0983",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/MemoryControl.hpp",
+      "path": "splash/runtime/engine/MemoryControl.hpp",
+      "source_sha256": "3a653630d8931b7266fad9ad4c45ea920f6d6521d75bdf4868e700837f6871c6",
+      "repository_sha256": "3a653630d8931b7266fad9ad4c45ea920f6d6521d75bdf4868e700837f6871c6",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/MemoryGovernor.cpp",
+      "path": "splash/runtime/engine/MemoryGovernor.cpp",
+      "source_sha256": "c888310c113dba65ddf18c27e4f23213dbe2e9e998bfdac04002d3b5e3fee679",
+      "repository_sha256": "c888310c113dba65ddf18c27e4f23213dbe2e9e998bfdac04002d3b5e3fee679",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/MemoryGovernor.hpp",
+      "path": "splash/runtime/engine/MemoryGovernor.hpp",
+      "source_sha256": "fb05ede0775099b71f8bf222b81e3d34047867cb9c68610460e54d382d4fb598",
+      "repository_sha256": "fb05ede0775099b71f8bf222b81e3d34047867cb9c68610460e54d382d4fb598",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/MemoryPlan.cpp",
+      "path": "splash/runtime/engine/MemoryPlan.cpp",
+      "source_sha256": "19b2811163acd081011725f8c83cc5008a34b222fd17e3e60327d0ba45047058",
+      "repository_sha256": "19b2811163acd081011725f8c83cc5008a34b222fd17e3e60327d0ba45047058",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/MemoryPlan.hpp",
+      "path": "splash/runtime/engine/MemoryPlan.hpp",
+      "source_sha256": "b12b18c31b0bbe7f22b1c6e071c2a7ca9bc97509de00e8a65e8daf8953d95cb9",
+      "repository_sha256": "b12b18c31b0bbe7f22b1c6e071c2a7ca9bc97509de00e8a65e8daf8953d95cb9",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/NativeRuntime.cpp",
+      "path": "splash/runtime/engine/NativeRuntime.cpp",
+      "source_sha256": "df03121d5e0efcd39dbe5d05c26a1bf66db46403a8087e4cb704e6e593894fcd",
+      "repository_sha256": "df03121d5e0efcd39dbe5d05c26a1bf66db46403a8087e4cb704e6e593894fcd",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/NativeRuntime.hpp",
+      "path": "splash/runtime/engine/NativeRuntime.hpp",
+      "source_sha256": "0c4147a3ba52083a4aa605d09cf12aba60d7bb32fe16c7b40655cd4afebdc363",
+      "repository_sha256": "0c4147a3ba52083a4aa605d09cf12aba60d7bb32fe16c7b40655cd4afebdc363",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/Protocol.cpp",
+      "path": "splash/runtime/engine/Protocol.cpp",
+      "source_sha256": "b62cf47008c31945a6a695cabc1a113c165e41ae8cb1564e231a59a67049038d",
+      "repository_sha256": "b62cf47008c31945a6a695cabc1a113c165e41ae8cb1564e231a59a67049038d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/Protocol.hpp",
+      "path": "splash/runtime/engine/Protocol.hpp",
+      "source_sha256": "c626a9a5ba4a002a5fcbaaf6def6fc8769db1e1cf4bd85b3111ea03e19bb48d9",
+      "repository_sha256": "c626a9a5ba4a002a5fcbaaf6def6fc8769db1e1cf4bd85b3111ea03e19bb48d9",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/RecencyOrder.hpp",
+      "path": "splash/runtime/engine/RecencyOrder.hpp",
+      "source_sha256": "fbe4ccab4ee3f648cbf840f001ba62998d700093426115f9d7303a6b5f3f8ddb",
+      "repository_sha256": "fbe4ccab4ee3f648cbf840f001ba62998d700093426115f9d7303a6b5f3f8ddb",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/RuntimeResources.hpp",
+      "path": "splash/runtime/engine/RuntimeResources.hpp",
+      "source_sha256": "146c0cca84c929bdb17526f9d61a9867f2ac268c342a7a6fe7f54ba5cdb7f5eb",
+      "repository_sha256": "146c0cca84c929bdb17526f9d61a9867f2ac268c342a7a6fe7f54ba5cdb7f5eb",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/RuntimeResources.mm",
+      "path": "splash/runtime/engine/RuntimeResources.mm",
+      "source_sha256": "c07a5e3d18eca6ba87e540a41c8c830f0a67873e561dfd45b933a70719faaccf",
+      "repository_sha256": "c07a5e3d18eca6ba87e540a41c8c830f0a67873e561dfd45b933a70719faaccf",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/Scheduler.cpp",
+      "path": "splash/runtime/engine/Scheduler.cpp",
+      "source_sha256": "f617ca20851c22aa9c21a4285a6b5ec84bfaca9c6d90556497464da4ad5f2e68",
+      "repository_sha256": "f617ca20851c22aa9c21a4285a6b5ec84bfaca9c6d90556497464da4ad5f2e68",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/Scheduler.hpp",
+      "path": "splash/runtime/engine/Scheduler.hpp",
+      "source_sha256": "10c2675fe87c27bb8433d5ed77b90a2074045c47ebc609eb44c3c9c54cf1a9ef",
+      "repository_sha256": "10c2675fe87c27bb8433d5ed77b90a2074045c47ebc609eb44c3c9c54cf1a9ef",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/StartupLog.hpp",
+      "path": "splash/runtime/engine/StartupLog.hpp",
+      "source_sha256": "43823dcd1979e89615fc85d58f7366b32505ea28a235252a60039b4898fa538a",
+      "repository_sha256": "43823dcd1979e89615fc85d58f7366b32505ea28a235252a60039b4898fa538a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/StateCache.cpp",
+      "path": "splash/runtime/engine/StateCache.cpp",
+      "source_sha256": "954aaedeab666d9759a1f525b1f87a661c955c0d5cd8a9260400a659f8ccc0de",
+      "repository_sha256": "954aaedeab666d9759a1f525b1f87a661c955c0d5cd8a9260400a659f8ccc0de",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/StateCache.hpp",
+      "path": "splash/runtime/engine/StateCache.hpp",
+      "source_sha256": "8f564489becae1ceaa2c1a50bd82a22b0d601bf1a5a6ec8cc3d27c2c8fa437a3",
+      "repository_sha256": "8f564489becae1ceaa2c1a50bd82a22b0d601bf1a5a6ec8cc3d27c2c8fa437a3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/Status.cpp",
+      "path": "splash/runtime/engine/Status.cpp",
+      "source_sha256": "d738e01c0e23a5218f33174c3faa8a9ff25050291340ad101e2ebcf9309e5ebc",
+      "repository_sha256": "d738e01c0e23a5218f33174c3faa8a9ff25050291340ad101e2ebcf9309e5ebc",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/Status.hpp",
+      "path": "splash/runtime/engine/Status.hpp",
+      "source_sha256": "21140259e937ac05596bf030059241af1c3ffb3d8012a95a1ae352729ad331fd",
+      "repository_sha256": "21140259e937ac05596bf030059241af1c3ffb3d8012a95a1ae352729ad331fd",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/Types.hpp",
+      "path": "splash/runtime/engine/Types.hpp",
+      "source_sha256": "20724c2f2e0d86bc67c5a9350d9defe1878a5459b0c826189df3384013a102cf",
+      "repository_sha256": "20724c2f2e0d86bc67c5a9350d9defe1878a5459b0c826189df3384013a102cf",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/WriteBehind.cpp",
+      "path": "splash/runtime/engine/WriteBehind.cpp",
+      "source_sha256": "dcb47ad2b49df1395c17c37ca419369fc559ba1c11127e7fa8b12797a9dd40af",
+      "repository_sha256": "dcb47ad2b49df1395c17c37ca419369fc559ba1c11127e7fa8b12797a9dd40af",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/engine/WriteBehind.hpp",
+      "path": "splash/runtime/engine/WriteBehind.hpp",
+      "source_sha256": "8810428992a5de6233c63c69e22d666dfa7b177f58413141c8bdb42bb3371b82",
+      "repository_sha256": "8810428992a5de6233c63c69e22d666dfa7b177f58413141c8bdb42bb3371b82",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/main.mm",
+      "path": "splash/runtime/main.mm",
+      "source_sha256": "d5d02929619f291b8a96a2e2da80da50b71037cb8e36a9ee011fdf8c666a4b99",
+      "repository_sha256": "d5d02929619f291b8a96a2e2da80da50b71037cb8e36a9ee011fdf8c666a4b99",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/BackendInstrumentation.hpp",
+      "path": "splash/runtime/metal/BackendInstrumentation.hpp",
+      "source_sha256": "861cd5e739e758bbc0d4844bfd07d339e0777cfc7955bf75cf02177ce63215b3",
+      "repository_sha256": "861cd5e739e758bbc0d4844bfd07d339e0777cfc7955bf75cf02177ce63215b3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/CommandGraph.hpp",
+      "path": "splash/runtime/metal/CommandGraph.hpp",
+      "source_sha256": "5c8ff5b4d7616ee27657527634c276e011aa67da0456cb4e7fc1d89d42105909",
+      "repository_sha256": "5c8ff5b4d7616ee27657527634c276e011aa67da0456cb4e7fc1d89d42105909",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/CommandWatchdog.hpp",
+      "path": "splash/runtime/metal/CommandWatchdog.hpp",
+      "source_sha256": "475c1163a570282c48fbee92e110b7e9eebb27a7461bf3ef78a37ad9ec1465b0",
+      "repository_sha256": "475c1163a570282c48fbee92e110b7e9eebb27a7461bf3ef78a37ad9ec1465b0",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/DeviceCapabilities.cpp",
+      "path": "splash/runtime/metal/DeviceCapabilities.cpp",
+      "source_sha256": "ebbc9604d365c2eb5dcaacbd1bf989b975b8a130740958c211657c7a0c7d0089",
+      "repository_sha256": "ebbc9604d365c2eb5dcaacbd1bf989b975b8a130740958c211657c7a0c7d0089",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/DeviceCapabilities.hpp",
+      "path": "splash/runtime/metal/DeviceCapabilities.hpp",
+      "source_sha256": "9329315f9a06b8b15e750dabab46d6b300403bca25dede7e2068984119476e05",
+      "repository_sha256": "9329315f9a06b8b15e750dabab46d6b300403bca25dede7e2068984119476e05",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/MetalBackend.hpp",
+      "path": "splash/runtime/metal/MetalBackend.hpp",
+      "source_sha256": "9fb758d9a063148a61a4833dc86406dc284f2698e9528a64083e84263c63f0ad",
+      "repository_sha256": "9fb758d9a063148a61a4833dc86406dc284f2698e9528a64083e84263c63f0ad",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/MetalBackend.mm",
+      "path": "splash/runtime/metal/MetalBackend.mm",
+      "source_sha256": "c3f4333c4a31f7a9bebfd7b36417adc847eb6759b78c9dcd4ca9e9c7117292c5",
+      "repository_sha256": "c3f4333c4a31f7a9bebfd7b36417adc847eb6759b78c9dcd4ca9e9c7117292c5",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/Residency.hpp",
+      "path": "splash/runtime/metal/Residency.hpp",
+      "source_sha256": "c0ab1035e1cb058175c928690af9fe0e753972f0eb2745dacdb3bad3a88466c6",
+      "repository_sha256": "c0ab1035e1cb058175c928690af9fe0e753972f0eb2745dacdb3bad3a88466c6",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/DraftAttention.h",
+      "path": "splash/runtime/metal/abi/DraftAttention.h",
+      "source_sha256": "152c444ab2b5473ae031b517881b6833bcc3a2ee8a2e85d546397d83b86c95c2",
+      "repository_sha256": "152c444ab2b5473ae031b517881b6833bcc3a2ee8a2e85d546397d83b86c95c2",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/Embedding.h",
+      "path": "splash/runtime/metal/abi/Embedding.h",
+      "source_sha256": "7e0ecaf16dea7fea3326b3462c7771d1ddf400a4c7529ebc05fd860cda85d323",
+      "repository_sha256": "7e0ecaf16dea7fea3326b3462c7771d1ddf400a4c7529ebc05fd860cda85d323",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/ExecutionGeometry.h",
+      "path": "splash/runtime/metal/abi/ExecutionGeometry.h",
+      "source_sha256": "a1cf13b8d8d8c6aa80de14d6cda58840e4f22725ea512be0a74a23307e1f2e7d",
+      "repository_sha256": "a1cf13b8d8d8c6aa80de14d6cda58840e4f22725ea512be0a74a23307e1f2e7d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/GDN.h",
+      "path": "splash/runtime/metal/abi/GDN.h",
+      "source_sha256": "64b5d9f33e0c9a6f97724420fc72fc693b2e69a4ba88221fff9ac58d1155474b",
+      "repository_sha256": "64b5d9f33e0c9a6f97724420fc72fc693b2e69a4ba88221fff9ac58d1155474b",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/Gguf.h",
+      "path": "splash/runtime/metal/abi/Gguf.h",
+      "source_sha256": "3c7ad3d7edc4e5fd711a3d8cf8fd21f02780f1f90525e19d81d665ed99155848",
+      "repository_sha256": "3c7ad3d7edc4e5fd711a3d8cf8fd21f02780f1f90525e19d81d665ed99155848",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/GgufRepack.h",
+      "path": "splash/runtime/metal/abi/GgufRepack.h",
+      "source_sha256": "62187f81c63547df91ce6e5cff62ec75275dc246c15d538671868b5def7705c8",
+      "repository_sha256": "62187f81c63547df91ce6e5cff62ec75275dc246c15d538671868b5def7705c8",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/KernelABI.h",
+      "path": "splash/runtime/metal/abi/KernelABI.h",
+      "source_sha256": "cf084ea358c2b8eb8e41d5a20394bba4999e576c00c3787652e9ec6da2425b0a",
+      "repository_sha256": "cf084ea358c2b8eb8e41d5a20394bba4999e576c00c3787652e9ec6da2425b0a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/KvExtent.h",
+      "path": "splash/runtime/metal/abi/KvExtent.h",
+      "source_sha256": "2c0845c4f406125fbb33dcedb1641f42f69801ef73b4ccda1d8917a18e32b80e",
+      "repository_sha256": "2c0845c4f406125fbb33dcedb1641f42f69801ef73b4ccda1d8917a18e32b80e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/Linear.h",
+      "path": "splash/runtime/metal/abi/Linear.h",
+      "source_sha256": "73867023169d7278c752fb73e8d1a728aa9525242b7171dc7568a3c371059eb1",
+      "repository_sha256": "73867023169d7278c752fb73e8d1a728aa9525242b7171dc7568a3c371059eb1",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/MoE.h",
+      "path": "splash/runtime/metal/abi/MoE.h",
+      "source_sha256": "f06746c7bdbab274272344227a1fe55ea8be1eeaf95231ce9abfc0fc31678640",
+      "repository_sha256": "f06746c7bdbab274272344227a1fe55ea8be1eeaf95231ce9abfc0fc31678640",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/PagedAttention.h",
+      "path": "splash/runtime/metal/abi/PagedAttention.h",
+      "source_sha256": "a850826cc454469cf24e3f404cf242c44bfd8d24791c1782bb8c6de265653902",
+      "repository_sha256": "a850826cc454469cf24e3f404cf242c44bfd8d24791c1782bb8c6de265653902",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/QuantFormat.h",
+      "path": "splash/runtime/metal/abi/QuantFormat.h",
+      "source_sha256": "7285d6292cbd18b20bbb9bf5e1bfc5b89ee7211be6e29ae45b93e1a83be647f0",
+      "repository_sha256": "7285d6292cbd18b20bbb9bf5e1bfc5b89ee7211be6e29ae45b93e1a83be647f0",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/QuantTables.h",
+      "path": "splash/runtime/metal/abi/QuantTables.h",
+      "source_sha256": "89e7aa1666fb6801b864644aafac000b9b5cb312ea1ec76cb1fee3a66b154c44",
+      "repository_sha256": "89e7aa1666fb6801b864644aafac000b9b5cb312ea1ec76cb1fee3a66b154c44",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/RoPE.h",
+      "path": "splash/runtime/metal/abi/RoPE.h",
+      "source_sha256": "6ca5d60b4da57eaadf5f349c2169b6583f584c8e8a4626f658a7f71371582029",
+      "repository_sha256": "6ca5d60b4da57eaadf5f349c2169b6583f584c8e8a4626f658a7f71371582029",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/RowCopy.h",
+      "path": "splash/runtime/metal/abi/RowCopy.h",
+      "source_sha256": "b0e2f3751e8f0e4e69eb071e6bdb0b8dfcda4bd795bc8e257e290651316775b3",
+      "repository_sha256": "b0e2f3751e8f0e4e69eb071e6bdb0b8dfcda4bd795bc8e257e290651316775b3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/Sampling.h",
+      "path": "splash/runtime/metal/abi/Sampling.h",
+      "source_sha256": "4195b77a583882321bfa4d0f0f3ded01568033c2b82b579ee650efc9867e2774",
+      "repository_sha256": "4195b77a583882321bfa4d0f0f3ded01568033c2b82b579ee650efc9867e2774",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/abi/Vision.h",
+      "path": "splash/runtime/metal/abi/Vision.h",
+      "source_sha256": "203e3dd6862f504261255ed5a466740f2afa037fcae15e78060a8399ab84ebe8",
+      "repository_sha256": "203e3dd6862f504261255ed5a466740f2afa037fcae15e78060a8399ab84ebe8",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/activation.h",
+      "path": "splash/runtime/metal/kernels/common/activation.h",
+      "source_sha256": "73339b1d3ed70c824b51c6de339683dcf0958f7d7a78ccb979c1060570cb9fc9",
+      "repository_sha256": "73339b1d3ed70c824b51c6de339683dcf0958f7d7a78ccb979c1060570cb9fc9",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/attention_qkv_prepare.h",
+      "path": "splash/runtime/metal/kernels/common/attention_qkv_prepare.h",
+      "source_sha256": "6e751e1775e6242bc3f025c3a44687b685bca6c9fdc034a82a95b8591eaf0b52",
+      "repository_sha256": "6e751e1775e6242bc3f025c3a44687b685bca6c9fdc034a82a95b8591eaf0b52",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/draft_context_kv.h",
+      "path": "splash/runtime/metal/kernels/common/draft_context_kv.h",
+      "source_sha256": "7131e5b02082c74cf36075dccba7e0bab6a1b2843c5bee7e304b6af0f72a372f",
+      "repository_sha256": "7131e5b02082c74cf36075dccba7e0bab6a1b2843c5bee7e304b6af0f72a372f",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/gdn_primitives.h",
+      "path": "splash/runtime/metal/kernels/common/gdn_primitives.h",
+      "source_sha256": "d13ac1e6b47439c1a2ce04480db29cb742213d1bf525738994b00d2bc1e17fff",
+      "repository_sha256": "d13ac1e6b47439c1a2ce04480db29cb742213d1bf525738994b00d2bc1e17fff",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/gguf_sgmatrix.h",
+      "path": "splash/runtime/metal/kernels/common/gguf_sgmatrix.h",
+      "source_sha256": "2ca1f62c834b9f7886fa552e5d6894ef977162eee9adc8715afbb22f6d69f8f3",
+      "repository_sha256": "2ca1f62c834b9f7886fa552e5d6894ef977162eee9adc8715afbb22f6d69f8f3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/gguf_staged.h",
+      "path": "splash/runtime/metal/kernels/common/gguf_staged.h",
+      "source_sha256": "dada3fd6e59ab916f4fe57a0e6ed2efbf1f16f6ec15ec5ecaa6957fcab17aa25",
+      "repository_sha256": "dada3fd6e59ab916f4fe57a0e6ed2efbf1f16f6ec15ec5ecaa6957fcab17aa25",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/gguf_staged_tile.h",
+      "path": "splash/runtime/metal/kernels/common/gguf_staged_tile.h",
+      "source_sha256": "960a492204c4088892035f0e62d570c9a1bca9145a6660908f63e99128f14e43",
+      "repository_sha256": "960a492204c4088892035f0e62d570c9a1bca9145a6660908f63e99128f14e43",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/gguf_tile.h",
+      "path": "splash/runtime/metal/kernels/common/gguf_tile.h",
+      "source_sha256": "fd06c8c9941a12f4294174e6bb09d0935f7c7dcd9e4e13b359ce5a6917e3e211",
+      "repository_sha256": "fd06c8c9941a12f4294174e6bb09d0935f7c7dcd9e4e13b359ce5a6917e3e211",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/kv_extent.h",
+      "path": "splash/runtime/metal/kernels/common/kv_extent.h",
+      "source_sha256": "9b66327f22a24215ed3d0d1f28e8cc61234e37a9927f39cb8327f102b0e32e7e",
+      "repository_sha256": "9b66327f22a24215ed3d0d1f28e8cc61234e37a9927f39cb8327f102b0e32e7e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/kv_paging.h",
+      "path": "splash/runtime/metal/kernels/common/kv_paging.h",
+      "source_sha256": "c67fd9796d9e28f96eb430ff992cc39c52fa563e3508308f3d27ffca7b46b5c9",
+      "repository_sha256": "c67fd9796d9e28f96eb430ff992cc39c52fa563e3508308f3d27ffca7b46b5c9",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/moe_expert_slab.h",
+      "path": "splash/runtime/metal/kernels/common/moe_expert_slab.h",
+      "source_sha256": "b61ff31bf8bf123fc5507c0b280629902129f9da6d3d603c851f4f9c05e74de0",
+      "repository_sha256": "b61ff31bf8bf123fc5507c0b280629902129f9da6d3d603c851f4f9c05e74de0",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/paged_attention_tile.h",
+      "path": "splash/runtime/metal/kernels/common/paged_attention_tile.h",
+      "source_sha256": "18d5c5bcfc7b452121fbd52597b713fc4d771add0b0b4c32a610a071cb0042d1",
+      "repository_sha256": "18d5c5bcfc7b452121fbd52597b713fc4d771add0b0b4c32a610a071cb0042d1",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/paged_store_row.h",
+      "path": "splash/runtime/metal/kernels/common/paged_store_row.h",
+      "source_sha256": "c2ed7e3d5580cfacdb35cc1d51b48fb720628c3d2ac333b563602f3a9b06cb0c",
+      "repository_sha256": "c2ed7e3d5580cfacdb35cc1d51b48fb720628c3d2ac333b563602f3a9b06cb0c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/q4_mpp_tiles.h",
+      "path": "splash/runtime/metal/kernels/common/q4_mpp_tiles.h",
+      "source_sha256": "7f8c492efbf21d7d0b0f6db0eb9afde15cc070cd49ae8a30fa8b2b4f126b9c0e",
+      "repository_sha256": "7f8c492efbf21d7d0b0f6db0eb9afde15cc070cd49ae8a30fa8b2b4f126b9c0e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/q4_sgmatrix.h",
+      "path": "splash/runtime/metal/kernels/common/q4_sgmatrix.h",
+      "source_sha256": "e26468d8850b03d7b4b3da09e4c1b01e7bfeac27b7cec077618859b3f085f761",
+      "repository_sha256": "e26468d8850b03d7b4b3da09e4c1b01e7bfeac27b7cec077618859b3f085f761",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/quant_formats.h",
+      "path": "splash/runtime/metal/kernels/common/quant_formats.h",
+      "source_sha256": "9399422c11797af61da83192ff1dd9f8117df5987650ec7810d35cadd14bc50b",
+      "repository_sha256": "9399422c11797af61da83192ff1dd9f8117df5987650ec7810d35cadd14bc50b",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/rms_inverse.h",
+      "path": "splash/runtime/metal/kernels/common/rms_inverse.h",
+      "source_sha256": "50b1e7849d298c221da1b4c95417e47ce784ded29fe7cf4620e784915ba10469",
+      "repository_sha256": "50b1e7849d298c221da1b4c95417e47ce784ded29fe7cf4620e784915ba10469",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/sgmatrix.h",
+      "path": "splash/runtime/metal/kernels/common/sgmatrix.h",
+      "source_sha256": "f21dccc8e3d39bb239da955977cfcb51e36ce51c36c89102c3038065a1478650",
+      "repository_sha256": "f21dccc8e3d39bb239da955977cfcb51e36ce51c36c89102c3038065a1478650",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/common/split_reduce.h",
+      "path": "splash/runtime/metal/kernels/common/split_reduce.h",
+      "source_sha256": "c0d08d399022edba686509d7d96df4fde2e3065dd9cae5f2219de1eee85f7f89",
+      "repository_sha256": "c0d08d399022edba686509d7d96df4fde2e3065dd9cae5f2219de1eee85f7f89",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/decode/attention_qkv.metal",
+      "path": "splash/runtime/metal/kernels/decode/attention_qkv.metal",
+      "source_sha256": "b93887b293f96baa9090bbeb49748b1bba62102c8afd381cef053846b242026a",
+      "repository_sha256": "b93887b293f96baa9090bbeb49748b1bba62102c8afd381cef053846b242026a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/decode/draft.metal",
+      "path": "splash/runtime/metal/kernels/decode/draft.metal",
+      "source_sha256": "d1a8d38820ad41066c470083dcb3d01106b800e6411d74b0c593882dbe19bbdb",
+      "repository_sha256": "d1a8d38820ad41066c470083dcb3d01106b800e6411d74b0c593882dbe19bbdb",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/decode/gdn.metal",
+      "path": "splash/runtime/metal/kernels/decode/gdn.metal",
+      "source_sha256": "d1ee8017c0fcd110aebe7d7b053635e749e0a34db047271596fa52a233981325",
+      "repository_sha256": "d1ee8017c0fcd110aebe7d7b053635e749e0a34db047271596fa52a233981325",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/decode/linear_gguf_sgmatrix.metal",
+      "path": "splash/runtime/metal/kernels/decode/linear_gguf_sgmatrix.metal",
+      "source_sha256": "e30fa761c487f95da350ebe5fe68c31066afa6f14a3c28fd646b3633f14ffaf3",
+      "repository_sha256": "e30fa761c487f95da350ebe5fe68c31066afa6f14a3c28fd646b3633f14ffaf3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/decode/linear_q4.metal",
+      "path": "splash/runtime/metal/kernels/decode/linear_q4.metal",
+      "source_sha256": "b81c321d07a11296ba72915fc751c71c70fb72938bdec953c47e7b43532b56fe",
+      "repository_sha256": "b81c321d07a11296ba72915fc751c71c70fb72938bdec953c47e7b43532b56fe",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/decode/linear_q4_grid_split.metal",
+      "path": "splash/runtime/metal/kernels/decode/linear_q4_grid_split.metal",
+      "source_sha256": "183024b997185bf29287bc687a2746690121eff66455a4780b2ecd4bf719ecaa",
+      "repository_sha256": "183024b997185bf29287bc687a2746690121eff66455a4780b2ecd4bf719ecaa",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/decode/linear_q4_sgmatrix.metal",
+      "path": "splash/runtime/metal/kernels/decode/linear_q4_sgmatrix.metal",
+      "source_sha256": "b156077b280bac9f1f229fe2d2e0ace00ec448805fc02c08e5d08c703a5e780c",
+      "repository_sha256": "b156077b280bac9f1f229fe2d2e0ace00ec448805fc02c08e5d08c703a5e780c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/decode/paged_attention.metal",
+      "path": "splash/runtime/metal/kernels/decode/paged_attention.metal",
+      "source_sha256": "b029e5c889f18d73e69154e28eae8ddd17c49d9905f6c61cd260e7df1a7b11df",
+      "repository_sha256": "b029e5c889f18d73e69154e28eae8ddd17c49d9905f6c61cd260e7df1a7b11df",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/decode/paged_attention_store.metal",
+      "path": "splash/runtime/metal/kernels/decode/paged_attention_store.metal",
+      "source_sha256": "7f9bc25ebcb7ac6823ada3a83a0da10c3be34245b2071c788788880bce3f1389",
+      "repository_sha256": "7f9bc25ebcb7ac6823ada3a83a0da10c3be34245b2071c788788880bce3f1389",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/decode/sampling.metal",
+      "path": "splash/runtime/metal/kernels/decode/sampling.metal",
+      "source_sha256": "585199155e562ed658210e1984bd9770dada7457052bd0a08eefad280d823216",
+      "repository_sha256": "585199155e562ed658210e1984bd9770dada7457052bd0a08eefad280d823216",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/prefill/attention_qkv.metal",
+      "path": "splash/runtime/metal/kernels/prefill/attention_qkv.metal",
+      "source_sha256": "82fa08daca8d941704235f368621ff6f4ac8335ac24c5f36ccdddbb45d103c64",
+      "repository_sha256": "82fa08daca8d941704235f368621ff6f4ac8335ac24c5f36ccdddbb45d103c64",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/prefill/draft_context.metal",
+      "path": "splash/runtime/metal/kernels/prefill/draft_context.metal",
+      "source_sha256": "97beda3a4d521d8dcb87655d0a6d80c728979bae5aee1f1def75331cdecfb6b3",
+      "repository_sha256": "97beda3a4d521d8dcb87655d0a6d80c728979bae5aee1f1def75331cdecfb6b3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/prefill/gdn.metal",
+      "path": "splash/runtime/metal/kernels/prefill/gdn.metal",
+      "source_sha256": "4d8432ffed3039d20e36662b28f642ca1df02a44b2e615816e6ecf177752ad8a",
+      "repository_sha256": "4d8432ffed3039d20e36662b28f642ca1df02a44b2e615816e6ecf177752ad8a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/prefill/linear_q4.metal",
+      "path": "splash/runtime/metal/kernels/prefill/linear_q4.metal",
+      "source_sha256": "f1e74f762ef4e9f6db00909f96ac2dd9c6ad283ebecfcee743e33e7cdf64404a",
+      "repository_sha256": "f1e74f762ef4e9f6db00909f96ac2dd9c6ad283ebecfcee743e33e7cdf64404a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/prefill/moe.metal",
+      "path": "splash/runtime/metal/kernels/prefill/moe.metal",
+      "source_sha256": "a1f2b943871e10474748856a9473347458ca1f24037804c135403b08c11cd47c",
+      "repository_sha256": "a1f2b943871e10474748856a9473347458ca1f24037804c135403b08c11cd47c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/prefill/normalization.metal",
+      "path": "splash/runtime/metal/kernels/prefill/normalization.metal",
+      "source_sha256": "c3b13eb96d9c54675a42982a6f8af55b21e93354089bb7241736d9c71034a2ff",
+      "repository_sha256": "c3b13eb96d9c54675a42982a6f8af55b21e93354089bb7241736d9c71034a2ff",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/prefill/paged_attention.metal",
+      "path": "splash/runtime/metal/kernels/prefill/paged_attention.metal",
+      "source_sha256": "a2ef5c16e588e14fff812f424a2a31bd4aad9961b3913c83107cc7735ecec1b4",
+      "repository_sha256": "a2ef5c16e588e14fff812f424a2a31bd4aad9961b3913c83107cc7735ecec1b4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/prefill/paged_attention_store.metal",
+      "path": "splash/runtime/metal/kernels/prefill/paged_attention_store.metal",
+      "source_sha256": "373df9a532304fbe955d855edb167145c66aa917f4cb8ee6da707a2248783e17",
+      "repository_sha256": "373df9a532304fbe955d855edb167145c66aa917f4cb8ee6da707a2248783e17",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/shared/embedding.metal",
+      "path": "splash/runtime/metal/kernels/shared/embedding.metal",
+      "source_sha256": "213b50d2eccf81732b74b024d3ba64b4112d863a8d420d3365e3611aaa70afff",
+      "repository_sha256": "213b50d2eccf81732b74b024d3ba64b4112d863a8d420d3365e3611aaa70afff",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/shared/gguf_float.metal",
+      "path": "splash/runtime/metal/kernels/shared/gguf_float.metal",
+      "source_sha256": "9dc569cfb1373b14d3893db549ade8e6440f954912e5c00012ced98779e0a782",
+      "repository_sha256": "9dc569cfb1373b14d3893db549ade8e6440f954912e5c00012ced98779e0a782",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/shared/gguf_linear.metal",
+      "path": "splash/runtime/metal/kernels/shared/gguf_linear.metal",
+      "source_sha256": "cf7f0a5b839fff329c7868dd18e2ea3af504b92000b93e6debd1383269270c60",
+      "repository_sha256": "cf7f0a5b839fff329c7868dd18e2ea3af504b92000b93e6debd1383269270c60",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/shared/gguf_repack.metal",
+      "path": "splash/runtime/metal/kernels/shared/gguf_repack.metal",
+      "source_sha256": "3e28a9047e32cef50488caca91740ff8f6da7ceabb4d0ab367dcb702da60e386",
+      "repository_sha256": "3e28a9047e32cef50488caca91740ff8f6da7ceabb4d0ab367dcb702da60e386",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/shared/gguf_rotation.metal",
+      "path": "splash/runtime/metal/kernels/shared/gguf_rotation.metal",
+      "source_sha256": "e749ae8637206595448f9e42f39176856f0a5b21558cc79b71ac370f24e19652",
+      "repository_sha256": "e749ae8637206595448f9e42f39176856f0a5b21558cc79b71ac370f24e19652",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/shared/moe.metal",
+      "path": "splash/runtime/metal/kernels/shared/moe.metal",
+      "source_sha256": "d38c9ddeb720f294b9dbd278d2b43a98d303846ac35e06d0c8babe667f820cda",
+      "repository_sha256": "d38c9ddeb720f294b9dbd278d2b43a98d303846ac35e06d0c8babe667f820cda",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/shared/moe_gguf.metal",
+      "path": "splash/runtime/metal/kernels/shared/moe_gguf.metal",
+      "source_sha256": "3fa80a48f895d435195cc3ae432cea93fb315fb78d4ced26fdccb3ce759faeed",
+      "repository_sha256": "3fa80a48f895d435195cc3ae432cea93fb315fb78d4ced26fdccb3ce759faeed",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/shared/normalization.metal",
+      "path": "splash/runtime/metal/kernels/shared/normalization.metal",
+      "source_sha256": "2bd70e9de9c23949f5b99191daf89ff4d33e3b9a9dadcc62ae51952bd40dca56",
+      "repository_sha256": "2bd70e9de9c23949f5b99191daf89ff4d33e3b9a9dadcc62ae51952bd40dca56",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/shared/residency.metal",
+      "path": "splash/runtime/metal/kernels/shared/residency.metal",
+      "source_sha256": "13618a4954dee416e8d214ca28aaa23c309761c368bae5c083bfc36ddf4d9bd5",
+      "repository_sha256": "13618a4954dee416e8d214ca28aaa23c309761c368bae5c083bfc36ddf4d9bd5",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/shared/rope.metal",
+      "path": "splash/runtime/metal/kernels/shared/rope.metal",
+      "source_sha256": "23a66c80c32f444de8af09f5ca67611fb8a08ea2517ab9ac3d7607ab463fc365",
+      "repository_sha256": "23a66c80c32f444de8af09f5ca67611fb8a08ea2517ab9ac3d7607ab463fc365",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/shared/row_copy.metal",
+      "path": "splash/runtime/metal/kernels/shared/row_copy.metal",
+      "source_sha256": "08360482b7bf34e8a73ebef854bff156711271a8b55c1323f41d53974d6d481e",
+      "repository_sha256": "08360482b7bf34e8a73ebef854bff156711271a8b55c1323f41d53974d6d481e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/metal/kernels/shared/vision.metal",
+      "path": "splash/runtime/metal/kernels/shared/vision.metal",
+      "source_sha256": "4f375556c8a4a7df0d654a8d5c72bd4fad1196e182a8c8b0d370b8a4de61b5b4",
+      "repository_sha256": "4f375556c8a4a7df0d654a8d5c72bd4fad1196e182a8c8b0d370b8a4de61b5b4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/AffinePlan.hpp",
+      "path": "splash/runtime/model/AffinePlan.hpp",
+      "source_sha256": "267f1841a7ae27e76118c8db2091c75a4197390f96bb57e33a8bbba33ec04e73",
+      "repository_sha256": "267f1841a7ae27e76118c8db2091c75a4197390f96bb57e33a8bbba33ec04e73",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/AffinePreparation.cpp",
+      "path": "splash/runtime/model/AffinePreparation.cpp",
+      "source_sha256": "130ffaea021e143f8b395e20876d2254c69cbc5cb49bcf587684d1e39f9ea715",
+      "repository_sha256": "130ffaea021e143f8b395e20876d2254c69cbc5cb49bcf587684d1e39f9ea715",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/AffinePreparation.hpp",
+      "path": "splash/runtime/model/AffinePreparation.hpp",
+      "source_sha256": "19568c02d5e6faed061524823f83e52c5565b8b693d9809bbe7d4387aa482d43",
+      "repository_sha256": "19568c02d5e6faed061524823f83e52c5565b8b693d9809bbe7d4387aa482d43",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/AffineTarget.cpp",
+      "path": "splash/runtime/model/AffineTarget.cpp",
+      "source_sha256": "e203544aff27f0c6a120bb5b120b958f1e4340ed1e1409e25b9007627a54cae3",
+      "repository_sha256": "e203544aff27f0c6a120bb5b120b958f1e4340ed1e1409e25b9007627a54cae3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/AffineTarget.hpp",
+      "path": "splash/runtime/model/AffineTarget.hpp",
+      "source_sha256": "b0b714e5c3fe6b1c635d679d817a277969047376ea610ee8b894b5ec8b079f74",
+      "repository_sha256": "b0b714e5c3fe6b1c635d679d817a277969047376ea610ee8b894b5ec8b079f74",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/Bfloat16.hpp",
+      "path": "splash/runtime/model/Bfloat16.hpp",
+      "source_sha256": "d036f65a2cce9f0aa534a8a5afeb33435d9ec2ad2ff503689383e217c9bee601",
+      "repository_sha256": "d036f65a2cce9f0aa534a8a5afeb33435d9ec2ad2ff503689383e217c9bee601",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/Crc32c.hpp",
+      "path": "splash/runtime/model/Crc32c.hpp",
+      "source_sha256": "9c6e0d65442c4f491d308c9d34c1605d5d5a5d07e75000c229262a39be8cbbc3",
+      "repository_sha256": "9c6e0d65442c4f491d308c9d34c1605d5d5a5d07e75000c229262a39be8cbbc3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/DFlashDraft.cpp",
+      "path": "splash/runtime/model/DFlashDraft.cpp",
+      "source_sha256": "b87780bea26a4c8863a073e3aa9d91022702e75f6939045159e5cde8dac4fc86",
+      "repository_sha256": "b87780bea26a4c8863a073e3aa9d91022702e75f6939045159e5cde8dac4fc86",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/DFlashDraft.hpp",
+      "path": "splash/runtime/model/DFlashDraft.hpp",
+      "source_sha256": "586958b97c6bb0cc02c6812ba5fe35648312be17a917ec5ee4c1d00aa346b48c",
+      "repository_sha256": "586958b97c6bb0cc02c6812ba5fe35648312be17a917ec5ee4c1d00aa346b48c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/DraftCheckpoint.cpp",
+      "path": "splash/runtime/model/DraftCheckpoint.cpp",
+      "source_sha256": "334b37663cfef8cbccfa4a0c62b625c33027ba4ff3f8b8a031d928d7cb28cbb2",
+      "repository_sha256": "334b37663cfef8cbccfa4a0c62b625c33027ba4ff3f8b8a031d928d7cb28cbb2",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/DraftCheckpoint.hpp",
+      "path": "splash/runtime/model/DraftCheckpoint.hpp",
+      "source_sha256": "ea96fa6670be92307857d65143ea541cd666d5c1ee57dac7e4dfd970b8cc92df",
+      "repository_sha256": "ea96fa6670be92307857d65143ea541cd666d5c1ee57dac7e4dfd970b8cc92df",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/DraftContextPlan.cpp",
+      "path": "splash/runtime/model/DraftContextPlan.cpp",
+      "source_sha256": "ddf997a015417f50e31fea53fc0f96e8b20c68f5c85634dd49b2ca873e8d5535",
+      "repository_sha256": "ddf997a015417f50e31fea53fc0f96e8b20c68f5c85634dd49b2ca873e8d5535",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/GgufFile.cpp",
+      "path": "splash/runtime/model/GgufFile.cpp",
+      "source_sha256": "44ff084e942b0063b0965628cd422798decede3597acfc89b3a3a01d51d529c7",
+      "repository_sha256": "44ff084e942b0063b0965628cd422798decede3597acfc89b3a3a01d51d529c7",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/GgufFile.hpp",
+      "path": "splash/runtime/model/GgufFile.hpp",
+      "source_sha256": "bf3860232be197e022222cab68e513691a342b444d376b7d2fb19ab0a6ccd7ee",
+      "repository_sha256": "bf3860232be197e022222cab68e513691a342b444d376b7d2fb19ab0a6ccd7ee",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/GgufImage.cpp",
+      "path": "splash/runtime/model/GgufImage.cpp",
+      "source_sha256": "fad3adc19149544dd12f25da7643659f0ad42f465311af653e38702ab4acd828",
+      "repository_sha256": "fad3adc19149544dd12f25da7643659f0ad42f465311af653e38702ab4acd828",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/GgufImage.hpp",
+      "path": "splash/runtime/model/GgufImage.hpp",
+      "source_sha256": "39ef4bfd32f81b640bf61ea7421f9abd9591a1af59536d1ff000ab663dde5824",
+      "repository_sha256": "39ef4bfd32f81b640bf61ea7421f9abd9591a1af59536d1ff000ab663dde5824",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/GgufImageLayout.hpp",
+      "path": "splash/runtime/model/GgufImageLayout.hpp",
+      "source_sha256": "267c9c4befabef33192593c9d79580ed6744b3011a5fbe90bb220c93dc1c3076",
+      "repository_sha256": "267c9c4befabef33192593c9d79580ed6744b3011a5fbe90bb220c93dc1c3076",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/GgufPreparation.cpp",
+      "path": "splash/runtime/model/GgufPreparation.cpp",
+      "source_sha256": "60dcacddbbf28ee39be58fb26463e4b30dd61346527bf366d4e13b5be612f80e",
+      "repository_sha256": "60dcacddbbf28ee39be58fb26463e4b30dd61346527bf366d4e13b5be612f80e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/GgufPreparation.hpp",
+      "path": "splash/runtime/model/GgufPreparation.hpp",
+      "source_sha256": "7f4ebafed20ee5f1c5d64d4dbd2e99a8f2bcd5126a4ffb5c12c06ebd13e9eb6e",
+      "repository_sha256": "7f4ebafed20ee5f1c5d64d4dbd2e99a8f2bcd5126a4ffb5c12c06ebd13e9eb6e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/GgufTarget.cpp",
+      "path": "splash/runtime/model/GgufTarget.cpp",
+      "source_sha256": "d34397b1e7d71cb9317069b2d7508f0d4f0ac5906cef098e6e679e7eebe9899d",
+      "repository_sha256": "d34397b1e7d71cb9317069b2d7508f0d4f0ac5906cef098e6e679e7eebe9899d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/GgufTarget.hpp",
+      "path": "splash/runtime/model/GgufTarget.hpp",
+      "source_sha256": "7df9af20ca7b9806ad6589d27cd28317f6c841356a4c409f2a47d9e130667fce",
+      "repository_sha256": "7df9af20ca7b9806ad6589d27cd28317f6c841356a4c409f2a47d9e130667fce",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/Model.hpp",
+      "path": "splash/runtime/model/Model.hpp",
+      "source_sha256": "ee4c8c40e3f175ef2dadfbf938c7d567172d7fc8ba9c34002a759ff7ee5c66fd",
+      "repository_sha256": "ee4c8c40e3f175ef2dadfbf938c7d567172d7fc8ba9c34002a759ff7ee5c66fd",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/ModelDescriptor.hpp",
+      "path": "splash/runtime/model/ModelDescriptor.hpp",
+      "source_sha256": "6af273198157ebbedd4a08b2f861b36c03bbf9a48a9e64aa13c645459b795282",
+      "repository_sha256": "6af273198157ebbedd4a08b2f861b36c03bbf9a48a9e64aa13c645459b795282",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/ModelDescriptor.mm",
+      "path": "splash/runtime/model/ModelDescriptor.mm",
+      "source_sha256": "b0fad7b0cd0be2ee91f1ce4a02d84d8ff408371b18f4232f20897ba68073447d",
+      "repository_sha256": "b0fad7b0cd0be2ee91f1ce4a02d84d8ff408371b18f4232f20897ba68073447d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/ModelFactory.cpp",
+      "path": "splash/runtime/model/ModelFactory.cpp",
+      "source_sha256": "2d79a93ff3e0fe6d1ffaf8938d3a9e27868d2d7f59c2224b979ed73c45b791bf",
+      "repository_sha256": "2d79a93ff3e0fe6d1ffaf8938d3a9e27868d2d7f59c2224b979ed73c45b791bf",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/ModelFactory.hpp",
+      "path": "splash/runtime/model/ModelFactory.hpp",
+      "source_sha256": "939e64909c9619c8873b716290783eb9eb795427d8d4094c3569ea90782e1384",
+      "repository_sha256": "939e64909c9619c8873b716290783eb9eb795427d8d4094c3569ea90782e1384",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/Qwen3_6Moe.cpp",
+      "path": "splash/runtime/model/Qwen3_6Moe.cpp",
+      "source_sha256": "5c3942ff338caa756043302a6db4373935eb8a8eb187c8655a22f0fafa62718e",
+      "repository_sha256": "5c3942ff338caa756043302a6db4373935eb8a8eb187c8655a22f0fafa62718e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/Qwen3_6Moe.hpp",
+      "path": "splash/runtime/model/Qwen3_6Moe.hpp",
+      "source_sha256": "0e89357ef6a874fe64d81c05fafcc69e2e154b3d9077b626fec38af7a10d6c80",
+      "repository_sha256": "0e89357ef6a874fe64d81c05fafcc69e2e154b3d9077b626fec38af7a10d6c80",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/Qwen3_8.cpp",
+      "path": "splash/runtime/model/Qwen3_8.cpp",
+      "source_sha256": "f7b64cf7abb33c52647ace8e3a6544ec0732c592ecc58744c9074597b2083d85",
+      "repository_sha256": "f7b64cf7abb33c52647ace8e3a6544ec0732c592ecc58744c9074597b2083d85",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/Qwen3_8.hpp",
+      "path": "splash/runtime/model/Qwen3_8.hpp",
+      "source_sha256": "4878b247fa7a9ac22d517f7a0994d6facfcf76b7573cffb83d03b327265774d5",
+      "repository_sha256": "4878b247fa7a9ac22d517f7a0994d6facfcf76b7573cffb83d03b327265774d5",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/QwenHybridLayout.hpp",
+      "path": "splash/runtime/model/QwenHybridLayout.hpp",
+      "source_sha256": "2b3e8b93271ca2a55546da3cc4cfc2ab766474f4863261cc363d91ccbef2230e",
+      "repository_sha256": "2b3e8b93271ca2a55546da3cc4cfc2ab766474f4863261cc363d91ccbef2230e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/QwenState.cpp",
+      "path": "splash/runtime/model/QwenState.cpp",
+      "source_sha256": "9f4a5edd57da0da4b9ffc2ee8b736a18a3510540389282e9759047e9ff3a8c4d",
+      "repository_sha256": "9f4a5edd57da0da4b9ffc2ee8b736a18a3510540389282e9759047e9ff3a8c4d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/QwenState.hpp",
+      "path": "splash/runtime/model/QwenState.hpp",
+      "source_sha256": "a40158323e887951943da477ebd4754d6b6c46f05392c3b8a3689367bda6bbe1",
+      "repository_sha256": "a40158323e887951943da477ebd4754d6b6c46f05392c3b8a3689367bda6bbe1",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/QwenTarget.cpp",
+      "path": "splash/runtime/model/QwenTarget.cpp",
+      "source_sha256": "c84830d6612e53e8f3229b4e10d7968a419abe8c1e6910f490cb14d4f882af3f",
+      "repository_sha256": "c84830d6612e53e8f3229b4e10d7968a419abe8c1e6910f490cb14d4f882af3f",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/QwenTarget.hpp",
+      "path": "splash/runtime/model/QwenTarget.hpp",
+      "source_sha256": "2082b60f67816e767b5f5ec72da96faf7ee014c5aea5739744b77d7e10b28bc5",
+      "repository_sha256": "2082b60f67816e767b5f5ec72da96faf7ee014c5aea5739744b77d7e10b28bc5",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/QwenTargetFiles.hpp",
+      "path": "splash/runtime/model/QwenTargetFiles.hpp",
+      "source_sha256": "b1f6a2d327c8ecf97d4a2fd1bf8fe74d589635c40ca4e128529436c8a7edb71d",
+      "repository_sha256": "b1f6a2d327c8ecf97d4a2fd1bf8fe74d589635c40ca4e128529436c8a7edb71d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/QwenTargetLoader.cpp",
+      "path": "splash/runtime/model/QwenTargetLoader.cpp",
+      "source_sha256": "28402bc1ae33591784485ffa6d258d2cefdd23a164eff4193ff1106f84ce019d",
+      "repository_sha256": "28402bc1ae33591784485ffa6d258d2cefdd23a164eff4193ff1106f84ce019d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/QwenTargetLoader.hpp",
+      "path": "splash/runtime/model/QwenTargetLoader.hpp",
+      "source_sha256": "5370346fe9509797f61d849cbd8c1f579e77c951118cf03b22cfa47a2f018e9f",
+      "repository_sha256": "5370346fe9509797f61d849cbd8c1f579e77c951118cf03b22cfa47a2f018e9f",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/QwenVision.cpp",
+      "path": "splash/runtime/model/QwenVision.cpp",
+      "source_sha256": "241c3fd882920147cf357f4e395ae3c2b853960ae320664dc0590a2eb1235e1c",
+      "repository_sha256": "241c3fd882920147cf357f4e395ae3c2b853960ae320664dc0590a2eb1235e1c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/QwenVision.hpp",
+      "path": "splash/runtime/model/QwenVision.hpp",
+      "source_sha256": "bb81f8593346e5a502987e242b54c5585e9ce8c6408c3ff736fc66a700326322",
+      "repository_sha256": "bb81f8593346e5a502987e242b54c5585e9ce8c6408c3ff736fc66a700326322",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/Runtime.hpp",
+      "path": "splash/runtime/model/Runtime.hpp",
+      "source_sha256": "87ffb4bfbaf0077e87b269be24811bff009a96518a8cb388f83a4dcfff3fc048",
+      "repository_sha256": "87ffb4bfbaf0077e87b269be24811bff009a96518a8cb388f83a4dcfff3fc048",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/Runtime.mm",
+      "path": "splash/runtime/model/Runtime.mm",
+      "source_sha256": "5444ab66b04f942bf69c518293509813f2b0e364d6069d7fdd856a4e9979ab66",
+      "repository_sha256": "5444ab66b04f942bf69c518293509813f2b0e364d6069d7fdd856a4e9979ab66",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/RuntimeArenas.hpp",
+      "path": "splash/runtime/model/RuntimeArenas.hpp",
+      "source_sha256": "c407d40bef839674744671beb130021caff69530f5cfef72e3eef66d520c550e",
+      "repository_sha256": "c407d40bef839674744671beb130021caff69530f5cfef72e3eef66d520c550e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/RuntimeArenas.mm",
+      "path": "splash/runtime/model/RuntimeArenas.mm",
+      "source_sha256": "ca6f475b4368a1248917d97f1230b819068945be8474442dd667ac59f2716ded",
+      "repository_sha256": "ca6f475b4368a1248917d97f1230b819068945be8474442dd667ac59f2716ded",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/SafetensorsCheckpoint.hpp",
+      "path": "splash/runtime/model/SafetensorsCheckpoint.hpp",
+      "source_sha256": "e80565612e580247f4c736e4a5d74138fc97c238cfcca0ccca8a064def00beca",
+      "repository_sha256": "e80565612e580247f4c736e4a5d74138fc97c238cfcca0ccca8a064def00beca",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/SafetensorsCheckpoint.mm",
+      "path": "splash/runtime/model/SafetensorsCheckpoint.mm",
+      "source_sha256": "7d8c0f24b9f550f3bba577edc7c1704747ddb503f80496fa1925346d4e8042c4",
+      "repository_sha256": "7d8c0f24b9f550f3bba577edc7c1704747ddb503f80496fa1925346d4e8042c4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/SlotFile.cpp",
+      "path": "splash/runtime/model/SlotFile.cpp",
+      "source_sha256": "0210d78341369abec87b35d58ab7703a7d512237a40cdeeef8fd4cf981f68ae8",
+      "repository_sha256": "0210d78341369abec87b35d58ab7703a7d512237a40cdeeef8fd4cf981f68ae8",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/SlotFile.hpp",
+      "path": "splash/runtime/model/SlotFile.hpp",
+      "source_sha256": "c725313c27b7942b16f794f58c64c0971f068299c8b3f44a50d69fb0e64f9bdb",
+      "repository_sha256": "c725313c27b7942b16f794f58c64c0971f068299c8b3f44a50d69fb0e64f9bdb",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/StateLayout.hpp",
+      "path": "splash/runtime/model/StateLayout.hpp",
+      "source_sha256": "7cd2e84adbfc9bf57ec1408688b751c4788418db7ce1607c6c9f60ee63d90e23",
+      "repository_sha256": "7cd2e84adbfc9bf57ec1408688b751c4788418db7ce1607c6c9f60ee63d90e23",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/StateTransfer.hpp",
+      "path": "splash/runtime/model/StateTransfer.hpp",
+      "source_sha256": "74d0c7b6868f0ff4fb3693175758a24280cc763af966ac956bbe6acebed6be3d",
+      "repository_sha256": "74d0c7b6868f0ff4fb3693175758a24280cc763af966ac956bbe6acebed6be3d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/VisionLoader.cpp",
+      "path": "splash/runtime/model/VisionLoader.cpp",
+      "source_sha256": "3672b84bd1a5b500d2eb2a1df444c7022943be685a047772690c65702f427b15",
+      "repository_sha256": "3672b84bd1a5b500d2eb2a1df444c7022943be685a047772690c65702f427b15",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/VisionLoader.hpp",
+      "path": "splash/runtime/model/VisionLoader.hpp",
+      "source_sha256": "33da81f6a4b905fbb16dfa65ea9b2c40551b47c71edadec06ed846d542d1dee2",
+      "repository_sha256": "33da81f6a4b905fbb16dfa65ea9b2c40551b47c71edadec06ed846d542d1dee2",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/VisionPreparation.cpp",
+      "path": "splash/runtime/model/VisionPreparation.cpp",
+      "source_sha256": "abfdc26a220664407123b32593533e15d85139321f7bb891f49e879868ea5e72",
+      "repository_sha256": "abfdc26a220664407123b32593533e15d85139321f7bb891f49e879868ea5e72",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/VisionPreparation.hpp",
+      "path": "splash/runtime/model/VisionPreparation.hpp",
+      "source_sha256": "d81c6bc9216808aac674a1f42ae73ecd7ad634a1176da987d9e3b64e54bb1c18",
+      "repository_sha256": "d81c6bc9216808aac674a1f42ae73ecd7ad634a1176da987d9e3b64e54bb1c18",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/WeightImages.cpp",
+      "path": "splash/runtime/model/WeightImages.cpp",
+      "source_sha256": "a130e41a7337756a80b70e6316eb76c7d76bb50d1013b65e0d57f4c85810c1a9",
+      "repository_sha256": "a130e41a7337756a80b70e6316eb76c7d76bb50d1013b65e0d57f4c85810c1a9",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/WeightImages.hpp",
+      "path": "splash/runtime/model/WeightImages.hpp",
+      "source_sha256": "155a09f964b2c589a3cde33d99c35101f94be17a61c9bf5b176f3d784f2bd5e0",
+      "repository_sha256": "155a09f964b2c589a3cde33d99c35101f94be17a61c9bf5b176f3d784f2bd5e0",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/WeightLayout.hpp",
+      "path": "splash/runtime/model/WeightLayout.hpp",
+      "source_sha256": "b9c6724386388e9cd935e2bd1995a38f3e986c2106a61dea0528caeea72609e9",
+      "repository_sha256": "b9c6724386388e9cd935e2bd1995a38f3e986c2106a61dea0528caeea72609e9",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/WeightMemory.hpp",
+      "path": "splash/runtime/model/WeightMemory.hpp",
+      "source_sha256": "6910c5af1d55e2a2e63b52f8e14a8896d275fc9817df4b2abdd47a0d067c9ab7",
+      "repository_sha256": "6910c5af1d55e2a2e63b52f8e14a8896d275fc9817df4b2abdd47a0d067c9ab7",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/WeightSource.cpp",
+      "path": "splash/runtime/model/WeightSource.cpp",
+      "source_sha256": "996dd0e12bbb92a69b8bcdaf601df6a5428537eb8caa34f59958a0c59bc429f8",
+      "repository_sha256": "996dd0e12bbb92a69b8bcdaf601df6a5428537eb8caa34f59958a0c59bc429f8",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/WeightSource.hpp",
+      "path": "splash/runtime/model/WeightSource.hpp",
+      "source_sha256": "eceea3d1b38cf7331196466cba3f1c060a47d9d8a6ddb78fa11764f4cf507c0d",
+      "repository_sha256": "eceea3d1b38cf7331196466cba3f1c060a47d9d8a6ddb78fa11764f4cf507c0d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/WeightStore.cpp",
+      "path": "splash/runtime/model/WeightStore.cpp",
+      "source_sha256": "61ec6f8ec8cbbe7e4d44e1b2a5ea913e545e9166efd9a71c780f54df230c968a",
+      "repository_sha256": "61ec6f8ec8cbbe7e4d44e1b2a5ea913e545e9166efd9a71c780f54df230c968a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/model/WeightStore.hpp",
+      "path": "splash/runtime/model/WeightStore.hpp",
+      "source_sha256": "e4f9bc076572881c266a2aa331e6a4c9a69f99169b9f6c85f0452d56a87e6c1e",
+      "repository_sha256": "e4f9bc076572881c266a2aa331e6a4c9a69f99169b9f6c85f0452d56a87e6c1e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/DraftAttention.cpp",
+      "path": "splash/runtime/ops/DraftAttention.cpp",
+      "source_sha256": "22640220998d828b52d1db2d89359b25e9ba12647aa72b60b1cd6abeee623c8d",
+      "repository_sha256": "22640220998d828b52d1db2d89359b25e9ba12647aa72b60b1cd6abeee623c8d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/DraftAttention.hpp",
+      "path": "splash/runtime/ops/DraftAttention.hpp",
+      "source_sha256": "9920cb0774bc61b508c7e3495d72cb76858c6d28f3953c3e5f961b5e334ea959",
+      "repository_sha256": "9920cb0774bc61b508c7e3495d72cb76858c6d28f3953c3e5f961b5e334ea959",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/DraftSelector.cpp",
+      "path": "splash/runtime/ops/DraftSelector.cpp",
+      "source_sha256": "82f57031231a744c320e42aa8d4f58a1475cf7f56eadd33be97445c42c081629",
+      "repository_sha256": "82f57031231a744c320e42aa8d4f58a1475cf7f56eadd33be97445c42c081629",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/DraftSelector.hpp",
+      "path": "splash/runtime/ops/DraftSelector.hpp",
+      "source_sha256": "a7c2af2b1ebd6be59ff6ff6765ea8ef6a4c6bf474b99804acebe4b2fe9582e6d",
+      "repository_sha256": "a7c2af2b1ebd6be59ff6ff6765ea8ef6a4c6bf474b99804acebe4b2fe9582e6d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/Embedding.cpp",
+      "path": "splash/runtime/ops/Embedding.cpp",
+      "source_sha256": "bb6b9dc8b0c0784e8315cb45fe2550688b72e2abba16b8ab52abdf8e56324a8f",
+      "repository_sha256": "bb6b9dc8b0c0784e8315cb45fe2550688b72e2abba16b8ab52abdf8e56324a8f",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/Embedding.hpp",
+      "path": "splash/runtime/ops/Embedding.hpp",
+      "source_sha256": "92f910b9678b45ee66e73840b6bbf15778aab22a0bfc21de28873e2df1cd990e",
+      "repository_sha256": "92f910b9678b45ee66e73840b6bbf15778aab22a0bfc21de28873e2df1cd990e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/ExecutionPlans.cpp",
+      "path": "splash/runtime/ops/ExecutionPlans.cpp",
+      "source_sha256": "b08e38f03cd6271b36e18f602e1aa34a6e2795617eee5a1a6b9268bf8a71f18e",
+      "repository_sha256": "b08e38f03cd6271b36e18f602e1aa34a6e2795617eee5a1a6b9268bf8a71f18e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/ExecutionPlans.hpp",
+      "path": "splash/runtime/ops/ExecutionPlans.hpp",
+      "source_sha256": "ce0a6fc7f60e7aa2e4b6c3fae760b41d9370b2ec6c6b3f54836d19e79d72ecc5",
+      "repository_sha256": "ce0a6fc7f60e7aa2e4b6c3fae760b41d9370b2ec6c6b3f54836d19e79d72ecc5",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/GDN.cpp",
+      "path": "splash/runtime/ops/GDN.cpp",
+      "source_sha256": "fcf88aa56fe1912c3da22db0f2c36c7598b3c7e6a442acf1a007a93db309bed9",
+      "repository_sha256": "fcf88aa56fe1912c3da22db0f2c36c7598b3c7e6a442acf1a007a93db309bed9",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/GDN.hpp",
+      "path": "splash/runtime/ops/GDN.hpp",
+      "source_sha256": "8639725dcf38122bbf618b635beb1fb81b6a2072f2f76b7da26881f1c4dddbc5",
+      "repository_sha256": "8639725dcf38122bbf618b635beb1fb81b6a2072f2f76b7da26881f1c4dddbc5",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/LaneBindings.hpp",
+      "path": "splash/runtime/ops/LaneBindings.hpp",
+      "source_sha256": "b9301ee0e7cf2476d115f9ed762b9f3a918e0c90527b74cbf9d8b5e544e30d30",
+      "repository_sha256": "b9301ee0e7cf2476d115f9ed762b9f3a918e0c90527b74cbf9d8b5e544e30d30",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/Linear.cpp",
+      "path": "splash/runtime/ops/Linear.cpp",
+      "source_sha256": "f6865f3de71b786ed06dc14c098483e442a747e475ea00345db26cc44aa60e35",
+      "repository_sha256": "f6865f3de71b786ed06dc14c098483e442a747e475ea00345db26cc44aa60e35",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/Linear.hpp",
+      "path": "splash/runtime/ops/Linear.hpp",
+      "source_sha256": "e49fc2bd4d21e72388a400435db2d01deb6d1250f91dee07f064b392f0cc44ea",
+      "repository_sha256": "e49fc2bd4d21e72388a400435db2d01deb6d1250f91dee07f064b392f0cc44ea",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/LinearGguf.cpp",
+      "path": "splash/runtime/ops/LinearGguf.cpp",
+      "source_sha256": "ee18089ad46b7b6fc35dc6a76d87cbded0fd4ffa576af17adcbf003138b0bf68",
+      "repository_sha256": "ee18089ad46b7b6fc35dc6a76d87cbded0fd4ffa576af17adcbf003138b0bf68",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/MoE.cpp",
+      "path": "splash/runtime/ops/MoE.cpp",
+      "source_sha256": "0f89027e49fc40cf3d4f5f298b7c0eaba230d8484323598ac0c1bd76cdf32616",
+      "repository_sha256": "0f89027e49fc40cf3d4f5f298b7c0eaba230d8484323598ac0c1bd76cdf32616",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/MoE.hpp",
+      "path": "splash/runtime/ops/MoE.hpp",
+      "source_sha256": "17bbfb36ae2e8ddaf21a8779b313b728dc270ad05806484aece62eaafe26b122",
+      "repository_sha256": "17bbfb36ae2e8ddaf21a8779b313b728dc270ad05806484aece62eaafe26b122",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/Normalization.cpp",
+      "path": "splash/runtime/ops/Normalization.cpp",
+      "source_sha256": "308200a382fb3e4719996fe422d2526960a843c5a38bd4dcf5ef5c58fbaf30b3",
+      "repository_sha256": "308200a382fb3e4719996fe422d2526960a843c5a38bd4dcf5ef5c58fbaf30b3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/Normalization.hpp",
+      "path": "splash/runtime/ops/Normalization.hpp",
+      "source_sha256": "a73d8d927d8908f94e2624c9e16825ae71a956ebaaba7cccc56933653d9e61ca",
+      "repository_sha256": "a73d8d927d8908f94e2624c9e16825ae71a956ebaaba7cccc56933653d9e61ca",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/PageStorage.hpp",
+      "path": "splash/runtime/ops/PageStorage.hpp",
+      "source_sha256": "204762882678f67448989877b095cdcb41119349fbf37df56e2678e9cfb50f8e",
+      "repository_sha256": "204762882678f67448989877b095cdcb41119349fbf37df56e2678e9cfb50f8e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/PageStorage.mm",
+      "path": "splash/runtime/ops/PageStorage.mm",
+      "source_sha256": "b01cb584a7141a216bd724ee8c4b92f9edd4b14f81b33156bed4a105f9f3a9bc",
+      "repository_sha256": "b01cb584a7141a216bd724ee8c4b92f9edd4b14f81b33156bed4a105f9f3a9bc",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/PagedAttention.cpp",
+      "path": "splash/runtime/ops/PagedAttention.cpp",
+      "source_sha256": "f50c96f115931c128e6ec17639218a5f5836618132d847dba583fb19ebfab6d5",
+      "repository_sha256": "f50c96f115931c128e6ec17639218a5f5836618132d847dba583fb19ebfab6d5",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/PagedAttention.hpp",
+      "path": "splash/runtime/ops/PagedAttention.hpp",
+      "source_sha256": "9d169440d65278d96686a3f456612483c561b9d652979e1c4a12d9e1d0c8a14f",
+      "repository_sha256": "9d169440d65278d96686a3f456612483c561b9d652979e1c4a12d9e1d0c8a14f",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/PagedKv.hpp",
+      "path": "splash/runtime/ops/PagedKv.hpp",
+      "source_sha256": "94f8504aeb4687ab275f83d8f7686ef0db99d4b724a2e280f1a215a6d09fbfb8",
+      "repository_sha256": "94f8504aeb4687ab275f83d8f7686ef0db99d4b724a2e280f1a215a6d09fbfb8",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/RoPE.cpp",
+      "path": "splash/runtime/ops/RoPE.cpp",
+      "source_sha256": "0c3217a6fd013ff8123596f13f5903083b88637370626362d6c7f8b7462903e8",
+      "repository_sha256": "0c3217a6fd013ff8123596f13f5903083b88637370626362d6c7f8b7462903e8",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/RoPE.hpp",
+      "path": "splash/runtime/ops/RoPE.hpp",
+      "source_sha256": "b71d5b263b2b2c8ed246d8f037fb0beda14a4dcadd48dafea94e6c2faade5c87",
+      "repository_sha256": "b71d5b263b2b2c8ed246d8f037fb0beda14a4dcadd48dafea94e6c2faade5c87",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/RowCopy.cpp",
+      "path": "splash/runtime/ops/RowCopy.cpp",
+      "source_sha256": "65051ddd464f4f1471f77bc59d1cbf447dc17c7b76025354a6f94dcdd5ad33ae",
+      "repository_sha256": "65051ddd464f4f1471f77bc59d1cbf447dc17c7b76025354a6f94dcdd5ad33ae",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/RowCopy.hpp",
+      "path": "splash/runtime/ops/RowCopy.hpp",
+      "source_sha256": "398cc0bcf352a84e45b8a28d5fe28001db6aefa5f38d3a88dd5b8618ddcfa593",
+      "repository_sha256": "398cc0bcf352a84e45b8a28d5fe28001db6aefa5f38d3a88dd5b8618ddcfa593",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/Sampling.cpp",
+      "path": "splash/runtime/ops/Sampling.cpp",
+      "source_sha256": "a2833773370a603dee70db8acd4a14026da53f5c09ee20f69ec1db01c376e5b8",
+      "repository_sha256": "a2833773370a603dee70db8acd4a14026da53f5c09ee20f69ec1db01c376e5b8",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/Sampling.hpp",
+      "path": "splash/runtime/ops/Sampling.hpp",
+      "source_sha256": "27cffc7b08b26cc60e58f09f85509a5addfd6e8a7d5e9e6ff959d61c80ca196a",
+      "repository_sha256": "27cffc7b08b26cc60e58f09f85509a5addfd6e8a7d5e9e6ff959d61c80ca196a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/Vision.hpp",
+      "path": "splash/runtime/ops/Vision.hpp",
+      "source_sha256": "dbecc3b2ec0147b98830bc5d9ae4cdd795724aea7c989d5536cc73a41b59ec51",
+      "repository_sha256": "dbecc3b2ec0147b98830bc5d9ae4cdd795724aea7c989d5536cc73a41b59ec51",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/Vision.mm",
+      "path": "splash/runtime/ops/Vision.mm",
+      "source_sha256": "cf5ed1a8356cdc3d75e0e9d7990755322c9ee74cd2f4f422c5eadf210699046d",
+      "repository_sha256": "cf5ed1a8356cdc3d75e0e9d7990755322c9ee74cd2f4f422c5eadf210699046d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/runtime/ops/Weights.hpp",
+      "path": "splash/runtime/ops/Weights.hpp",
+      "source_sha256": "0cca20a41397fdf10c0d1c59e6ab72c26373217eddf5f748c59eafeff51385e4",
+      "repository_sha256": "0cca20a41397fdf10c0d1c59e6ab72c26373217eddf5f748c59eafeff51385e4",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/__init__.py",
+      "path": "splash/server/__init__.py",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "repository_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/api_shapes.py",
+      "path": "splash/server/api_shapes.py",
+      "source_sha256": "9a72670317dcecf15eb5c05eaa0dd53078eb104ec652802fa340bdf9dcf6335c",
+      "repository_sha256": "9a72670317dcecf15eb5c05eaa0dd53078eb104ec652802fa340bdf9dcf6335c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/backend.py",
+      "path": "splash/server/backend.py",
+      "source_sha256": "becf4888918f6ae47d732621f84fef2d741ca4eaf36007eb03fbb05acb9639d8",
+      "repository_sha256": "becf4888918f6ae47d732621f84fef2d741ca4eaf36007eb03fbb05acb9639d8",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/chat.html",
+      "path": "splash/server/chat.html",
+      "source_sha256": "1eb67c38617c31b948b6f8728571c5052a707150ea7325b26a1731c6f53a8c32",
+      "repository_sha256": "1eb67c38617c31b948b6f8728571c5052a707150ea7325b26a1731c6f53a8c32",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/chat_templates.py",
+      "path": "splash/server/chat_templates.py",
+      "source_sha256": "30bcc77b32dee7cb42415b0cef3227338117cde15dbf57570ff60c73e5fa90a7",
+      "repository_sha256": "30bcc77b32dee7cb42415b0cef3227338117cde15dbf57570ff60c73e5fa90a7",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/constraints.py",
+      "path": "splash/server/constraints.py",
+      "source_sha256": "5eab97fede38497390fb57e1c399dbcc67178535ce85414d96fb1d0b1137d61d",
+      "repository_sha256": "5eab97fede38497390fb57e1c399dbcc67178535ce85414d96fb1d0b1137d61d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/crash_trace.py",
+      "path": "splash/server/crash_trace.py",
+      "source_sha256": "fa9df8eed7be06d5d312f44de54a029c1f0850d3a34a71a53f180ba295323014",
+      "repository_sha256": "fa9df8eed7be06d5d312f44de54a029c1f0850d3a34a71a53f180ba295323014",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/diagnostics.py",
+      "path": "splash/server/diagnostics.py",
+      "source_sha256": "f0bab2da273971545bd2fedbf7185459f7679746dd5bb01979187e084d5282fc",
+      "repository_sha256": "f0bab2da273971545bd2fedbf7185459f7679746dd5bb01979187e084d5282fc",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/document_worker.py",
+      "path": "splash/server/document_worker.py",
+      "source_sha256": "3b2ff75f4f04c68aa9f302ca7c5d02b3423c4ce0ad68c5198d0e564bfe275eb7",
+      "repository_sha256": "3b2ff75f4f04c68aa9f302ca7c5d02b3423c4ce0ad68c5198d0e564bfe275eb7",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/documents.py",
+      "path": "splash/server/documents.py",
+      "source_sha256": "bccb1b45a69d76a8d1181a676c32d213ec12f11fa985e8390056753097699c86",
+      "repository_sha256": "bccb1b45a69d76a8d1181a676c32d213ec12f11fa985e8390056753097699c86",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/errors.py",
+      "path": "splash/server/errors.py",
+      "source_sha256": "4ae257977b5f4c46bb0fffdfbcae59c96f87ab24f9854114951fb468aceb146c",
+      "repository_sha256": "4ae257977b5f4c46bb0fffdfbcae59c96f87ab24f9854114951fb468aceb146c",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/favicon.svg",
+      "path": "splash/server/favicon.svg",
+      "source_sha256": "923dcda0264c66c76de7c000d2c05721c370c47fc4483f64efa851f25dd70906",
+      "repository_sha256": "923dcda0264c66c76de7c000d2c05721c370c47fc4483f64efa851f25dd70906",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/frontend.py",
+      "path": "splash/server/frontend.py",
+      "source_sha256": "29b6ce5395a8f743282c2dfe22dc1f184566fe043e2d85c9cb9957388a7efb44",
+      "repository_sha256": "29b6ce5395a8f743282c2dfe22dc1f184566fe043e2d85c9cb9957388a7efb44",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/http_security.py",
+      "path": "splash/server/http_security.py",
+      "source_sha256": "a01eaa7cc622b00b4309548f6453a12d74ec45b6df15e9cdcf804a41c05a5965",
+      "repository_sha256": "a01eaa7cc622b00b4309548f6453a12d74ec45b6df15e9cdcf804a41c05a5965",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/images.py",
+      "path": "splash/server/images.py",
+      "source_sha256": "61fb0c8261258df5457b246377289d499c8453e32d81f6a7b9b4304b09041592",
+      "repository_sha256": "61fb0c8261258df5457b246377289d499c8453e32d81f6a7b9b4304b09041592",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/json_codec.py",
+      "path": "splash/server/json_codec.py",
+      "source_sha256": "d5b70ddb876ce2f3c911dd00d0f22f0f41f7cb361a596c67650ed4eb0a18f0d9",
+      "repository_sha256": "d5b70ddb876ce2f3c911dd00d0f22f0f41f7cb361a596c67650ed4eb0a18f0d9",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/judgments.py",
+      "path": "splash/server/judgments.py",
+      "source_sha256": "f3917402e712d2bb9eea26e7a1e9cabb5579cdd2f1309c2504d22bcb847d3111",
+      "repository_sha256": "f3917402e712d2bb9eea26e7a1e9cabb5579cdd2f1309c2504d22bcb847d3111",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/latency.py",
+      "path": "splash/server/latency.py",
+      "source_sha256": "9ca118d511f93466c291dff5c8220a424d5df281a9ec43095abda66fd1bc534e",
+      "repository_sha256": "9ca118d511f93466c291dff5c8220a424d5df281a9ec43095abda66fd1bc534e",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/metrics.py",
+      "path": "splash/server/metrics.py",
+      "source_sha256": "fe06733b0a07c74efa26d85ac69f7d07e7926b408093c4cb104270db13a22f89",
+      "repository_sha256": "fe06733b0a07c74efa26d85ac69f7d07e7926b408093c4cb104270db13a22f89",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/origins.py",
+      "path": "splash/server/origins.py",
+      "source_sha256": "badacb3d21065b0a21a3d3b3ca97b07f3f131dc6e6da308a76d907e08c5436f1",
+      "repository_sha256": "badacb3d21065b0a21a3d3b3ca97b07f3f131dc6e6da308a76d907e08c5436f1",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/output.py",
+      "path": "splash/server/output.py",
+      "source_sha256": "84c521ca53edcb84154ea5d5c171126c05c66da41c267b5eddf4acc887ccdf00",
+      "repository_sha256": "84c521ca53edcb84154ea5d5c171126c05c66da41c267b5eddf4acc887ccdf00",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/protocol.py",
+      "path": "splash/server/protocol.py",
+      "source_sha256": "a1e0716a05a9b151d323a4c4b4b7aa1e5b0e5228986e6277658e172b2786582f",
+      "repository_sha256": "a1e0716a05a9b151d323a4c4b4b7aa1e5b0e5228986e6277658e172b2786582f",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/runtime.py",
+      "path": "splash/server/runtime.py",
+      "source_sha256": "71198453a531756cd89c8bfed3b1ad944e5d1d2545564ab00412afc6ba70135a",
+      "repository_sha256": "71198453a531756cd89c8bfed3b1ad944e5d1d2545564ab00412afc6ba70135a",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/schema_validation.py",
+      "path": "splash/server/schema_validation.py",
+      "source_sha256": "a6d3eb43e39e7ae51f35e14ebe92324e1e112c979740978e766a5ce0da22ba35",
+      "repository_sha256": "a6d3eb43e39e7ae51f35e14ebe92324e1e112c979740978e766a5ce0da22ba35",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/serve_options.py",
+      "path": "splash/server/serve_options.py",
+      "source_sha256": "8940202170dfbeaa89cd6e48db999169b71a08ebd017f8cfaa661b9222d5018d",
+      "repository_sha256": "8940202170dfbeaa89cd6e48db999169b71a08ebd017f8cfaa661b9222d5018d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/server.py",
+      "path": "splash/server/server.py",
+      "source_sha256": "a28c24b024938e7b6c25ae44382a2bbab881f39b5282c0d9b3883c95d0bde300",
+      "repository_sha256": "a28c24b024938e7b6c25ae44382a2bbab881f39b5282c0d9b3883c95d0bde300",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/thinking.py",
+      "path": "splash/server/thinking.py",
+      "source_sha256": "1b91818745624bfce259d27eaf33103e409bcf45ac7d0a5d7fad81ade2628b59",
+      "repository_sha256": "1b91818745624bfce259d27eaf33103e409bcf45ac7d0a5d7fad81ade2628b59",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/tokenization.py",
+      "path": "splash/server/tokenization.py",
+      "source_sha256": "1fee184316930866fdd2ea5838b5c5396b79190868cd62c4639b07530ded7bdf",
+      "repository_sha256": "1fee184316930866fdd2ea5838b5c5396b79190868cd62c4639b07530ded7bdf",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/server/tool_schema.py",
+      "path": "splash/server/tool_schema.py",
+      "source_sha256": "82df7bdf9cd4ec7befafabcc50af8363de962d81b9d5da0eadcd628ff318e442",
+      "repository_sha256": "82df7bdf9cd4ec7befafabcc50af8363de962d81b9d5da0eadcd628ff318e442",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/splash/splash/splash",
+      "path": "splash/splash",
+      "source_sha256": "4c20b1d043a474cbdb386b49fe4425fcf98b31443c502db4cf99f6b9cea2b8e3",
+      "repository_sha256": "4c20b1d043a474cbdb386b49fe4425fcf98b31443c502db4cf99f6b9cea2b8e3",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/opencode.json",
+      "path": "opencode/opencode.json",
+      "source_sha256": "1c3cf7a3ed87c4e27b8a39e0b237c3a3c2c95924e6d2b8b72e8f30d11bbeecc8",
+      "repository_sha256": "ccec4ddf24ee3f9e5a658206d11f2b3df487b0c96a9251e8e359d7e6d4eb4008",
+      "normalized": true
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/cli.json",
+      "path": "opencode/cli.json",
+      "source_sha256": "d85b3dfd55cf745ac71f85dc30efb491ecab6052648c7de4d4545ddb10a7b3b8",
+      "repository_sha256": "d85b3dfd55cf745ac71f85dc30efb491ecab6052648c7de4d4545ddb10a7b3b8",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/AGENTS.md",
+      "path": "opencode/AGENTS.md",
+      "source_sha256": "b80fb7ebc27a76c64f02ab063f56cfd79501061dc89cb30628f70ca16221a1dd",
+      "repository_sha256": "60c9a4973536089db6811af43bfc2cac14d33f008d657e11f7b726b6843c82e8",
+      "normalized": true
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/package.json",
+      "path": "opencode/package.json",
+      "source_sha256": "14033cb2bc0b1463d132731f0bd7b32c8f052c94e11a0a747635506e322c115e",
+      "repository_sha256": "480986832d83cb780d337efb8a526bc33b8357669a0da8a9f0415254b378a2c3",
+      "normalized": true
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/package-lock.json",
+      "path": "opencode/package-lock.json",
+      "source_sha256": "eee789d3b4b6fe957a38477f6e4c1fc3d4939cb07f6d5129afcf2d7fb13aeae0",
+      "repository_sha256": "eee789d3b4b6fe957a38477f6e4c1fc3d4939cb07f6d5129afcf2d7fb13aeae0",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/commands/context-slice.md",
+      "path": "opencode/commands/context-slice.md",
+      "source_sha256": "b2c345f80abf2666986ba7150e222057e1f785c3cf0f510f7b6d57b43e12884d",
+      "repository_sha256": "b2c345f80abf2666986ba7150e222057e1f785c3cf0f510f7b6d57b43e12884d",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/plugins/concise-compaction.ts",
+      "path": "opencode/plugins/concise-compaction.ts",
+      "source_sha256": "3e77725d1d3ea639985f8a6a8030e7be848531670e5c63cb7df4b4c2df306f71",
+      "repository_sha256": "3e77725d1d3ea639985f8a6a8030e7be848531670e5c63cb7df4b4c2df306f71",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/plugins/lib/progress-ledger.ts",
+      "path": "opencode/plugins/lib/progress-ledger.ts",
+      "source_sha256": "4932785573e14391ef9b4c7edd9059a51dfae3eb9b4f007fb7f7b801419f6e04",
+      "repository_sha256": "4932785573e14391ef9b4c7edd9059a51dfae3eb9b4f007fb7f7b801419f6e04",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/plugins/lib/telemetry.ts",
+      "path": "opencode/plugins/lib/telemetry.ts",
+      "source_sha256": "8fa551d15d751ffc93587f04fd6a909a724d47a2f0a5899f079b767a697fe8fa",
+      "repository_sha256": "8fa551d15d751ffc93587f04fd6a909a724d47a2f0a5899f079b767a697fe8fa",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/plugins/performance-events.ts",
+      "path": "opencode/plugins/performance-events.ts",
+      "source_sha256": "318e1111e92f59afc34804ae4185564929fbe7e492f0b76b1025391271721100",
+      "repository_sha256": "318e1111e92f59afc34804ae4185564929fbe7e492f0b76b1025391271721100",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/plugins/read-window-default.ts",
+      "path": "opencode/plugins/read-window-default.ts",
+      "source_sha256": "d5a3d6eb42266f2ee371282e8934000a88753709dfac7892848b3abb2456caf9",
+      "repository_sha256": "d5a3d6eb42266f2ee371282e8934000a88753709dfac7892848b3abb2456caf9",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/plugins/repeated-child-call-guard.ts",
+      "path": "opencode/plugins/repeated-child-call-guard.ts",
+      "source_sha256": "2c212493822c82b797285e6379e792ddc8d9b2c767ce550b66d6d3c70dd30c1f",
+      "repository_sha256": "2c212493822c82b797285e6379e792ddc8d9b2c767ce550b66d6d3c70dd30c1f",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/prompts/router.md",
+      "path": "opencode/prompts/router.md",
+      "source_sha256": "e3e78b31be0791a3b1821a6c9e5171a4f7130cab356ea57be450c522785ea937",
+      "repository_sha256": "e3e78b31be0791a3b1821a6c9e5171a4f7130cab356ea57be450c522785ea937",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/prompts/general.md",
+      "path": "opencode/prompts/general.md",
+      "source_sha256": "8ce348cde798d89cdcf8a384d25540bfc867db2b6814323926faf37fa5e9c464",
+      "repository_sha256": "8ce348cde798d89cdcf8a384d25540bfc867db2b6814323926faf37fa5e9c464",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/prompts/long-analysis.md",
+      "path": "opencode/prompts/long-analysis.md",
+      "source_sha256": "b7f2d4ad8dec16a6869b743e27ba3eaa7eabb742f3e61489105bc39b4946fc49",
+      "repository_sha256": "b7f2d4ad8dec16a6869b743e27ba3eaa7eabb742f3e61489105bc39b4946fc49",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/prompts/context-worker.md",
+      "path": "opencode/prompts/context-worker.md",
+      "source_sha256": "5242705a5989cdb74a748d30b3de1fbdb68a79c5018727ef576365796ee68e90",
+      "repository_sha256": "5242705a5989cdb74a748d30b3de1fbdb68a79c5018727ef576365796ee68e90",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/prompts/general-worker.md",
+      "path": "opencode/prompts/general-worker.md",
+      "source_sha256": "c06d41f22373db8973c4e9285056d61355433e6460d85b9ff7c4eb8918127757",
+      "repository_sha256": "c06d41f22373db8973c4e9285056d61355433e6460d85b9ff7c4eb8918127757",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/tests/repeated-child-call-guard.test.ts",
+      "path": "opencode/tests/repeated-child-call-guard.test.ts",
+      "source_sha256": "c944576040efb583b093705e3d621a70a31350821af10eaf3537bf0f45ed3df2",
+      "repository_sha256": "c944576040efb583b093705e3d621a70a31350821af10eaf3537bf0f45ed3df2",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/.config/opencode/tests/native-loop-handoff.mjs",
+      "path": "opencode/tests/native-loop-handoff.mjs",
+      "source_sha256": "dda795b141549814efbe441bffd7f1234d4eae1558a1976213e169a9fa4d2bcc",
+      "repository_sha256": "2b245f08b0eb39ffc535f63caaa5b34111b69a0ffdf6e5ebf22107fc94ae8d62",
+      "normalized": true
+    },
+    {
+      "source": "/Users/mymac/startllamacpp.sh",
+      "path": "startllamacpp.sh",
+      "source_sha256": "d0c252691740eee0a69726fe8e0cc2089ee215cae01287c3657d7e4e5c4af808",
+      "repository_sha256": "57cfa1ada1e4b0454aa7d47c2d7ac16355a35d07746db1d74d0f2096bbfedd08",
+      "normalized": true
+    },
+    {
+      "source": "/Users/mymac/watchllamacpp.sh",
+      "path": "scripts/watchllamacpp.sh",
+      "source_sha256": "a9191534e808e427ea35800a207b132acac758d08dc7537e1879c51bbf245011",
+      "repository_sha256": "e7e6bb38c47b273d026d48abde9afea522260533baca0094ed00ea7d8dc905e7",
+      "normalized": true
+    },
+    {
+      "source": "/Users/mymac/monitorsplash.sh",
+      "path": "scripts/monitorsplash.sh",
+      "source_sha256": "54c5710d60b7372a08452d316867440d1566dcf21c37e1739e9aaef09d040d88",
+      "repository_sha256": "54c5710d60b7372a08452d316867440d1566dcf21c37e1739e9aaef09d040d88",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/monitorllamacpp.sh",
+      "path": "scripts/monitorllamacpp.sh",
+      "source_sha256": "89857c65990263cd60416a3c042b4ac644929cf2b0e1e43d0336afa4ff4139bf",
+      "repository_sha256": "07834010a957d182066ac6b4eaaf9aef49b9f6da368e3618c078f997a3f85e6b",
+      "normalized": true
+    },
+    {
+      "source": "/Users/mymac/bin/md2latex.sh",
+      "path": "scripts/md2latex.sh",
+      "source_sha256": "79d3dad6f3ebbffdaee782c6b7e8a862c2cd639c5fd36f933f29fef8929042fc",
+      "repository_sha256": "79d3dad6f3ebbffdaee782c6b7e8a862c2cd639c5fd36f933f29fef8929042fc",
+      "normalized": false
+    },
+    {
+      "source": "/Users/mymac/bin/md2latex-images.lua",
+      "path": "scripts/md2latex-images.lua",
+      "source_sha256": "82151c8f815422f7375242ae0b842887c7ce301c0d3febe3e20d441531b2e796",
+      "repository_sha256": "82151c8f815422f7375242ae0b842887c7ce301c0d3febe3e20d441531b2e796",
+      "normalized": false
+    }
+  ]
+}
