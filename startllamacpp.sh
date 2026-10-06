@@ -604,9 +604,9 @@ sync_opencode_splash() {
      .agent.general.top_p = 0.80 |
      .agent.long_analysis.temperature = 0.7 |
      .agent.long_analysis.top_p = 0.80 |
-     .agent.context_worker.temperature = 0.7 |
+     .agent.context_worker.temperature = (.agent.context_worker.temperature // 0.7) |
      .agent.context_worker.top_p = 0.80 |
-     .agent.general_worker.temperature = 0.7 |
+     .agent.general_worker.temperature = (.agent.general_worker.temperature // 0.7) |
      .agent.general_worker.top_p = 0.80 |
      .compaction = ((.compaction // {}) + {
        auto: true, keep: {tokens: ([1536, (($context - $output) / 2 | floor)] | min)}, buffer: $output
