@@ -99,7 +99,7 @@ print('Ready test server',flush=True)
         config = json.loads(self.config.read_text())
         self.assertEqual(
             config["provider"]["local-llama"]["models"]["bonsai-27b-splash"]["limit"],
-            {"context": 22528, "output": 1024},
+            {"context": 22528, "output": 4096},
         )
         self.assertEqual(config["compaction"]["keep"]["tokens"], 1536)
 

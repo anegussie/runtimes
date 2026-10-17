@@ -14,7 +14,7 @@
     "keep": {
       "tokens": 1536
     },
-    "buffer": 1024
+    "buffer": 4096
   },
   "tool_output": {
     "max_lines": 100,
@@ -332,7 +332,7 @@
           "name": "Ternary Bonsai 2 27B PTQ1_0 via Splash (non-thinking, int8 KV)",
           "limit": {
             "context": 22528,
-            "output": 1024
+            "output": 4096
           }
         }
       }

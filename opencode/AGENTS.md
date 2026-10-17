@@ -2,7 +2,7 @@
 
 ## Local inference memory safety
 
-For the 16 GB Bonsai/Splash profile, run one user job at a time and delegate to at most one active worker. Multiple chats or OpenCode clients do not improve throughput on this profile. Finish or explicitly stop the current job before starting another. When the user withdraws or stops a request, abort that exact OpenCode session using the supported session API; do not launch replacement work. Do not cancel unrelated users' sessions or close applications. Do not retry a busy/resource-limited backend in a loop. Keep native inference concurrency at one, server context at or below 14K, and client context at or below 12288. Do not add launchd or automatic startup.
+For the 16 GB Bonsai/Splash profile, run one user job at a time and delegate to at most one active worker. Multiple chats or OpenCode clients do not improve throughput on this profile. Finish or explicitly stop the current job before starting another. When the user withdraws or stops a request, abort that exact OpenCode session using the supported session API; do not launch replacement work. Do not cancel unrelated users' sessions or close applications. Do not retry a busy/resource-limited backend in a loop. Keep native inference concurrency at one and use the launcher-configured context limits; do not increase context during a task. Do not add launchd or automatic startup.
 
 ## Explicit continuation only
 
@@ -21,3 +21,7 @@ __RUNTIME_ROOT__/scripts/md2latex.sh INPUT.md
 ```
 
 Use the absolute path because subagent shells may not inherit the user's `PATH`. Do not manually recreate the conversion unless the script fails or the user explicitly requests a different workflow.
+
+## Project-local helpers
+
+Create helper scripts and validation artifacts inside the selected project, for example `tmp/opencode/`, using a permitted working directory. The global policy denies external directories. After an external-directory denial, use a project-local path; do not retry the denied path through another tool or command. Report essential external-access blockers instead of widening the policy.

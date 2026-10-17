@@ -1,10 +1,11 @@
 {
   "type": "module",
   "scripts": {
-    "test": "npm run test:repeat-guard",
+    "test": "npm run test:repeat-guard && npm run test:tool-failures",
     "test:guards": "npm run test:repeat-guard",
     "test:repeat-guard": "node --experimental-strip-types --test tests/repeated-child-call-guard.test.ts",
-    "test:loop-handoff": "node tests/native-loop-handoff.mjs"
+    "test:loop-handoff": "node tests/native-loop-handoff.mjs",
+    "test:tool-failures": "node --experimental-strip-types --test tests/tool-failure-recovery.test.ts tests/router-tool-recovery.test.ts && node tests/tool-failure-e2e.test.mjs"
   },
   "dependencies": {
     "@opencode-ai/plugin": "1.18.10"

@@ -35,8 +35,13 @@ with tempfile.TemporaryDirectory(prefix='runtime-config-check-') as temporary:
     assert list((destination / 'backups').glob('runtime-*/opencode.json'))
 assert not (ROOT / 'splash/.git').exists()
 assert not (ROOT / 'opencode/service.json').exists()
-assert not list(ROOT.rglob('*.gguf'))
-assert not list(ROOT.rglob('*.safetensors'))
+# Installed weights belong to the ignored model cache, not the source
+# snapshot. Still reject tracked or otherwise unignored model artifacts.
+model_artifacts = subprocess.check_output([
+    'git', 'ls-files', '--cached', '--others', '--exclude-standard', '-z',
+    '--', '*.gguf', '*.safetensors',
+], cwd=ROOT).split(b'\0')
+assert not any(model_artifacts), 'Model artifacts must not enter the source snapshot'
 for p in [ROOT / 'startllamacpp.sh', ROOT / 'scripts/watchllamacpp.sh', ROOT / 'scripts/monitorllamacpp.sh']:
     assert '/Users/mymac/' not in p.read_text(), p
 subprocess.run(['bash', str(ROOT / 'startllamacpp.sh'), '--help'], check=True, stdout=subprocess.DEVNULL)

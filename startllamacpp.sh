@@ -15,7 +15,9 @@ SPLASH_BONSAI_MODEL_ID="prism-ml/Ternary-Bonsai-2-27B-gguf:PTQ1_0"
 SPLASH_BONSAI_ALIAS="bonsai-27b-splash"
 SPLASH_BONSAI_MAX_CONTEXT="${SPLASH_BONSAI_MAX_CONTEXT:-24K}"
 SPLASH_BONSAI_OPENCODE_CONTEXT="${SPLASH_BONSAI_OPENCODE_CONTEXT:-auto}"
-SPLASH_BONSAI_MAX_TOKENS="${SPLASH_BONSAI_MAX_TOKENS:-1024}"
+splash_bonsai_default_output=0
+[[ -n "${SPLASH_BONSAI_MAX_TOKENS:-}" ]] || splash_bonsai_default_output=1
+SPLASH_BONSAI_MAX_TOKENS="${SPLASH_BONSAI_MAX_TOKENS:-4096}"
 SPLASH_BONSAI_MAX_CACHE_DISK="${SPLASH_BONSAI_MAX_CACHE_DISK:-8G}"
 SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT="${SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT:-60}"
 SPLASH_BONSAI_PREFILL_CHUNK_TOKENS="${SPLASH_BONSAI_PREFILL_CHUNK_TOKENS:-512}"
@@ -1318,6 +1320,11 @@ case "$choice" in
        (( SPLASH_BONSAI_OPENCODE_CONTEXT >= splash_context_limit )); then
       echo "SPLASH_BONSAI_OPENCODE_CONTEXT must be auto or 2-22528 tokens, smaller than the server context." >&2
       exit 1
+    fi
+    # Preserve small-context launches while giving the normal 24K profile
+    # enough output for complete tool arguments. Explicit overrides stay exact.
+    if (( splash_bonsai_default_output && SPLASH_BONSAI_OPENCODE_CONTEXT <= SPLASH_BONSAI_MAX_TOKENS )); then
+      SPLASH_BONSAI_MAX_TOKENS="$((SPLASH_BONSAI_OPENCODE_CONTEXT / 2))"
     fi
     if ! splash_uint_in_range "$SPLASH_BONSAI_MAX_TOKENS" 1 "$((SPLASH_BONSAI_OPENCODE_CONTEXT - 1))"; then
       echo "SPLASH_BONSAI_MAX_TOKENS must be positive and smaller than SPLASH_BONSAI_OPENCODE_CONTEXT." >&2
