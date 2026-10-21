@@ -2,6 +2,7 @@ import { createHash } from "node:crypto"
 import { revision, loadLedger, coverage, rememberLoopStop } from "./lib/progress-ledger.ts"
 import { record } from "./lib/telemetry.ts"
 import { resolve } from "node:path"
+import { guardTextStream } from "./lib/text-loop.ts"
 
 type RepeatState = { signature: string; output: string; count: number }
 
@@ -47,6 +48,20 @@ export default {
       }
       return false
     }
+
+    await ctx.session.hook("http.response", async (event: any) => {
+      if (event.kind !== "primary" || event.model?.providerID !== "local-llama"
+        || !new URL(event.request.url).pathname.endsWith("/chat/completions")
+        || !event.response.ok || !event.response.body
+        || !event.response.headers.get("content-type")?.includes("text/event-stream")
+        || !(await isChildSession(event.sessionID))) return
+      event.response = guardTextStream(event.response, async () => {
+        const handoff = `STATUS: PARTIAL\nCHILD_LOOP_ABORTED: repeated text without tool calls; provider stream stopped.\nSession: ${event.sessionID}\nCHANGED/CHECKS: This response issued no tool calls; it proves no new edit or verification. Earlier work, if any, remains recorded in this session.\nNEXT: Report the unfinished assignment and saved findings. Do not claim completion or automatically relaunch the failed scope.`
+        await preserveStop(event.sessionID, handoff)
+        await record({ event: "child_loop_stopped", sessionID: event.sessionID, reason: "repeated_text_without_tools" })
+        return handoff
+      })
+    })
 
     await ctx.tool.hook("execute.before", async (event) => {
       if (!(await isChildSession(event.sessionID))) return
