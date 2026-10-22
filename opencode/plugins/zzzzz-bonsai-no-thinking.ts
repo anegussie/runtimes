@@ -13,6 +13,9 @@ async function constrain(request: Request, ceiling = 4096): Promise<Request> {
   body.reasoning_effort = "none"
   body.chat_template_kwargs = { ...body.chat_template_kwargs, enable_thinking: false }
   const headers = new Headers(request.headers)
+  headers.set("x-opencode-effective-reasoning-effort", "none")
+  headers.set("x-opencode-effective-thinking", "false")
+  headers.set("x-opencode-effective-max-tokens", String(body.max_tokens))
   headers.delete("content-length")
   return new Request(request, { headers, body: JSON.stringify(body) })
 }

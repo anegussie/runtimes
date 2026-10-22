@@ -318,6 +318,7 @@ prepare_splash_run() {
   run_id="$(date '+%Y%m%d-%H%M%S')"
   SPLASH_RUN_LOG="$log_dir/bonsai-27b-splash-$run_id.log"
   : > "$SPLASH_RUN_LOG"
+  export SPLASH_TELEMETRY_PATH="${SPLASH_TELEMETRY_PATH:-$SPLASH_RUN_LOG.jsonl}"
   ln -sfn "$SPLASH_RUN_LOG" "$log_dir/splash-latest.log"
   ln -sfn "$SPLASH_RUN_LOG" "$log_dir/bonsai-27b-splash-latest.log"
   echo "Run log: $SPLASH_RUN_LOG"
@@ -1395,7 +1396,7 @@ case "$choice" in
     trap 'exit 143' TERM
     trap 'exit 129' HUP
     if [[ -f ${RUNTIME_ROOT}/scripts/monitorsplash.sh ]]; then
-      bash "${RUNTIME_ROOT}/scripts/monitorsplash.sh" --record 600 >>"$SPLASH_RUN_LOG" 2>&1 &
+      SPLASH_MONITOR_QUIET=1 bash "${RUNTIME_ROOT}/scripts/monitorsplash.sh" --record 10 >>"$SPLASH_RUN_LOG" 2>&1 &
       splash_monitor_pid=$!
     fi
     splash_startup_retries=0

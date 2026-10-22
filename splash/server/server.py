@@ -25,6 +25,7 @@ from huggingface_hub.utils import validate_repo_id
 from transformers import AutoTokenizer
 
 from . import images as image_input
+from . import telemetry
 from . import json_codec, judgments, serve_options
 from . import runtime as engine_runtime
 from .api_shapes import (
@@ -341,6 +342,7 @@ class FrontendHandler(BaseHTTPRequestHandler):
     def _safe_error(self, error, anthropic=False, *, log=True):
         if self._response_started:
             return
+        telemetry.emit({"event": "http_request_error", "http_status": error.status, "error_code": error.code, "correlation": getattr(self, "_telemetry_correlation", {}) if self.command == "POST" else telemetry.correlation(getattr(self, "headers", {}))})
         if log:
             self._log_api_error(error)
         try:
@@ -529,6 +531,8 @@ class FrontendHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         started_at = time.monotonic()
+        self._telemetry_correlation = {**telemetry.correlation(self.headers), "http_request_id": secrets.token_hex(16)}
+        telemetry.emit({"event": "http_request_ingress", "method": "POST", "route": "generation_or_control", "correlation": self._telemetry_correlation})
         job = None
         body = None
         self._body_reservation = None
@@ -666,6 +670,9 @@ class FrontendHandler(BaseHTTPRequestHandler):
                 else:
                     job = self.app.prepare(body, deadline=deadline)
             body = None
+            job.telemetry = dict(self._telemetry_correlation)
+            job.telemetry["http_preparation_ms"] = (time.monotonic() - started_at) * 1000.0
+            self.app.backend._telemetry(job, "request_prepared", streaming=stream)
             self._body_reservation.retain_for(job)
             self._body_reservation = None
             job.return_progress = return_progress
@@ -1831,6 +1838,7 @@ class FrontendServer(ThreadingHTTPServer):
 
     def status(self):
         status = self.app.status()
+        status["telemetry"] = telemetry.health()
         status["instance"] = {
             "id": self.instance_id,
             "pid": os.getpid(),

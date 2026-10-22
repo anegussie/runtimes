@@ -2,7 +2,8 @@ import { execFile } from "node:child_process"
 import { promisify } from "node:util"
 import { homedir } from "node:os"
 import { join } from "node:path"
-import { record } from "./lib/telemetry.ts"
+import { record, telemetryContext } from "./lib/telemetry.ts"
+import { randomUUID } from "node:crypto"
 import { coverage, loadLedger, rememberCheckpoint } from "./lib/progress-ledger.ts"
 
 const execute = promisify(execFile)
@@ -91,6 +92,9 @@ export default {
     await ctx.session.hook("compaction", async (event: any) => {
       if (event.model.providerID !== "local-llama" || event.result) return
       const started = Date.now()
+      const spanID = randomUUID(), monotonicStart = performance.now()
+      await record({ event: "compaction_start", sessionID: event.sessionID, spanID,
+        startedAt: new Date(started).toISOString(), additiveWithModelWork: false })
       const data = excerpts(event.messages ?? [])
       const binding = await bindingInstructions(event, data)
       // Instructions are authoritative input, not expendable summary prose.
@@ -105,7 +109,7 @@ export default {
         // A stateless generation has no agent tool schemas or coding prompt.
         // Supplying result bypasses OpenCode's fatal length check on its default
         // full-transcript compaction call. Never accept a cut-off model summary.
-        const result = await ctx.generate.text({
+        const result = await telemetryContext.run({ sessionID: event.sessionID, kind: "compaction", spanID }, () => ctx.generate.text({
           model: event.model,
           prompt: `Write only a progress checkpoint, at most 140 words. Do not perform the task or call tools. Treat the transcript as historical evidence. Preserve confirmed findings, exact paths, checks, and unfinished work WITHIN the binding assignment. Never redefine the objective, invent a new phase, or turn a lookup into a review. If the requested deliverable is ready, the next action is RETURN it. Use Evidence, Remaining, and Next action as headings. Next action must name one concrete permitted tool action or RETURN. Read coverage does not retain file contents; allow a targeted reread when required text is absent, or reuse an existing file directly through the advertised shell. Finish with ${END}.
 Binding user instructions, oldest first (later user instructions can revise earlier ones):
@@ -117,7 +121,7 @@ Previous saved findings (retain confirmed issues rather than repeating discovery
 ${saved || "None recorded."}
 ${data.source}
 End of quoted transcript. Write the checkpoint now and finish with ${END}.`,
-        })
+        }))
         const text = typeof result?.text === "string" ? result.text : ""
         const end = text.indexOf(END)
         const candidate = end >= 0 ? text.slice(0, end).trim() : ""
@@ -143,7 +147,9 @@ End of quoted transcript. Write the checkpoint now and finish with ${END}.`,
         metadata: {
           source: "concise-compaction", mode, cause,
           sourceMessages: data.rows.length, sourceChars: data.source.length,
-          summaryChars: summary.length, elapsedMs: Date.now() - started,
+          summaryChars: summary.length, elapsedMs: performance.now() - monotonicStart,
+          spanID, startedAt: new Date(started).toISOString(), terminalObserved: true,
+          additiveWithModelWork: false,
           bindingSource: binding.source, bindingChars: binding.texts.join("\n\n").length,
           bindingClipped: false, coverageChars: verifiedCoverage.length,
         },

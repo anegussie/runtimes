@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 
 from tokenizers.decoders import DecodeStream
 
-from . import json_codec
+from . import json_codec, telemetry
 from . import protocol as wire
 from . import runtime as engine_runtime
 from .constraints import TokenConstraint
@@ -120,6 +120,8 @@ class Job:
     frontend_queue_ms: float = 0.0
     # HTTP-thread callback for queued heartbeats and disconnect detection.
     queue_poll: object | None = None
+    telemetry: dict = field(default_factory=dict)
+    telemetry_progress_at: float = 0.0
 
 
 class CallbackStreamer:
@@ -680,6 +682,7 @@ class NativeBackend:
         """FIFO submission without allocating native model state for waiters."""
         job = state.job
         started = time.monotonic()
+        self._telemetry(job, "request_queue_enter")
         with self.submission_condition:
             self.submission_queue.append(job.request_id)
         try:
@@ -713,6 +716,7 @@ class NativeBackend:
                 self.submission_queue.remove(job.request_id)
                 job.frontend_queue_ms = (time.monotonic() - started) * 1000.0
                 self.submission_condition.notify_all()
+            self._telemetry(job, "request_queue_leave", frontend_queue_ms=job.frontend_queue_ms, cancelled=job.cancelled.is_set())
 
     def _detach_locked(self, state):
         state.detach()
@@ -730,8 +734,17 @@ class NativeBackend:
             )
             with self.lock:
                 job.cache = cache
+            self._telemetry(job, "request_native_start", cached_tokens=cache.matched_tokens)
             job.events.put(("start", None))
         elif isinstance(event, wire.PromptProgressEvent):
+            if time.monotonic() - job.telemetry_progress_at >= 1.0:
+                job.telemetry_progress_at = time.monotonic()
+                self._telemetry(
+                    job,
+                    "request_prefill_progress",
+                    processed_tokens=event.processed_tokens,
+                    native_elapsed_ms=event.elapsed_micros / 1000.0,
+                )
             job.events.put(
                 (
                     "progress",
@@ -744,6 +757,10 @@ class NativeBackend:
                 )
             )
         elif isinstance(event, wire.TokensEvent):
+            if event.tokens and event.sequence_offset == 0:
+                self._telemetry(
+                    job, "request_first_token", first_batch_tokens=len(event.tokens)
+                )
             if job.latency is not None and event.tokens:
                 job.latency.tokens()
             if event.sequence_offset == 0:
@@ -920,10 +937,50 @@ class NativeBackend:
             }
         if error:
             record["error_code"] = error.code
+        self._telemetry(
+            job,
+            "request_end",
+            outcome=record["outcome"],
+            completion_tokens=result.completion_tokens if result else None,
+            reasoning_tokens=job.reasoning_tokens,
+            frontend_queue_ms=job.frontend_queue_ms,
+            metrics=result.metrics if result else None,
+            error_code=error.code if error else None,
+        )
         try:
             self.request_logger(record)
         except Exception:
             pass
+
+    def _telemetry(self, job, event, **fields):
+        # Capture clocks on the originating thread, write off the native reader.
+        snapshot = self.status_snapshot or {}
+        record = {
+            **telemetry.clocks(),
+            "event": event,
+            "request_id": job.request_id,
+            "public_response_id": job.public_id,
+            "correlation": job.telemetry,
+            "prompt_tokens": len(job.prompt_tokens),
+            "max_new_tokens": job.max_new_tokens,
+            "thinking": job.thinking,
+            "thinking_token_budget": getattr(job, "thinking_token_budget", None),
+            "reasoning_effort_sent": getattr(getattr(job, "reasoning", None), "sent", None),
+            "reasoning_effort_effective": getattr(getattr(job, "reasoning", None), "effort", None),
+            "enable_thinking": getattr(getattr(job, "reasoning", None), "enable_thinking", None),
+            "offered_tools_count": job.tools_signature[0] if job.tools_signature else 0,
+            "tool_schema_signature": job.tools_signature[1]
+            if job.tools_signature
+            else None,
+            "build_id": snapshot.get("identity", {}).get("cache", {}).get("build_id"),
+            "memory_pressure": snapshot.get("memory_pressure"),
+            "thermal_state": snapshot.get("thermal_state"),
+            "timing_scope": "request_stage_elapsed_not_gpu_kernel_time",
+            "gpu_kernel_ms": None,
+            "cpu_compute_ms": None,
+            **fields,
+        }
+        telemetry.enqueue(record)
 
     def close(self):
         with self.lock:

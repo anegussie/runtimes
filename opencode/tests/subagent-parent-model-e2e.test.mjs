@@ -12,7 +12,7 @@ for (const mode of modes) {
   const root = await realpath(await mkdtemp(join(tmpdir(), 'opencode-parent-model-')))
   const dir = join(root, 'config/opencode'), project = join(root, 'project')
   await mkdir(join(dir, 'plugins'), { recursive: true }); await mkdir(project)
-  for (const name of ['zzzz-subagent-parent-model.ts', 'worker-slice-policy.ts', 'zzz-router-tool-recovery.ts', 'lib'])
+  for (const name of ['zzzz-subagent-parent-model.ts', 'worker-slice-policy.ts', 'zzz-router-tool-recovery.ts', 'performance-events.ts', 'lib'])
     await cp(join(base, 'plugins', name), join(dir, 'plugins', name), { recursive: true })
   await writeFile(join(project, 'source.txt'), 'native worker read verified\n')
   let parentCalls = 0, workerCalls = 0, schemaClean = false, workerModel, verified = false
@@ -57,7 +57,7 @@ for (const mode of modes) {
   }
   await writeFile(join(dir, 'opencode.json'), JSON.stringify(config))
   const child = spawn('/opt/homebrew/bin/opencode', ['run', '--standalone', '--format', 'json', '--agent', 'router', 'Read only the assigned source through one foreground worker.'], {
-    cwd: project, env: { ...process.env, PWD: project, XDG_CONFIG_HOME: join(root, 'config'), XDG_DATA_HOME: join(root, 'data'), XDG_STATE_HOME: join(root, 'state'), XDG_CACHE_HOME: join(root, 'cache'), OPENCODE_CONFIG_DIR: dir, OPENCODE_CONFIG: join(dir, 'opencode.json'), OPENCODE_DB: join(root, 'test.db'), OPENCODE_PERFORMANCE_DIAGNOSTIC: '1', OPENCODE_PROGRESS_TEST_DIR: join(root, 'progress'), OPENCODE_DISABLE_MODELS_FETCH: 'true' }, stdio: ['ignore', 'pipe', 'pipe']
+    cwd: project, env: { ...process.env, PWD: project, XDG_CONFIG_HOME: join(root, 'config'), XDG_DATA_HOME: join(root, 'data'), XDG_STATE_HOME: join(root, 'state'), XDG_CACHE_HOME: join(root, 'cache'), OPENCODE_CONFIG_DIR: dir, OPENCODE_CONFIG: join(dir, 'opencode.json'), OPENCODE_DB: join(root, 'test.db'), OPENCODE_PERFORMANCE_DIAGNOSTIC: '1', OPENCODE_TELEMETRY_DIR: join(root, 'telemetry'), OPENCODE_PROGRESS_TEST_DIR: join(root, 'progress'), OPENCODE_DISABLE_MODELS_FETCH: 'true' }, stdio: ['ignore', 'pipe', 'pipe']
   })
   let stdout = '', stderr = ''
   child.stdout.on('data', data => { stdout += data }); child.stderr.on('data', data => { stderr += data })
@@ -74,6 +74,18 @@ for (const mode of modes) {
     assert.equal(workerModel, 'fixture-parent')
     assert.equal(verified, true)
     assert.deepEqual(failures, [])
+    const events = (await readFile(join(root, 'telemetry/performance.jsonl'), 'utf8')).trim().split('\n').map(JSON.parse)
+    const starts = events.filter(e => e.event === 'llm_request_start')
+    const ends = events.filter(e => e.event === 'llm_request_end')
+    assert.ok(starts.some(e => e.agent === 'context_worker'), 'worker model requests traced')
+    assert.ok(starts.some(e => e.agent === 'router'), 'parent model requests traced')
+    for (const start of starts) assert.ok(ends.some(e => e.requestID === start.requestID && e.outcome === 'completed'), 'every request completed')
+    for (const tool of ['read', 'subagent']) {
+      const start = events.find(e => e.event === 'tool_start' && e.tool === tool)
+      assert.ok(start?.spanID, `${tool} start durably traced`)
+      assert.ok(start.originatingRequestID, `${tool} linked to generating request`)
+      assert.ok(events.some(e => e.event === 'tool' && e.spanID === start.spanID), `${tool} end traced`)
+    }
   } finally {
     clearTimeout(timer)
     if (child.exitCode == null) child.kill('SIGTERM')

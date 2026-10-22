@@ -43,13 +43,24 @@ print_once() {
 }
 
 record_once() {
-  local payload previous='{}'
-  payload="$(fetch_status)" || return 1
+  local payload probe_seconds swap_snapshot previous='{}'
+  if ! payload="$(curl --max-time 5 -fsS -w '\n%{time_total}' "$STATUS_URL")"; then
+    mkdir -p "$LOG_DIR"
+    jq -cn '{schemaVersion:2,event:"status_sample_error",ts:now}' >> "$LOG_DIR/splash-status-errors.jsonl"
+    return 1
+  fi
+  swap_snapshot="$(sysctl -n vm.swapusage 2>/dev/null || true)"
+  probe_seconds="${payload##*$'\n'}"
+  payload="${payload%$'\n'*}"
   mkdir -p "$LOG_DIR"
   if [[ -s "$SNAPSHOTS" ]]; then previous="$(tail -n 1 "$SNAPSHOTS")"; fi
-  jq -ce --argjson ts "$(date +%s)" '
-    select(.ready == true and .memory_governor != null and .metrics != null) |
-    {ts:$ts,instance:.instance.id,restarts:.transport.restarts,model:.instance.model,
+  jq -ce --argjson ts "$(date +%s)" --argjson probe_seconds "$probe_seconds" --arg swap "$swap_snapshot" '
+    {schemaVersion:2,event:"status_sample",ready:.ready,system_swap:$swap,ts:$ts,sampled_at_ms:(now*1000),probe_ms:($probe_seconds*1000),
+     thermal_state:.thermal_state,memory_pressure:.memory_pressure,active_requests:.active_requests,
+     admission:.admission,transport:.transport,weights:.weights,
+     memory_current:.memory_actual.current_bytes,memory_peak:.memory_actual.peak_bytes,
+     cache_bytes:.cache.bytes,kv:.kv,state:.state,
+     telemetry:.telemetry,status_stale:.transport.status_stale,status_age_ms:.transport.status_age_ms,instance:.instance.id,restarts:.transport.restarts,model:.instance.model,
      build:.identity.cache.build_id,context:.maximum_context_tokens,
      completed:.requests.completed,failed:.requests.failed,cancelled:.requests.cancelled,
      waiting:.admission.waiting_memory,suspended:.admission.suspended,
@@ -65,6 +76,7 @@ record_once() {
      metal_failures:.metrics.metal_failures,capacity_failures:.metrics.capacity_failures,
      disk_read:.disk.read_bytes,disk_written:.disk.written_bytes}
   ' <<< "$payload" >> "$SNAPSHOTS" || return 1
+  [[ "${SPLASH_MONITOR_QUIET:-0}" == "1" ]] && return 0
   jq -er --arg timestamp "$(date '+%Y-%m-%d %H:%M:%S %Z')" '
     select(.ready == true and .metrics != null) |
     "\($timestamp) engine=\(.instance.id)/restart\(.transport.restarts) Average (engine lifetime, native batch work): PP=\((.metrics.prefill_tokens_per_second*10|floor)/10) tok/s over \(.metrics.prefill_input_tokens) tokens; TPS=\((.metrics.decode_tokens_per_second*10|floor)/10) tok/s over \(.metrics.decode_output_tokens) tokens; requests=\(.requests.completed) completed/\(.requests.failed) failed; draft acceptance=\((.metrics.draft_acceptance_rate*1000|floor)/10)%; waiting native/frontend=\(.admission.waiting_memory)/\(.transport.frontend_waiting // 0); replay_tokens=\(.cache.resource_replay_tokens); SSD written=\((.disk.written_bytes/1073741824*100|floor)/100) GiB"
@@ -94,7 +106,7 @@ report() {
   [[ -s "$SNAPSHOTS" ]] || { echo "No snapshots at $SNAPSHOTS. Run --record 60 for future reports." >&2; exit 1; }
   cutoff="$(($(date +%s) - hours * 3600))"
   jq -sr --argjson cutoff "$cutoff" '
-    [.[] | select(.ts >= $cutoff)] as $rows |
+    [.[] | select(.ts >= $cutoff and (.schemaVersion != 2 or .ready == true))] as $rows |
     if ($rows|length) < 2 then "Need at least two snapshots in this period."
     else
       [$rows[]] | group_by([.instance, (.restarts // 0)]) |
@@ -125,12 +137,13 @@ case "$mode" in
     positive_interval "$interval"
     if [[ "$mode" == --record ]]; then
       # Establish a ready-state baseline before measuring counter deltas.
-      until server_ready; do sleep 2; done
+      until server_ready; do record_once >/dev/null 2>&1 || true; sleep 2; done
       record_once || {
         printf '[%s] Initial snapshot failed: %s\n' "$(date '+%Y-%m-%dT%H:%M:%S%z')" "$STATUS_URL" >&2
         exit 1
       }
       while :; do
+        if [[ -n "${SPLASH_MONITOR_OWNER_PID:-}" ]] && ! kill -0 "$SPLASH_MONITOR_OWNER_PID" 2>/dev/null; then exit 0; fi
         sleep "$interval"
         record_once || printf '[%s] Snapshot failed: %s\n' "$(date '+%Y-%m-%dT%H:%M:%S%z')" "$STATUS_URL" >&2
       done

@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "test": "npm run test:repeat-guard && npm run test:tool-failures && npm run test:compaction && npm run test:text-loop-native && npm run test:parent-model && npm run test:no-thinking",
+    "test": "npm run test:repeat-guard && npm run test:tool-failures && npm run test:compaction && npm run test:text-loop-native && npm run test:parent-model && npm run test:no-thinking && npm run test:telemetry",
     "test:guards": "npm run test:repeat-guard",
     "test:repeat-guard": "node --experimental-strip-types --test tests/repeated-child-call-guard.test.ts tests/text-loop.test.ts",
     "test:loop-handoff": "node tests/native-loop-handoff.mjs",
@@ -9,7 +9,8 @@
     "test:compaction": "node --experimental-strip-types --test tests/concise-compaction.test.ts",
     "test:text-loop-native": "node tests/text-loop-e2e.test.mjs",
     "test:parent-model": "node --experimental-strip-types --test tests/subagent-parent-model.test.ts && node tests/subagent-parent-model-e2e.test.mjs",
-    "test:no-thinking": "node --experimental-strip-types --test tests/bonsai-no-thinking.test.ts && node tests/bonsai-no-thinking-e2e.test.mjs"
+    "test:no-thinking": "node --experimental-strip-types --test tests/bonsai-no-thinking.test.ts && node tests/bonsai-no-thinking-e2e.test.mjs",
+    "test:telemetry": "node --experimental-strip-types --test tests/request-telemetry.test.ts tests/performance-events.test.ts"
   },
   "dependencies": {
     "@opencode-ai/plugin": "1.18.10"

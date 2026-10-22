@@ -9,12 +9,12 @@ const base = new URL('..', import.meta.url).pathname
 const root = await realpath(await mkdtemp(join(tmpdir(), 'opencode-no-thinking-native-')))
 const dir = join(root, 'config/opencode'), project = join(root, 'project')
 await mkdir(join(dir, 'plugins'), { recursive: true }); await mkdir(project)
-await cp(join(base, 'plugins/zzzzz-bonsai-no-thinking.ts'), join(dir, 'plugins/zzzzz-bonsai-no-thinking.ts'))
+for (const name of ['zzzzz-bonsai-no-thinking.ts', 'performance-events.ts', 'lib']) await cp(join(base, 'plugins', name), join(dir, 'plugins', name), { recursive: true })
 const requests = []
 const server = http.createServer(async (req, res) => {
   let raw = ''; for await (const part of req) raw += part
   if (!req.url?.endsWith('/chat/completions')) { res.writeHead(404).end(); return }
-  const body = JSON.parse(raw); requests.push(body)
+  const body = JSON.parse(raw); body.__trace = req.headers['x-opencode-request-id']; requests.push(body)
   res.writeHead(200, { 'content-type': 'text/event-stream' })
   res.end(`data: ${JSON.stringify({ id: 'thinking-fixture', object: 'chat.completion.chunk', created: 1, model: body.model, choices: [{ index: 0, delta: { role: 'assistant', content: 'WIRE_OK' }, finish_reason: 'stop' }] })}\n\ndata: [DONE]\n\n`)
 })
@@ -28,7 +28,7 @@ const config = {
 }
 await writeFile(join(dir, 'opencode.json'), JSON.stringify(config))
 const child = spawn('/opt/homebrew/bin/opencode', ['run', '--standalone', '--format', 'json', '--agent', 'test_agent', 'Reply exactly WIRE_OK.'], {
-  cwd: project, env: { ...process.env, PWD: project, XDG_CONFIG_HOME: join(root, 'config'), XDG_DATA_HOME: join(root, 'data'), XDG_STATE_HOME: join(root, 'state'), XDG_CACHE_HOME: join(root, 'cache'), OPENCODE_CONFIG_DIR: dir, OPENCODE_CONFIG: join(dir, 'opencode.json'), OPENCODE_DB: join(root, 'test.db'), OPENCODE_DISABLE_MODELS_FETCH: 'true' }, stdio: ['ignore', 'pipe', 'pipe'],
+  cwd: project, env: { ...process.env, PWD: project, XDG_CONFIG_HOME: join(root, 'config'), XDG_DATA_HOME: join(root, 'data'), XDG_STATE_HOME: join(root, 'state'), XDG_CACHE_HOME: join(root, 'cache'), OPENCODE_CONFIG_DIR: dir, OPENCODE_CONFIG: join(dir, 'opencode.json'), OPENCODE_DB: join(root, 'test.db'), OPENCODE_DISABLE_MODELS_FETCH: 'true', OPENCODE_PERFORMANCE_DIAGNOSTIC: '1', OPENCODE_TELEMETRY_DIR: join(root, 'telemetry') }, stdio: ['ignore', 'pipe', 'pipe'],
 })
 let stdout = '', stderr = ''
 child.stdout.on('data', x => { stdout += x }); child.stderr.on('data', x => { stderr += x })
@@ -41,6 +41,14 @@ try {
   assert.ok(stdout.includes('WIRE_OK'), stdout.slice(-1200))
   assert.ok(requests.length >= 2, 'title and primary requests must both be observed')
   assert.ok(requests.some(r => /title/i.test(JSON.stringify(r.messages))), 'title request was not exercised')
+  const telemetry = (await readFile(join(root, 'telemetry/performance.jsonl'), 'utf8')).trim().split('\n').map(JSON.parse)
+  const starts = telemetry.filter(e => e.event === 'llm_request_start')
+  const ends = telemetry.filter(e => e.event === 'llm_request_end')
+  assert.equal(starts.length, requests.length)
+  assert.equal(ends.length, requests.length)
+  assert.ok(starts.some(e => e.kind === 'title'))
+  assert.ok(ends.every(e => e.outcome === 'completed' && e.transportDoneObserved))
+  assert.ok(requests.every(r => starts.some(e => e.requestID === r.__trace)))
   for (const r of requests) {
     assert.equal(r.reasoning_effort, 'none')
     assert.equal(r.chat_template_kwargs.enable_thinking, false)
