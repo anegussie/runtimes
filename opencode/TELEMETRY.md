@@ -1,4 +1,4 @@
-# Option 14 lifecycle telemetry
+# Splash lifecycle and performance telemetry
 
 Version 2 adds correlated lifecycle events to the global OpenCode plugins,
 Splash HTTP frontend, and launcher status monitor. It records metadata and
@@ -12,10 +12,40 @@ are excluded.
 - Splash: the launcher exports `SPLASH_TELEMETRY_PATH` beside the timestamped
   profile log as `<profile>.log.jsonl`. Python server changes and this environment
   variable take effect on the next server launch.
-- Monitor: `~/.local/state/llama-server/splash-status.jsonl`, every 10 seconds
+- Monitor: `~/.local/state/llama-server/splash-status.jsonl`, every 2 seconds
   when launched by `startllamacpp.sh`. Failed probes go to
   `splash-status-errors.jsonl`. The monitor can be replaced without restarting
   inference. `SPLASH_MONITOR_OWNER_PID` bounds a replacement monitor's lifetime.
+
+The maintained monitor is `dev/tools/monitorsplash.sh`, installed as
+`~/monitorsplash.sh` and `runtime/scripts/monitorsplash.sh`. Launcher sampling
+can be overridden with `SPLASH_MONITOR_INTERVAL` (positive integer seconds).
+
+Every five minutes the monitor also appends a `performance_summary` to
+`splash-performance.jsonl` and a readable `===== [PERF] Performance 300s (native)` line to
+`splash-latest.log` (the active profile log). It records interval and engine
+lifetime PP/TPS, processed/generated/cached token counts, completed/failed/
+cancelled requests, and thermal/memory state. Rates are total native stage
+tokens divided by total stage elapsed time, not averages of request rates or
+tokens divided by five minutes of clock time. Engine lifetime includes startup
+warmup when included in native counters; it is not a production-only average.
+Quiet mode writes both files and suppresses stdout, which the launcher redirects
+to its log. Performance summaries are also mirrored directly to the launcher's
+terminal, discovered from the monitor's parent or `SPLASH_MONITOR_OWNER_PID`.
+Set `SPLASH_MONITOR_TTY` to an explicit terminal path, or to an empty string to
+disable this mirror. Missing terminals do not interrupt file logging. Readable
+summaries use local timestamps with UTC offsets, matching the launcher clock;
+JSON retains epoch timestamps.
+Search the active log with `rg -F '[PERF]' ~/.local/state/llama-server/splash-latest.log`.
+
+The first ready sample establishes the interval baseline; the first summary
+is emitted after 300 seconds, on the next successful fresh sample. Idle stages
+have null rates in JSON and `idle` in the readable log. Missing optional counts
+show `n/a`. HTTP instance changes, native restarts or counter rollbacks reset
+the baseline. Stale/unready probes do not contribute. `SPLASH_SUMMARY_INTERVAL`
+can override the 300-second period. Restarting only the monitor starts a new
+interval but preserves the engine lifetime average. Native batch rates differ
+from client-visible streaming rates, which remain in request telemetry.
 
 The maintained runtime repository and installed global files receive the same
 OpenCode changes. Its older bundled Splash server receives a compatible patch;
@@ -55,10 +85,32 @@ and cached thermal/memory state when available. `/status.telemetry` exposes
 enabled state, write failures, dropped events, and pending writer events. The
 bounded asynchronous writer avoids disk I/O on the native event reader.
 
+Every native request event also records the effective sampler and seed. At
+startup a `run_manifest` event preserves the resolved model directory, target
+and draft revisions and file digests, native command, allowlisted serving
+options, server source hashes, checkout identity, device, memory plan, KV/state
+formats, context, prefill chunk size, and initial cache/request counters. It
+excludes API keys, arbitrary environment variables, and request content. File
+digests come from the installer record; telemetry does not reread multi-GB
+weights or claim a fresh content verification. Legacy model directories without
+`model.json` explicitly report unavailable assembly identity.
+
 Status snapshots retain active request progress, native/frontend queues,
 admission and memory state, thermal state, system swap, cache/state/disk counters,
 build identity, stale-status flags, and HTTP probe duration. System swap is a
 machine-wide snapshot, not process-owned memory or a measured swap stall.
+
+Samples additionally retain full expert-streaming counters (separate prefill
+and decode reads, hit rates, loads, slots and arena/staging sizes), memory plan,
+identity, and disk quota/free-space state. Prefix-cache disk traffic and expert
+reads are separate in `--report`. Process RSS is recorded for the HTTP server
+and its direct children; shared pages mean it must not be added to Metal
+allocation or treated as unique physical memory. `vm_stat` page size and
+page-in/out and swap-in/out counters are machine-wide. Sample deltas are null
+when unavailable, counters reset, or the HTTP instance changes. Two-second
+sampling improves visibility but does not measure exact stalls or guarantee
+capture of every short spike. Older JSONL remains readable, with missing fields
+reported as unavailable.
 
 ## Timing interpretation
 
@@ -75,6 +127,13 @@ zero. Logger failure counters, bounded stream parser limits, and unresolved
 spans make incomplete coverage visible. A crash may lose buffered events; this
 is performance telemetry rather than a durable transaction log.
 
+For a tuning comparison, hold artifact/runtime, sampler, filled context,
+output/checker, and cache state constant. Collect repeated matched runs, retain
+failures and cancellations, and report medians and spread with thermal/memory
+conditions. More than 5% within-build spread prevents a stable speedup claim;
+repeat or characterize it. Routine mixed OpenCode traffic is observational and
+is not a controlled benchmark.
+
 ## Validation
 
 The server suite passed 937 tests. OpenCode passed 40 unit tests and native
@@ -84,3 +143,24 @@ oversized frames, HTTP failures, missing tool hooks, privacy, and writer failure
 The older runtime server patch passed its three telemetry integration tests.
 The deployed monitor was smoke-tested against the existing live server without
 submitting inference.
+
+The 2026-10-23 performance additions passed all 939 current server tests, all
+15 installed-launcher regression tests, five compatible older-runtime telemetry
+tests, and eight monitor fixture tests. Fixtures cover missing OS data, counter
+resets, process selection, expert/identity preservation, legacy reports,
+five-minute weighted averages, idle intervals, and quiet terminal mirroring.
+The full server checks also verified explicit release of the assembly hold on
+shutdown, eliminating a file-handle warning found during validation.
+
+A real option-18 startup on isolated port 1236 verified the complete manifest,
+three successful requests including SSE, 768 tokens reused on the repeated
+prompt, two-second resource samples, and zero telemetry write failures or
+dropped events. The test used a temporary OpenCode config and stopped afterward.
+Artifacts: `build/validation/telemetry-performance-20261023/`. Initial memory
+admission refusal and an exact-output punctuation mismatch are retained there
+as diagnostics. This was a correctness smoke test, not a performance comparison.
+
+The installed five-minute monitor was also checked against live `/status`
+without submitting inference. Its readable average was displayed in the active
+launcher's terminal and verified in the profile log using local timestamps;
+the inference process and HTTP instance remained unchanged.

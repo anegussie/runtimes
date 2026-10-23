@@ -2042,6 +2042,9 @@ def main():
             vision=readiness.vision,
         )
         server.app = app
+        telemetry.run_manifest(
+            args, args.model_root, _native_command(args), backend.status, server.instance_id
+        )
         server.server_activate()
         address = f"http://{args.host}:{server.server_port}"
         context = (

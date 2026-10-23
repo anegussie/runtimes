@@ -7,10 +7,20 @@ STATUS_URL="http://${HOST}:${PORT}/status"
 LOG_DIR="${LLAMA_LOG_DIR:-$HOME/.local/state/llama-server}"
 SNAPSHOTS="$LOG_DIR/splash-status.jsonl"
 LATEST_LOG="$LOG_DIR/splash-latest.log"
+PERFORMANCE="$LOG_DIR/splash-performance.jsonl"
+SUMMARY_INTERVAL="${SPLASH_SUMMARY_INTERVAL:-300}"
+SUMMARY_BASELINE='{}'
+SUMMARY_TTY="${SPLASH_MONITOR_TTY:-}"
+if [[ -z "${SPLASH_MONITOR_TTY+x}" ]]; then
+  summary_tty_name="$(ps -o tty= -p "${SPLASH_MONITOR_OWNER_PID:-$PPID}" 2>/dev/null | tr -d ' ' || true)"
+  if [[ "$summary_tty_name" =~ ^tty(s)?[0-9]+$ ]]; then
+    SUMMARY_TTY="/dev/$summary_tty_name"
+  fi
+fi
 
 usage() {
   printf '%s\n' 'Usage: monitorsplash.sh [--once | --watch [seconds] | --snapshot | --record [seconds] | --report [hours] | --history [count] | --json | --log]'
-  printf '%s\n' '  --watch prints live status without writing to disk; --record stores one compact snapshot per interval (default 60s).'
+  printf '%s\n' '  --watch prints live status; --record samples every interval (default 60s) and logs performance summaries every 300s.'
 }
 
 positive_interval() {
@@ -42,22 +52,102 @@ print_once() {
   ' <<< "$payload"
 }
 
+log_performance_summary() {
+  local current="$1" action summary line timestamp
+  action="$(jq -nr --argjson a "$SUMMARY_BASELINE" --argjson b "$current" --argjson seconds "$SUMMARY_INTERVAL" '
+    ["pp_tokens","pp_ms","output_tokens","decode_ms"] as $keys |
+    if $b.ready != true or $b.status_stale == true or $b.instance == null or
+       any($keys[]; . as $key | ($b[$key]|type) != "number") then "skip"
+    elif $a.instance != $b.instance or $a.restarts != $b.restarts or
+         $b.ts < $a.ts or any($keys[]; . as $key | $b[$key] < $a[$key]) then "reset"
+    elif $b.ts-$a.ts >= $seconds then "emit" else "wait" end
+  ')" || return 1
+  case "$action" in
+    reset) SUMMARY_BASELINE="$current"; return 0 ;;
+    skip|wait) return 0 ;;
+  esac
+  summary="$(jq -nc --argjson a "$SUMMARY_BASELINE" --argjson b "$current" '
+    def delta($key):
+      if ($a[$key]|type) == "number" and ($b[$key]|type) == "number" and $b[$key] >= $a[$key]
+      then $b[$key]-$a[$key] else null end;
+    def rate($tokens;$ms): if $tokens != null and $ms != null and $ms>0 then 1000*$tokens/$ms else null end;
+    {schemaVersion:2,event:"performance_summary",ts:$b.ts,instance:$b.instance,restarts:$b.restarts,
+     model:$b.model,build:$b.build,context:$b.context,from_ts:$a.ts,interval_seconds:($b.ts-$a.ts),
+     timing_scope:"native_batch_stage_elapsed",interval:{
+       prefill_tokens:delta("pp_tokens"),prefill_ms:delta("pp_ms"),
+       output_tokens:delta("output_tokens"),decode_ms:delta("decode_ms"),
+       pp_tokens_per_second:rate(delta("pp_tokens");delta("pp_ms")),
+       decode_tokens_per_second:rate(delta("output_tokens");delta("decode_ms")),
+       completed:delta("completed"),failed:delta("failed"),cancelled:delta("cancelled"),
+       cached_tokens:delta("cached_tokens")},
+     lifetime:{pp_tokens_per_second:rate($b.pp_tokens;$b.pp_ms),
+       decode_tokens_per_second:rate($b.output_tokens;$b.decode_ms),completed:$b.completed},
+     ttft_p50_ms:$b.ttft_p50_ms,ttft_p95_ms:$b.ttft_p95_ms,
+     memory_pressure:$b.memory_pressure,thermal_state:$b.thermal_state,
+     status_stale:$b.status_stale}
+  ')" || return 1
+  timestamp="$(date -r "$(jq -r '.ts' <<< "$summary")" '+%Y-%m-%dT%H:%M:%S%z')" || return 1
+  line="$(jq -r --arg timestamp "$timestamp" '
+    def rate: if . == null then "idle" else "\((.*10|round)/10) tok/s" end;
+    "\($timestamp) ===== [PERF] Performance \(.interval_seconds)s (native): interval average PP=\(.interval.pp_tokens_per_second|rate) TPS=\(.interval.decode_tokens_per_second|rate); engine lifetime average PP=\(.lifetime.pp_tokens_per_second|rate) TPS=\(.lifetime.decode_tokens_per_second|rate); processed=\(.interval.prefill_tokens) generated=\(.interval.output_tokens) cached=\(.interval.cached_tokens // "n/a"); requests=\(.interval.completed // "n/a") failed=\(.interval.failed // "n/a") cancelled=\(.interval.cancelled // "n/a"); memory=\(.memory_pressure) thermal=\(.thermal_state); engine=\(.instance)/restart\(.restarts)"
+  ' <<< "$summary")" || return 1
+  printf '%s\n' "$summary" >> "$PERFORMANCE" || return 1
+  printf '%s\n' "$line" >> "$LATEST_LOG" || return 1
+  SUMMARY_BASELINE="$current"
+  if [[ "${SPLASH_MONITOR_QUIET:-0}" != "1" ]]; then
+    printf '%s\n' "$line"
+  elif [[ -n "$SUMMARY_TTY" ]]; then
+    # Quiet launcher stdout is redirected to the log. Mirror only this
+    # summary to its terminal, without duplicating the file entry.
+    printf '%s\n' "$line" 2>/dev/null >> "$SUMMARY_TTY" || true
+  fi
+}
+
 record_once() {
-  local payload probe_seconds swap_snapshot previous='{}'
+  local payload probe_seconds swap_snapshot vm_snapshot process_snapshot server_pid process_rows previous='{}'
   if ! payload="$(curl --max-time 5 -fsS -w '\n%{time_total}' "$STATUS_URL")"; then
     mkdir -p "$LOG_DIR"
     jq -cn '{schemaVersion:2,event:"status_sample_error",ts:now}' >> "$LOG_DIR/splash-status-errors.jsonl"
     return 1
   fi
   swap_snapshot="$(sysctl -n vm.swapusage 2>/dev/null || true)"
+  vm_snapshot="$(vm_stat 2>/dev/null || true)"
   probe_seconds="${payload##*$'\n'}"
   payload="${payload%$'\n'*}"
+  process_snapshot=null
+  server_pid="$(jq -r '.instance.pid // empty' <<< "$payload")"
+  if [[ "$server_pid" =~ ^[1-9][0-9]*$ ]] && process_rows="$(ps -axo pid=,ppid=,rss= 2>/dev/null)"; then
+    process_snapshot="$(awk -v owner="$server_pid" '
+      BEGIN { printf "["; separator="" }
+      $1 == owner || $2 == owner {
+        printf "%s{\"pid\":%d,\"ppid\":%d,\"rss_bytes\":%.0f}", separator,$1,$2,$3*1024; separator=","
+      }
+      END { print "]" }
+    ' <<< "$process_rows")"
+  fi
   mkdir -p "$LOG_DIR"
   if [[ -s "$SNAPSHOTS" ]]; then previous="$(tail -n 1 "$SNAPSHOTS")"; fi
-  jq -ce --argjson ts "$(date +%s)" --argjson probe_seconds "$probe_seconds" --arg swap "$swap_snapshot" '
+  jq -ce --argjson ts "$(date +%s)" --argjson probe_seconds "$probe_seconds" --arg swap "$swap_snapshot" \
+    --arg vm "$vm_snapshot" --argjson processes "$process_snapshot" --argjson previous "$previous" '
+    def vm_counters:
+      ($vm | split("\n") | map(try capture("^(?<key>Pageins|Pageouts|Swapins|Swapouts):[[:space:]]*(?<value>[0-9]+)") catch empty)
+       | map({key:(.key|ascii_downcase),value:(.value|tonumber)}) | from_entries) as $counters |
+      {page_size_bytes: ((try ($vm | capture("page size of (?<n>[0-9]+)") | .n | tonumber) catch null) // null)} + $counters;
+    vm_counters as $vm_now |
+    def vm_delta($key):
+      ($previous.system_vm[$key] // null) as $old | ($vm_now[$key] // null) as $new |
+      if $old != null and $new != null and $new >= $old then $new-$old else null end;
     {schemaVersion:2,event:"status_sample",ready:.ready,system_swap:$swap,ts:$ts,sampled_at_ms:(now*1000),probe_ms:($probe_seconds*1000),
+     system_vm:$vm_now,
+     system_vm_delta: (if $previous.instance == .instance.id and $previous.ts < $ts
+       then {interval_seconds:($ts-$previous.ts),pageins:vm_delta("pageins"),pageouts:vm_delta("pageouts"),swapins:vm_delta("swapins"),swapouts:vm_delta("swapouts")}
+       else null end),
+     process_memory:{scope:"server_and_direct_children_rss_not_unique_physical_memory",processes:$processes},
      thermal_state:.thermal_state,memory_pressure:.memory_pressure,active_requests:.active_requests,
      admission:.admission,transport:.transport,weights:.weights,
+     identity:.identity,memory_plan:.memory_plan,streamed_experts:.streamed_experts,
+     memory_governor:.memory_governor,memory_actual:.memory_actual,
+     disk:.disk,verify_rows:.verify_rows,prefill_chunk_tokens:.prefill_chunk_tokens,
      memory_current:.memory_actual.current_bytes,memory_peak:.memory_actual.peak_bytes,
      cache_bytes:.cache.bytes,kv:.kv,state:.state,
      telemetry:.telemetry,status_stale:.transport.status_stale,status_age_ms:.transport.status_age_ms,instance:.instance.id,restarts:.transport.restarts,model:.instance.model,
@@ -71,33 +161,13 @@ record_once() {
      replay_tokens:.cache.resource_replay_tokens,
      ttft_p50_ms:.metrics.ttft_ms.p50,ttft_p95_ms:.metrics.ttft_ms.p95,
      cache_hits:.cache.hits,cache_lookups:.cache.lookups,
+     cached_tokens:.cache.reused_tokens,
      denied:.memory_governor.denied_reservations,growth_allowed:.memory_governor.growth_allowed,
      host_headroom:.memory_governor.host_headroom_bytes,
      metal_failures:.metrics.metal_failures,capacity_failures:.metrics.capacity_failures,
      disk_read:.disk.read_bytes,disk_written:.disk.written_bytes}
   ' <<< "$payload" >> "$SNAPSHOTS" || return 1
-  [[ "${SPLASH_MONITOR_QUIET:-0}" == "1" ]] && return 0
-  jq -er --arg timestamp "$(date '+%Y-%m-%d %H:%M:%S %Z')" '
-    select(.ready == true and .metrics != null) |
-    "\($timestamp) engine=\(.instance.id)/restart\(.transport.restarts) Average (engine lifetime, native batch work): PP=\((.metrics.prefill_tokens_per_second*10|floor)/10) tok/s over \(.metrics.prefill_input_tokens) tokens; TPS=\((.metrics.decode_tokens_per_second*10|floor)/10) tok/s over \(.metrics.decode_output_tokens) tokens; requests=\(.requests.completed) completed/\(.requests.failed) failed; draft acceptance=\((.metrics.draft_acceptance_rate*1000|floor)/10)%; waiting native/frontend=\(.admission.waiting_memory)/\(.transport.frontend_waiting // 0); replay_tokens=\(.cache.resource_replay_tokens); SSD written=\((.disk.written_bytes/1073741824*100|floor)/100) GiB"
-  ' <<< "$payload" | {
-    if [[ -w /dev/tty ]]; then
-      tee -a "$LATEST_LOG" /dev/tty >/dev/null
-    else
-      tee -a "$LATEST_LOG" >/dev/null
-    fi
-  } || return 1
-  local current
-  current="$(tail -n 1 "$SNAPSHOTS")"
-  jq -nr --argjson a "$previous" --argjson b "$current" --arg timestamp "$(date '+%Y-%m-%d %H:%M:%S %Z')" '
-    if $a.instance == $b.instance and $a.restarts == $b.restarts and ($b.ts > ($a.ts // 0)) then
-      def delta($key): [($b[$key] - $a[$key]),0]|max;
-      "\($timestamp) Interval \($b.ts-$a.ts)s: native PP=\(if delta("pp_ms")>0 then (1000*delta("pp_tokens")/delta("pp_ms")*10|floor)/10 else 0 end) tok/s; native TPS=\(if delta("decode_ms")>0 then (1000*delta("output_tokens")/delta("decode_ms")*10|floor)/10 else 0 end) tok/s; prefill=\((delta("pp_ms")/1000*10|floor)/10)s decode=\((delta("decode_ms")/1000*10|floor)/10)s; completed=\(delta("completed")); replay_tokens=\(delta("replay_tokens")); SSD written=\((delta("disk_written")/1073741824*100|floor)/100) GiB"
-    else empty end
-  ' | {
-    if [[ -w /dev/tty ]]; then tee -a "$LATEST_LOG" /dev/tty >/dev/null
-    else tee -a "$LATEST_LOG" >/dev/null; fi
-  }
+  log_performance_summary "$(tail -n 1 "$SNAPSHOTS")"
 }
 
 report() {
@@ -120,13 +190,16 @@ report() {
           "Weighted averages over sampled interval: PP=\(if delta("pp_ms")>0 then (1000*delta("pp_tokens")/delta("pp_ms")*10|floor)/10 else 0 end) tok/s  TPS=\(if delta("decode_ms")>0 then (1000*delta("output_tokens")/delta("decode_ms")*10|floor)/10 else 0 end) tok/s  draft_acceptance=\(if delta("drafted")>0 then (100*delta("accepted")/delta("drafted")*10|floor)/10 else 0 end)%",
           "TTFT latest p50/p95=\(if $b.ttft_p50_ms == null or $b.ttft_p95_ms == null then "n/a" else "\(($b.ttft_p50_ms)|floor)/\(($b.ttft_p95_ms)|floor) ms" end)  replay_tokens=\(if $a.replay_tokens == null or $b.replay_tokens == null then "n/a" else delta("replay_tokens") end)",
           "Pressure: denied_reservations=\(delta("denied"))  latest_growth_allowed=\($b.growth_allowed)  latest_host_headroom_MiB=\(($b.host_headroom/1048576)|floor)",
-          "SSD: read_MiB=\((delta("disk_read")/1048576)|floor) written_MiB=\((delta("disk_written")/1048576)|floor)"
+          "SSD prefix cache: read_MiB=\((delta("disk_read")/1048576)|floor) written_MiB=\((delta("disk_written")/1048576)|floor)",
+          "SSD expert reads: prefill_MiB=\(if $a.streamed_experts.prefill.read_bytes != null and $b.streamed_experts.prefill.read_bytes != null then (($b.streamed_experts.prefill.read_bytes-$a.streamed_experts.prefill.read_bytes)/1048576|floor) else "n/a" end) decode_MiB=\(if $a.streamed_experts.decode.read_bytes != null and $b.streamed_experts.decode.read_bytes != null then (($b.streamed_experts.decode.read_bytes-$a.streamed_experts.decode.read_bytes)/1048576|floor) else "n/a" end)",
+          "System swap activity: swapins=\(if $a.system_vm.swapins != null and $b.system_vm.swapins >= $a.system_vm.swapins then $b.system_vm.swapins-$a.system_vm.swapins else "n/a" end) swapouts=\(if $a.system_vm.swapouts != null and $b.system_vm.swapouts >= $a.system_vm.swapouts then $b.system_vm.swapouts-$a.system_vm.swapouts else "n/a" end) (machine-wide counters)"
         ] | join("\n")
       ) | if length == 0 then "No engine run has two snapshots in this period." else .[] end
     end
   ' "$SNAPSHOTS"
 }
 
+positive_interval "$SUMMARY_INTERVAL"
 mode="${1:---once}"
 case "$mode" in
   --once|--status) print_once ;;
@@ -159,7 +232,7 @@ case "$mode" in
     count="${2:-10}"
     positive_interval "$count"
     [[ -e "$LATEST_LOG" ]] || { echo "No Splash log: $LATEST_LOG" >&2; exit 1; }
-    rg 'Done ·|Error ·|Average \(engine lifetime|Interval [0-9]+s:' "$LATEST_LOG" | tail -n "$count" || true ;;
+    rg 'Done ·|Error ·|Average \(engine lifetime|Interval [0-9]+s:|Performance [0-9]+s' "$LATEST_LOG" | tail -n "$count" || true ;;
   --log) [[ -e "$LATEST_LOG" ]] || { echo "No Splash log: $LATEST_LOG" >&2; exit 1; }; exec tail -F "$LATEST_LOG" ;;
   --help|-h) usage ;;
   *) usage >&2; exit 2 ;;

@@ -1396,7 +1396,7 @@ case "$choice" in
     trap 'exit 143' TERM
     trap 'exit 129' HUP
     if [[ -f ${RUNTIME_ROOT}/scripts/monitorsplash.sh ]]; then
-      SPLASH_MONITOR_QUIET=1 bash "${RUNTIME_ROOT}/scripts/monitorsplash.sh" --record 10 >>"$SPLASH_RUN_LOG" 2>&1 &
+      SPLASH_MONITOR_QUIET=1 bash "${RUNTIME_ROOT}/scripts/monitorsplash.sh" --record "${SPLASH_MONITOR_INTERVAL:-2}" >>"$SPLASH_RUN_LOG" 2>&1 &
       splash_monitor_pid=$!
     fi
     splash_startup_retries=0
