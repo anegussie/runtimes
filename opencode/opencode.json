@@ -4,8 +4,8 @@
   "experimental": {
     "subagent_depth": 1
   },
-  "model": "local-llama/bonsai-27b-splash",
-  "small_model": "local-llama/bonsai-27b-splash",
+  "model": "local-llama/qwen3.6-35b-a3b-iq3-xxs-splash",
+  "small_model": "local-llama/qwen3.6-35b-a3b-iq3-xxs-splash",
   "enabled_providers": [
     "local-llama"
   ],
@@ -14,7 +14,7 @@
     "keep": {
       "tokens": 1536
     },
-    "buffer": 4096
+    "buffer": 2048
   },
   "tool_output": {
     "max_lines": 100,
@@ -42,7 +42,7 @@
       "description": "Routes every request to an isolated worker so the parent context stays small",
       "prompt": "{file:__OPENCODE_CONFIG_DIR__/prompts/router.md}",
       "mode": "primary",
-      "model": "local-llama/bonsai-27b-splash",
+      "model": "local-llama/qwen3.6-35b-a3b-iq3-xxs-splash",
       "reasoningEffort": "none",
       "tools": {
         "*": false,
@@ -65,7 +65,7 @@
       "description": "Local coding agent with tools and selective delegation",
       "prompt": "{file:__OPENCODE_CONFIG_DIR__/prompts/general.md}",
       "mode": "primary",
-      "model": "local-llama/bonsai-27b-splash",
+      "model": "local-llama/qwen3.6-35b-a3b-iq3-xxs-splash",
       "reasoningEffort": "none",
       "tools": {
         "read": true,
@@ -104,7 +104,7 @@
       "description": "Long-form debugging, planning, and analysis",
       "prompt": "{file:__OPENCODE_CONFIG_DIR__/prompts/long-analysis.md}",
       "mode": "all",
-      "model": "local-llama/bonsai-27b-splash",
+      "model": "local-llama/qwen3.6-35b-a3b-iq3-xxs-splash",
       "reasoningEffort": "none",
       "tools": {
         "read": true,
@@ -143,7 +143,7 @@
       "description": "Use first for section-by-section, large-document, or multi-file work; complete one slice in a separate context and return a concise handoff",
       "prompt": "{file:__OPENCODE_CONFIG_DIR__/prompts/context-worker.md}",
       "mode": "subagent",
-      "model": "local-llama/bonsai-27b-splash",
+      "model": "local-llama/qwen3.6-35b-a3b-iq3-xxs-splash",
       "reasoningEffort": "none",
       "tools": {
         "read": true,
@@ -182,7 +182,7 @@
       "description": "Completes one assigned task in a fresh child context and reports a concise result",
       "prompt": "{file:__OPENCODE_CONFIG_DIR__/prompts/general-worker.md}",
       "mode": "subagent",
-      "model": "local-llama/bonsai-27b-splash",
+      "model": "local-llama/qwen3.6-35b-a3b-iq3-xxs-splash",
       "reasoningEffort": "none",
       "tools": {
         "read": true,
@@ -333,6 +333,13 @@
           "limit": {
             "context": 22528,
             "output": 4096
+          }
+        },
+        "qwen3.6-35b-a3b-iq3-xxs-splash": {
+          "name": "Qwen3.6 35B A3B UD-IQ3_XXS via Splash SSD expert streaming",
+          "limit": {
+            "context": 22528,
+            "output": 2048
           }
         }
       }
