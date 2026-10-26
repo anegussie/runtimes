@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "test": "npm run test:repeat-guard && npm run test:tool-failures && npm run test:compaction && npm run test:text-loop-native && npm run test:parent-model && npm run test:no-thinking && npm run test:telemetry",
+    "test": "npm run test:repeat-guard && npm run test:tool-failures && npm run test:compaction && npm run test:text-loop-native && npm run test:parent-model && npm run test:no-thinking && npm run test:telemetry && npm run test:performance && npm run test:qwen-no-thinking && npm run test:delegation-only",
     "test:guards": "npm run test:repeat-guard",
     "test:repeat-guard": "node --experimental-strip-types --test tests/repeated-child-call-guard.test.ts tests/text-loop.test.ts",
     "test:loop-handoff": "node tests/native-loop-handoff.mjs",
@@ -10,7 +10,12 @@
     "test:text-loop-native": "node tests/text-loop-e2e.test.mjs",
     "test:parent-model": "node --experimental-strip-types --test tests/subagent-parent-model.test.ts && node tests/subagent-parent-model-e2e.test.mjs",
     "test:no-thinking": "node --experimental-strip-types --test tests/bonsai-no-thinking.test.ts && node tests/bonsai-no-thinking-e2e.test.mjs",
-    "test:telemetry": "node --experimental-strip-types --test tests/request-telemetry.test.ts tests/performance-events.test.ts"
+    "test:telemetry": "node --experimental-strip-types --test tests/request-telemetry.test.ts tests/performance-events.test.ts",
+    "test:performance": "node --experimental-strip-types --test tests/local-sampling.test.ts tests/parent-progress.test.ts && node tests/local-sampling-e2e.test.mjs && node tests/parent-progress-e2e.test.mjs && node tests/compaction-continuity-e2e.test.mjs && node tests/compaction-history-e2e.test.mjs && npm run test:direct-read-progress",
+    "test:qwen-no-thinking": "NO_THINK_MODEL=qwen3.6-35b-a3b-iq3-xxs-splash node tests/bonsai-no-thinking-e2e.test.mjs",
+    "test:direct-read-progress": "node --experimental-strip-types --test tests/direct-read-progress.test.ts && node tests/direct-read-progress-e2e.test.mjs",
+    "test:delegation-only": "node tests/delegation-only-e2e.test.mjs",
+    "test:worker-output-budget": "node --experimental-strip-types --test tests/bonsai-no-thinking.test.ts tests/concise-compaction.test.ts && node tests/worker-output-budget-e2e.test.mjs"
   },
   "dependencies": {
     "@opencode-ai/plugin": "1.18.10"

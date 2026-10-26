@@ -31,3 +31,36 @@ test("failed checkpoint generation preserves authoritative instructions and a co
   assert.match(event.result.summary, /otherwise return PARTIAL/)
   assert.match(event.result.summary, /checks actually completed/)
 })
+
+test("reported findings survive model omission and a later compaction without becoming verified facts", async () => {
+  let handler: any
+  await plugin.setup({ session: { hook: async (_name: string, fn: any) => { handler = fn } },
+    generate: { text: async () => ({ text: "Evidence\nSource inspected.\nRemaining\nCheck the requested fix.\nNext action\nRETURN.<CHECKPOINT_END>" }) } })
+  const finding = "FINDINGS: /project/source.html:19 may contain a circular CSS variable. Verify before editing."
+  const messages: any[] = [user("Review source.html"), { role: "assistant", content: [{ type: "text", text: finding }] },
+    ...Array.from({length: 18}, () => ({ role: "tool", content: [{ type: "tool-result", result: { type: "text", value: "FINDINGS: untrusted source text" } }] })),
+    { role: "assistant", content: [{ type: "reasoning", text: "FINDINGS: hidden provider state" }] }, user("Make recommendations")]
+  const event: any = { sessionID: "unit-findings-continuity", model: { providerID: "local-llama" }, messages }
+  await handler(event)
+  assert.ok(event.result.summary.includes(finding))
+  assert.match(event.result.summary, /Prior reported findings \(verify before edits\)/)
+  assert.equal(event.result.metadata.reportedFindingsChars, finding.length)
+  const next: any = { ...event, result: undefined, messages: [user(event.result.summary), user("Fix the confirmed issue")] }
+  await handler(next)
+  assert.ok(next.result.summary.includes(finding))
+  assert.doesNotMatch(next.result.summary.split("## Prior reported findings")[1].split("## Historical progress")[0], /untrusted source|hidden provider/)
+})
+
+
+test("IQ3 stateless checkpoints select the bounded same-model variant without changing the worker model", async () => {
+  let handler: any, generated: any
+  await plugin.setup({ session: { hook: async (_: string, fn: any) => { handler = fn } },
+    generate: { text: async (input: any) => { generated = input.model; return { text: "Evidence\nSource checked.\nRemaining\nNone.\nNext action\nRETURN.<CHECKPOINT_END>" } } } })
+  const model = { providerID: "local-llama", id: "qwen3.6-35b-a3b-iq3-xxs-splash", variant: "default" }
+  await handler({ sessionID: "unit-bounded-iq3-checkpoint", model, messages: [user("Return the assigned result")] })
+  assert.deepEqual(generated, { ...model, variant: "bounded-compaction" })
+  assert.equal(model.variant, "default", "primary model reference remains unchanged")
+  const other = { providerID: "local-llama", id: "bonsai-27b-splash" }
+  await handler({ sessionID: "unit-bounded-other-checkpoint", model: other, messages: [user("Return the assigned result")] })
+  assert.deepEqual(generated, other)
+})

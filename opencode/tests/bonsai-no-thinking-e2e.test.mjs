@@ -19,10 +19,13 @@ const server = http.createServer(async (req, res) => {
   res.end(`data: ${JSON.stringify({ id: 'thinking-fixture', object: 'chat.completion.chunk', created: 1, model: body.model, choices: [{ index: 0, delta: { role: 'assistant', content: 'WIRE_OK' }, finish_reason: 'stop' }] })}\n\ndata: [DONE]\n\n`)
 })
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
-const model = 'local-llama/bonsai-27b-splash'
+const alias = process.env.NO_THINK_MODEL ?? 'bonsai-27b-splash'
+const model = 'local-llama/' + alias
+const ceiling = alias.includes('iq3-xxs') ? 2048 : 4096
+const titleCeiling = alias.includes('iq3-xxs') ? 64 : 128
 const config = {
   model, default_agent: 'test_agent',
-  providers: { 'local-llama': { package: 'aisdk:@ai-sdk/openai-compatible', settings: { baseURL: `http://127.0.0.1:${server.address().port}/v1` }, models: { 'bonsai-27b-splash': { name: 'Bonsai fixture', limit: { context: 24576, output: 4096 } } } } },
+  providers: { 'local-llama': { package: 'aisdk:@ai-sdk/openai-compatible', settings: { baseURL: `http://127.0.0.1:${server.address().port}/v1` }, models: { [alias]: { name: 'Local fixture', limit: { context: 24576, output: 4096 } } } } },
   agents: { test_agent: { model, mode: 'primary', system: 'Reply exactly WIRE_OK. Use no tools.', request: { body: { reasoning_effort: 'low', max_tokens: 24006 } } } },
   compaction: { auto: false },
 }
@@ -36,11 +39,12 @@ const timer = setTimeout(() => child.kill('SIGTERM'), 45000)
 try {
   const code = await new Promise(resolve => child.on('exit', resolve))
   await writeFile(join(root, 'result.json'), JSON.stringify({ code, requests, stdout, stderr }, null, 2))
-  console.log(JSON.stringify({ root, code, requests: requests.map(r => ({ reasoning_effort: r.reasoning_effort, max_tokens: r.max_tokens, thinking: r.chat_template_kwargs?.enable_thinking, title: /title/i.test(JSON.stringify(r.messages)) })) }))
+  console.log(JSON.stringify({ root, code, requests: requests.map(r => ({ reasoning_effort: r.reasoning_effort, max_tokens: r.max_tokens, thinking: r.chat_template_kwargs?.enable_thinking })) }))
   assert.equal(code, 0, stderr.slice(-2000))
   assert.ok(stdout.includes('WIRE_OK'), stdout.slice(-1200))
   assert.ok(requests.length >= 2, 'title and primary requests must both be observed')
-  assert.ok(requests.some(r => /title/i.test(JSON.stringify(r.messages))), 'title request was not exercised')
+  assert.ok(requests.some(r => r.max_tokens === titleCeiling), 'title must use its separate output ceiling')
+  assert.ok(requests.some(r => r.max_tokens === ceiling), 'primary output ceiling must remain available')
   const telemetry = (await readFile(join(root, 'telemetry/performance.jsonl'), 'utf8')).trim().split('\n').map(JSON.parse)
   const starts = telemetry.filter(e => e.event === 'llm_request_start')
   const ends = telemetry.filter(e => e.event === 'llm_request_end')
@@ -52,7 +56,7 @@ try {
   for (const r of requests) {
     assert.equal(r.reasoning_effort, 'none')
     assert.equal(r.chat_template_kwargs.enable_thinking, false)
-    assert.ok(r.max_tokens > 0 && r.max_tokens <= 4096)
+    assert.ok(r.max_tokens > 0 && r.max_tokens <= ceiling)
   }
 } finally {
   clearTimeout(timer)

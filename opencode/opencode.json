@@ -14,7 +14,7 @@
     "keep": {
       "tokens": 1536
     },
-    "buffer": 2048
+    "buffer": 4096
   },
   "tool_output": {
     "max_lines": 100,
@@ -50,7 +50,7 @@
         "question": true
       },
       "temperature": 0.7,
-      "top_p": 0.80,
+      "top_p": 0.8,
       "permission": {
         "*": "deny",
         "task": {
@@ -62,82 +62,50 @@
       }
     },
     "general": {
-      "description": "Local coding agent with tools and selective delegation",
+      "description": "Delegates every user task to one foreground worker; parent does not read or execute",
       "prompt": "{file:__OPENCODE_CONFIG_DIR__/prompts/general.md}",
       "mode": "primary",
       "model": "local-llama/qwen3.6-35b-a3b-iq3-xxs-splash",
       "reasoningEffort": "none",
       "tools": {
-        "read": true,
-        "grep": true,
-        "glob": true,
-        "list": true,
-        "edit": true,
-        "write": true,
-        "todowrite": true,
-        "bash": true,
+        "*": false,
         "task": true,
-        "skill": true,
-        "question": true,
-        "webfetch": true,
-        "websearch": true
+        "question": true
       },
       "permission": {
-        "read": "allow",
-        "grep": "allow",
-        "glob": "allow",
-        "list": "allow",
-        "edit": "allow",
-        "write": "allow",
-        "todowrite": "allow",
-        "bash": "allow",
-        "task": "allow",
-        "skill": "allow",
-        "question": "allow",
-        "webfetch": "allow",
-        "websearch": "allow"
+        "*": "deny",
+        "task": {
+          "*": "deny",
+          "context_worker": "allow",
+          "general_worker": "allow"
+        },
+        "question": "allow"
       },
       "temperature": 0.7,
-      "top_p": 0.80
+      "top_p": 0.8
     },
     "long_analysis": {
-      "description": "Long-form debugging, planning, and analysis",
-      "prompt": "{file:__OPENCODE_CONFIG_DIR__/prompts/long-analysis.md}",
+      "description": "Delegates every user task to one foreground worker; parent does not read or execute",
+      "prompt": "{file:__OPENCODE_CONFIG_DIR__/prompts/router.md}",
       "mode": "all",
       "model": "local-llama/qwen3.6-35b-a3b-iq3-xxs-splash",
       "reasoningEffort": "none",
       "tools": {
-        "read": true,
-        "grep": true,
-        "glob": true,
-        "list": true,
-        "edit": true,
-        "write": true,
-        "todowrite": true,
-        "bash": true,
+        "*": false,
         "task": true,
-        "skill": true,
-        "question": true,
-        "webfetch": true,
-        "websearch": true
+        "question": true
       },
       "permission": {
-        "read": "allow",
-        "grep": "allow",
-        "glob": "allow",
-        "list": "allow",
-        "edit": "allow",
-        "write": "allow",
-        "todowrite": "allow",
-        "bash": "allow",
-        "task": "allow",
-        "skill": "allow",
-        "question": "allow",
-        "webfetch": "allow",
-        "websearch": "allow"
+        "*": "deny",
+        "task": {
+          "*": "deny",
+          "context_worker": "allow",
+          "general_worker": "allow"
+        },
+        "question": "allow"
       },
       "temperature": 0.7,
-      "top_p": 0.80
+      "top_p": 0.8
     },
     "context_worker": {
       "description": "Use first for section-by-section, large-document, or multi-file work; complete one slice in a separate context and return a concise handoff",
@@ -176,7 +144,7 @@
         "websearch": "allow"
       },
       "temperature": 0.7,
-      "top_p": 0.80
+      "top_p": 0.8
     },
     "general_worker": {
       "description": "Completes one assigned task in a fresh child context and reports a concise result",
@@ -215,7 +183,7 @@
         "websearch": "allow"
       },
       "temperature": 0.7,
-      "top_p": 0.80
+      "top_p": 0.8
     }
   },
   "provider": {
@@ -339,7 +307,16 @@
           "name": "Qwen3.6 35B A3B UD-IQ3_XXS via Splash SSD expert streaming",
           "limit": {
             "context": 22528,
-            "output": 2048
+            "output": 4096
+          },
+          "variants": {
+            "bounded-compaction": {
+              "max_tokens": 2048,
+              "reasoning_effort": "none",
+              "chat_template_kwargs": {
+                "enable_thinking": false
+              }
+            }
           }
         }
       }

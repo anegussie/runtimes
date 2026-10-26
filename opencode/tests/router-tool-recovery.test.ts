@@ -78,3 +78,40 @@ test("workers, other providers, title/compaction requests and successful tools a
   await r.hooks.context(e)
   assert.deepEqual(Object.keys(e.tools), ["subagent", "question"])
 })
+
+
+test("all configured primary profiles share delegation-only recovery and serial tool calls", async () => {
+  for (const agent of ["general", "long_analysis"]) {
+    const r = await runtime()
+    const e = r.event([user("Fix source.py"), error("read")], agent)
+    await r.hooks.context(e)
+    assert.deepEqual(Object.keys(e.tools), ["subagent"])
+    assert.match(e.messages.at(-1).content[0].text, /Never call execute, shell, bash, read/)
+    assert.equal((await r.http({ tools: [] })).parallel_tool_calls, false)
+  }
+})
+
+
+test("one native incomplete delegation requires only its offered correction; success and terminal failures release it", async () => {
+  const r = await runtime()
+  const incomplete = error("subagent", { error: { type: "tool.input-incomplete", message: "The tool call was not executed because the output token limit (stop reason: length) was reached before you could complete the arguments." } })
+  const messages = [user("Implement one fix in the selected file"), incomplete]
+  await r.hooks.context(r.event(messages))
+  const body = { tools: [{ type: "function", function: { name: "subagent", parameters: schema.input } }, { type: "function", function: { name: "question", parameters: schema.input } }] }
+  const repaired = await r.http(body)
+  assert.deepEqual(repaired.tool_choice, { type: "function", function: { name: "subagent" } })
+  assert.equal(repaired.tools.length, 1)
+  assert.match(JSON.stringify(messages), /read -> edit -> verify/)
+  for (const result of [
+    { role: "tool", content: [{ type: "tool-result", name: "subagent", result: { type: "text", value: "STATUS: DONE" } }] },
+    error("subagent", "Subagent cancelled: CHILD_LOOP_ABORTED; earlier incomplete delegation"),
+    incomplete,
+  ]) {
+    await r.hooks.context(r.event([user("Implement"), incomplete, result]))
+    assert.equal((await r.http(body)).tool_choice, undefined)
+  }
+  await r.hooks.context(r.event([user("Implement"), incomplete], "router", "local-llama", {}))
+  assert.equal((await r.http(body)).tool_choice, "none")
+  await r.hooks.context(r.event([user("Implement"), incomplete, user("Only answer this question")]))
+  assert.equal((await r.http(body)).tool_choice, undefined)
+})

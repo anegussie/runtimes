@@ -3,7 +3,8 @@ import { homedir, tmpdir } from "node:os"
 import { join, resolve } from "node:path"
 
 type Entry = { path: string; revision: string; start: number; end: number; partial: boolean; visits: number; limit?: number }
-type Ledger = { version: number; reads: Entry[]; checkpoint?: string; loopStop?: string }
+export type Slice = { request: string; key: string; path: string; revision: string; objective: string; target: string; child: string; handoff: string; truncated?: boolean; done: boolean }
+type Ledger = { version: number; reads: Entry[]; checkpoint?: string; loopStop?: string; slices?: Slice[] }
 const root = () => process.env.OPENCODE_PERFORMANCE_DIAGNOSTIC === "1"
   ? process.env.OPENCODE_PROGRESS_TEST_DIR ?? join(tmpdir(), `opencode-progress-diagnostic-${process.pid}`)
   : join(homedir(), ".local/state/opencode/progress")
@@ -88,6 +89,23 @@ export async function rememberLoopStop(id: string, handoff: string) {
   const next = prior.catch(() => {}).then(async () => {
     const ledger = await loadLedger(id)
     ledger.loopStop = handoff.slice(0, 3200)
+    await mkdir(root(), { recursive: true, mode: 0o700 })
+    const temp = `${path}.${process.pid}.tmp`
+    await writeFile(temp, JSON.stringify(ledger), { mode: 0o600 })
+    await rename(temp, path)
+  })
+  pending.set(id, next)
+  try { await next } finally { if (pending.get(id) === next) pending.delete(id) }
+}
+
+// Parent-session-local worker provenance. This stores handoffs, never source.
+export async function rememberSlice(id: string, slice: Slice) {
+  const path = location(id)
+  if (!path) return
+  const prior = pending.get(id) ?? Promise.resolve()
+  const next = prior.catch(() => {}).then(async () => {
+    const ledger = await loadLedger(id)
+    ledger.slices = [...(ledger.slices ?? []).filter(row => row.key !== slice.key || row.revision !== slice.revision), slice].slice(-24)
     await mkdir(root(), { recursive: true, mode: 0o700 })
     const temp = `${path}.${process.pid}.tmp`
     await writeFile(temp, JSON.stringify(ledger), { mode: 0o600 })

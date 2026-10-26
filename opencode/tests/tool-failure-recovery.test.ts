@@ -6,6 +6,7 @@ process.env.OPENCODE_PERFORMANCE_DIAGNOSTIC = "1"
 const user = (text = "Fix /project/example.html") => ({ role: "user", content: [{ type: "text", text }] })
 const result = (name = "subagent", message = 'Invalid arguments for tool "subagent":\n- prompt: Missing key\n\nArguments provided:\n{}', type = "error-text", native = false) => ({ role: "tool", content: [{ type: "tool-result", name, result: { type, value: native ? { error: { type: "tool.execution", message } } : message } }] })
 const success = (name = "subagent") => result(name, "STATUS: DONE", "text")
+const unsupportedGrep = (name = "shell", type = "text") => result(name, "grep: invalid option -- P\nusage: grep [-abcdDEFGHhIiJLlMmnOopqRSsUVvwXxZz]\n", type)
 async function runtime() {
   let hook: any
   await plugin.setup({ session: { hook: async (_name: string, fn: any) => { hook = fn } } })
@@ -98,4 +99,36 @@ test("productive calls, question fallback, other errors/providers, and repeated 
   const e = r.event([user(), result(), result()])
   await r.hook(e); const count = e.messages.length; await r.hook(e)
   assert.equal(e.messages.length, count)
+})
+
+test("masked BSD grep failure receives one portable correction without losing worker tools", async () => {
+  const r = await runtime()
+  for (const type of ["text", "error-text"]) {
+    const e = r.event([user(), unsupportedGrep("shell", type)], "general_worker")
+    await r.hook(e)
+    assert.ok(e.tools.shell && e.tools.read)
+    assert.match(e.messages.at(-1).content[0].text, /SHELL_PORTABILITY_RECOVERY/)
+    assert.match(e.messages.at(-1).content[0].text, /matching pattern semantics/)
+    assert.match(e.messages.at(-1).content[0].text, /Do not blindly replace/)
+  }
+  const repeated = r.event([user(), unsupportedGrep(), unsupportedGrep()])
+  await r.hook(repeated)
+  assert.deepEqual(repeated.tools, {})
+  const corrected = r.event([user(), unsupportedGrep(), success("shell")])
+  await r.hook(corrected)
+  assert.equal(corrected.messages.length, 3)
+})
+
+test("grep diagnostic in user, assistant, file reads, cloud providers or unrelated output is not control state", async () => {
+  const r = await runtime()
+  for (const messages of [[user(unsupportedGrep().content[0].result.value)], [user(), { role: "assistant", content: unsupportedGrep().content }], [user(), unsupportedGrep("read")], [user(), result("shell", "grep: invalid option -- P", "text")], [user(), result("shell", "no matches", "text")]]) {
+    const e = r.event(messages)
+    const before = JSON.stringify(e)
+    await r.hook(e)
+    assert.equal(JSON.stringify(e), before)
+  }
+  const e = r.event([user(), unsupportedGrep()], "general_worker", "cloud")
+  const before = JSON.stringify(e)
+  await r.hook(e)
+  assert.equal(JSON.stringify(e), before)
 })

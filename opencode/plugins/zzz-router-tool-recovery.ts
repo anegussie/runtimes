@@ -1,10 +1,24 @@
 import { record } from "./lib/telemetry.ts"
 
-type Dispatch = { final: boolean; recovery: boolean; definitions: any[] }
+type Dispatch = { final: boolean; recovery: boolean; repair?: string; definitions: any[] }
 const errorMessage = (result: any) => {
   if (!["error", "error-text", "error-json"].includes(result?.type)) return ""
   const value = result.value
   return typeof value === "string" ? value : value?.error?.message ?? value?.message ?? ""
+}
+const parentAgents = new Set(["router", "general", "long_analysis"])
+function incompleteDelegation(messages: any[]): boolean {
+  const boundary = messages.findLastIndex(message => message.role === "user")
+  let count = 0
+  for (const message of messages.slice(boundary + 1)) {
+    if (message.role !== "tool" || !Array.isArray(message.content)) continue
+    for (const part of message.content) {
+      if (part.type !== "tool-result" || !["subagent", "task"].includes(part.name ?? part.tool)) continue
+      if (/^The tool call was not executed because the output token limit\b/.test(errorMessage(part.result))) count++
+      else count = 0
+    }
+  }
+  return count === 1
 }
 const unavailable = (messages: any[]) => {
   let boundary = -1
@@ -27,8 +41,8 @@ export default {
       const final = names.length === 0
       // Workers also need a grammar-enforced text-only failure handoff.
       // Their ordinary requests and tool sets remain unchanged.
-      if (event.agent !== "router" && !final) { dispatch.delete(event.sessionID); return }
-      const recovery = event.agent === "router" && !final && unavailable(event.messages ?? [])
+      if (!parentAgents.has(event.agent) && !final) { dispatch.delete(event.sessionID); return }
+      const recovery = parentAgents.has(event.agent) && !final && unavailable(event.messages ?? [])
       if (recovery) {
         const tool = event.tools.subagent ?? event.tools.task
         event.tools = tool ? { [event.tools.subagent ? "subagent" : "task"]: tool } : {}
@@ -38,11 +52,17 @@ export default {
           event.messages.push({ role: "system", content: [{ type: "text", text }] })
         await record({ event: "router_tool_recovery", sessionID: event.sessionID, action: "bounded_delegation_or_plain_clarification" })
       }
+      const repair = parentAgents.has(event.agent) && !final && incompleteDelegation(event.messages ?? [])
+        ? (event.tools.subagent ? "subagent" : event.tools.task ? "task" : undefined) : undefined
+      if (repair) {
+        event.tools = { [repair]: event.tools[repair] }
+        event.messages.push({ role: "system", content: [{ type: "text", text: "ROUTER_DELEGATION_REPAIR: The previous delegation never executed because its arguments were truncated. Issue one compact corrected delegation now, using the selected target and original authorized objective. Include only objective, exact target, relevant findings, and done/check criteria; no recap, scripts, file contents or data tables. For an authorized implementation assign one concrete improvement as read -> edit -> verify in the same worker. Return changed paths and actual checks, not verbatim source. A second incomplete call ends with PARTIAL; do not retry terminal worker, permission, resource or loop failures." }] })
+      }
       const previous = dispatch.get(event.sessionID)
       const definitions = Object.entries(event.tools ?? {}).map(([name, tool]: any) => ({ type: "function", function: {
         name, description: tool.description ?? "", parameters: tool.input ?? { type: "object", properties: {} },
       } }))
-      dispatch.set(event.sessionID, { final: Object.keys(event.tools ?? {}).length === 0, recovery,
+      dispatch.set(event.sessionID, { final: Object.keys(event.tools ?? {}).length === 0, recovery, repair,
         definitions: definitions.length ? definitions : previous?.definitions ?? [] })
       // Bound bookkeeping only; this is not an admission or tool-call limit.
       if (dispatch.size > 128) dispatch.delete(dispatch.keys().next().value!)
@@ -61,6 +81,11 @@ export default {
           parameters: { type: "object", properties: {}, additionalProperties: false },
         } }]
         body.tool_choice = "none"
+      } else if (state.repair && body.tools?.some((tool: any) => tool.function?.name === state.repair)) {
+        // Only one actual incomplete delegation gets a required correction.
+        // Ordinary replies/questions and terminal handoffs remain optional.
+        body.tools = body.tools.filter((tool: any) => tool.function?.name === state.repair)
+        body.tool_choice = { type: "function", function: { name: state.repair } }
       }
       // With an advertised tool list, Splash constrains generated function
       // names when parallel calls are disabled. Optional text remains allowed.

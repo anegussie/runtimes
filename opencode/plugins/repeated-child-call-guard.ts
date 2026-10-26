@@ -13,7 +13,8 @@ const describeError = (value: unknown) => {
   try { return JSON.stringify(value ?? "unknown error") } catch { return String(value) }
 }
 
-// This guard only watches child sessions. It has no total tool-call budget.
+// Tool repetition is child-only; prose stream repetition covers parents too.
+// Neither guard has a total tool-call budget.
 export default {
   id: "repeated-child-call-guard",
   async setup(ctx: any) {
@@ -53,9 +54,14 @@ export default {
       if (event.kind !== "primary" || event.model?.providerID !== "local-llama"
         || !new URL(event.request.url).pathname.endsWith("/chat/completions")
         || !event.response.ok || !event.response.body
-        || !event.response.headers.get("content-type")?.includes("text/event-stream")
-        || !(await isChildSession(event.sessionID))) return
+        || !event.response.headers.get("content-type")?.includes("text/event-stream")) return
+      const child = await isChildSession(event.sessionID)
       event.response = guardTextStream(event.response, async () => {
+        if (!child) {
+          const handoff = `STATUS: PARTIAL\nPARENT_LOOP_ABORTED: repeated action promises without tool calls; provider stream stopped.\nCHANGED/CHECKS: This response issued no tool calls and proves no new edit or verification. Earlier worker findings remain in this session.\nNEXT: Report the unfinished task and the actual blocker; do not claim completion or automatically relaunch the failed scope.`
+          await record({ event: "parent_loop_stopped", sessionID: event.sessionID, reason: "repeated_text_without_tools" })
+          return handoff
+        }
         const handoff = `STATUS: PARTIAL\nCHILD_LOOP_ABORTED: repeated text without tool calls; provider stream stopped.\nSession: ${event.sessionID}\nCHANGED/CHECKS: This response issued no tool calls; it proves no new edit or verification. Earlier work, if any, remains recorded in this session.\nNEXT: Report the unfinished assignment and saved findings. Do not claim completion or automatically relaunch the failed scope.`
         await preserveStop(event.sessionID, handoff)
         await record({ event: "child_loop_stopped", sessionID: event.sessionID, reason: "repeated_text_without_tools" })

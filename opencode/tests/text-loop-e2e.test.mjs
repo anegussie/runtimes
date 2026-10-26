@@ -8,7 +8,7 @@ import http from 'node:http'
 // Real OpenCode, deterministic streaming provider, isolated state and files.
 const base = new URL('..', import.meta.url).pathname
 const original = JSON.parse(await readFile(join(base, 'opencode.json'), 'utf8'))
-for (const mode of ['repeated-text', 'productive']) {
+for (const mode of process.env.TEXT_LOOP_CASE ? [process.env.TEXT_LOOP_CASE] : ['repeated-text', 'parent-repeated-text', 'productive']) {
   const root = await realpath(await mkdtemp(join(tmpdir(), 'opencode-text-loop-native-')))
   const configDir = join(root, 'config/opencode'), project = join(root, 'project')
   await mkdir(join(configDir, 'plugins'), { recursive: true }); await mkdir(project)
@@ -22,6 +22,16 @@ for (const mode of ['repeated-text', 'productive']) {
     const payload = JSON.parse(raw), text = JSON.stringify(payload.messages)
     const worker = text.includes('TEXT_LOOP_WORKER'), parent = text.includes('TEXT_LOOP_PARENT')
     let call, content = 'Fixture title'
+    if (parent && mode === 'parent-repeated-text') {
+      parentCalls++
+      res.writeHead(200, { 'content-type': 'text/event-stream' })
+      const timer = setInterval(() => {
+        res.write(frame({ content: 'I need to read the file to understand its current structure before implementing changes.\n' })); sent++
+        if (sent >= 90) { clearInterval(timer); res.end(frame({}, 'stop') + 'data: [DONE]\n\n') }
+      }, 10)
+      res.on('close', () => { clearInterval(timer); cancelled = sent < 90 })
+      return
+    }
     if (worker) {
       workerCalls++
       if (mode === 'repeated-text') {
@@ -70,8 +80,14 @@ for (const mode of ['repeated-text', 'productive']) {
     await writeFile(join(root, 'result.json'), JSON.stringify(result, null, 2))
     console.log(JSON.stringify({ mode, root, code, parentCalls, workerCalls, sent, cancelled, parentStopped }))
     assert.equal(code, 0, stderr.slice(-1800))
-    assert.equal(parentCalls, 2)
-    if (mode === 'repeated-text') {
+    assert.equal(parentCalls, mode === 'parent-repeated-text' ? 1 : 2)
+    if (mode === 'parent-repeated-text') {
+      assert.equal(workerCalls, 0)
+      assert.equal(cancelled, true, 'parent provider generation did not stop early')
+      assert.match(stdout, /PARENT_LOOP_ABORTED/)
+      assert.match(stdout, /STATUS: PARTIAL/)
+      await assert.rejects(readFile(artifact))
+    } else if (mode === 'repeated-text') {
       assert.equal(workerCalls, 1)
       assert.equal(cancelled, true, 'provider generation did not stop early')
       assert.equal(parentStopped, true, 'parent did not enter a constrained failure handoff')

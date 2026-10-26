@@ -46,14 +46,16 @@ test("tool argument deltas, reasoning deltas, and content after a real tool call
     assert.equal(await guardTextStream(new Response(raw), async () => { throw Error("unexpected stop") }).text(), raw)
   }
 })
-test("response hook scopes interception to local child primary SSE and persists its stop reason", async () => {
+test("response hook scopes interception to local primary SSE and preserves child stop reasons", async () => {
   const hooks: any = {}
   await plugin.setup({ tool: { hook: async () => {} }, session: { hook: async (name: string, fn: any) => { hooks[name] = fn }, get: async ({ sessionID }: any) => ({ parentID: sessionID === "unit-text-child" ? "parent" : undefined }) } })
   const event = () => ({ sessionID: "unit-text-child", kind: "primary", model: { providerID: "local-llama" }, request: new Request("http://localhost/v1/chat/completions"), response: new Response(chunk({ content: loop }), { headers: { "content-type": "text/event-stream" } }) })
-  for (const change of [{ sessionID: "unit-parent" }, { kind: "compaction" }, { model: { providerID: "other" } }, { response: new Response("no SSE") }]) {
+  for (const change of [{ kind: "compaction" }, { model: { providerID: "other" } }, { response: new Response("no SSE") }]) {
     const e = { ...event(), ...change }; const before = e.response
     await hooks["http.response"](e); assert.equal(e.response, before)
   }
+  const parent = { ...event(), sessionID: "unit-parent" }; await hooks["http.response"](parent)
+  assert.match(await parent.response.text(), /PARENT_LOOP_ABORTED/)
   const e = event(); await hooks["http.response"](e)
   assert.match(await e.response.text(), /CHILD_LOOP_ABORTED/)
   assert.match((await loadLedger(e.sessionID)).loopStop!, /no new edit or verification/)
