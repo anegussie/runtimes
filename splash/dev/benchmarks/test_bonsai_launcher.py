@@ -74,14 +74,14 @@ print('Ready test server',flush=True)
         }
         for name in list(self.env):
             if (
-                name.startswith("SPLASH_BONSAI_")
+                name.startswith(("SPLASH_BONSAI_", "SPLASH_QWEN36_"))
                 and name != "SPLASH_BONSAI_STARTUP_RETRY_DELAY"
             ):
                 del self.env[name]
 
-    def run_launcher(self, **overrides):
+    def run_launcher(self, choice="14", **overrides):
         return subprocess.run(
-            ["bash", LAUNCHER, "--direct", "14"],
+            ["bash", LAUNCHER, "--direct", choice],
             env={**self.env, **overrides},
             capture_output=True,
             text=True,
@@ -93,6 +93,8 @@ print('Ready test server',flush=True)
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         args = json.loads((self.root / "argv.json").read_text())
         self.assertIn("--persistent-cache", args)
+        self.assertIn("--language-only", args)
+        self.assertNotIn("--max-image-pixels", args)
         self.assertEqual(args[args.index("--max-context") + 1], "24K")
         self.assertEqual(args[args.index("--prefill-chunk-tokens") + 1], "512")
         self.assertEqual(args[args.index("--max-cache-disk") + 1], "8589934592")
@@ -192,6 +194,152 @@ print('Ready test server',flush=True)
         pid = int((self.root / "server.pid").read_text())
         with self.assertRaises(ProcessLookupError):
             os.kill(pid, 0)
+
+
+    def test_option19_iq3_profile_is_independent_of_option18(self):
+        r = self.run_launcher(
+            "19",
+            SPLASH_QWEN36_MAX_CONTEXT="invalid",
+            SPLASH_QWEN36_MAX_TOKENS="invalid",
+            SPLASH_QWEN36_PERSISTENT_CACHE="0",
+            SPLASH_QWEN36_CACHE_DIR=str(self.root / "option18-cache"),
+        )
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        args = json.loads((self.root / "argv.json").read_text())
+        for flag, value in {
+            "--model": "unsloth/Qwen3.6-35B-A3B-GGUF:UD-IQ3_XXS",
+            "--served-model-name": "qwen3.6-35b-a3b-iq3-xxs-splash",
+            "--max-context": "80K",
+            "--max-image-pixels": "1048576",
+            "--expert-memory": "auto",
+            "--max-memory": "8G",
+            "--kv-format": "int8",
+            "--state-format": "bf16",
+            "--max-active-requests": "1",
+            "--prefill-chunk-tokens": "512",
+            "--max-cache-disk": "2147483648",
+            "--default-reasoning-effort": "none",
+            "--cache-dir": str(
+                pathlib.Path.home() / "Library/Caches/Splash/qwen36-option19-iq3-xxs"
+            ),
+        }.items():
+            self.assertEqual(args[args.index(flag) + 1], value, flag)
+        self.assertIn("--persistent-cache", args)
+        self.assertNotIn("--language-only", args)
+        config = json.loads(self.config.read_text())
+        self.assertEqual(config["model"], "local-llama/qwen3.6-35b-a3b-iq3-xxs-splash")
+        self.assertEqual(
+            config["provider"]["local-llama"]["models"][
+                "qwen3.6-35b-a3b-iq3-xxs-splash"
+            ]["limit"],
+            {"context": 79872, "output": 4096},
+        )
+        self.assertEqual(config["compaction"]["buffer"], 4096)
+        model = config["provider"]["local-llama"]["models"]["qwen3.6-35b-a3b-iq3-xxs-splash"]
+        self.assertTrue(model["attachment"])
+        self.assertEqual(model["modalities"], {"input": ["text", "image"], "output": ["text"]})
+        self.assertIn("Vision enabled:", r.stdout)
+        self.assertTrue(
+            (self.root / "logs/qwen3.6-35b-a3b-iq3-xxs-splash-latest.log").is_symlink()
+        )
+
+    def test_option19_interactive_selection_and_overrides(self):
+        r = subprocess.run(
+            ["bash", LAUNCHER],
+            input="19\n",
+            env={
+                **self.env,
+                "SPLASH_QWEN36_IQ3_MAX_CONTEXT": "16K",
+                "SPLASH_QWEN36_IQ3_OPENCODE_CONTEXT": "12288",
+                "SPLASH_QWEN36_IQ3_MAX_TOKENS": "3072",
+                "SPLASH_QWEN36_IQ3_MAX_CACHE_DISK": "0",
+            },
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("19) Qwen3.6 35B A3B UD-IQ3_XXS", r.stdout)
+        args = json.loads((self.root / "argv.json").read_text())
+        self.assertEqual(args[args.index("--max-context") + 1], "16K")
+        self.assertNotIn("--persistent-cache", args)
+        self.assertNotIn("--cache-dir", args)
+        config = json.loads(self.config.read_text())
+        self.assertEqual(
+            config["provider"]["local-llama"]["models"][
+                "qwen3.6-35b-a3b-iq3-xxs-splash"
+            ]["limit"],
+            {"context": 12288, "output": 3072},
+        )
+
+    def test_option19_invalid_settings_do_not_mutate_config(self):
+        before = self.config.read_bytes()
+        for overrides in (
+            {"SPLASH_QWEN36_IQ3_MAX_CONTEXT": "81K"},
+            {"SPLASH_QWEN36_IQ3_OPENCODE_CONTEXT": "79873"},
+            {"SPLASH_QWEN36_IQ3_MAX_TOKENS": "79872"},
+            {"SPLASH_QWEN36_IQ3_MAX_CACHE_DISK": "9G"},
+            {"SPLASH_QWEN36_IQ3_PERSISTENT_CACHE": "2"},
+        ):
+            with self.subTest(overrides=overrides):
+                r = self.run_launcher("19", **overrides)
+                self.assertNotEqual(r.returncode, 0)
+                self.assertEqual(self.config.read_bytes(), before)
+                self.assertFalse((self.root / "attempts").exists())
+
+    def test_option19_iq3_persistence_across_repeated_launches(self):
+        alias = "qwen3.6-35b-a3b-iq3-xxs-splash"
+        config = json.loads(self.config.read_text())
+        config["provider"]["local-llama"]["models"][alias] = {
+            "name": "Existing IQ3",
+            "limit": {"context": 22528, "output": 4096},
+            "variants": {
+                "bounded-compaction": {"max_tokens": 2048},
+                "custom": {"max_tokens": 128},
+            },
+            "options": {"top_k": 19},
+        }
+        config["agent"]["context_worker"] = {
+            "model": "local-llama/old", "temperature": 0.37,
+        }
+        self.config.write_text(json.dumps(config))
+        previous = None
+        for _ in range(2):
+            result = self.run_launcher("19")
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            config = json.loads(self.config.read_text())
+            model = config["provider"]["local-llama"]["models"][alias]
+            self.assertIn("bounded-compaction", model.get("variants", {}))
+            self.assertEqual(model["variants"]["custom"], {"max_tokens": 128})
+            self.assertEqual(model["options"], {"top_k": 19})
+            self.assertEqual(model["limit"], {"context": 79872, "output": 4096})
+            self.assertEqual(config["compaction"]["buffer"], 4096)
+            self.assertEqual(config["agent"]["context_worker"]["temperature"], 0.37)
+            bounded = model["variants"]["bounded-compaction"]
+            self.assertEqual(bounded["max_tokens"], 2048)
+            self.assertEqual(bounded["reasoning_effort"], "none")
+            self.assertFalse(bounded["chat_template_kwargs"]["enable_thinking"])
+            if previous is not None:
+                self.assertEqual(config, previous)
+            previous = config
+
+    def test_option19_iq3_smaller_output_overrides_and_small_context(self):
+        alias = "qwen3.6-35b-a3b-iq3-xxs-splash"
+        for output in (512, 1024, 3072):
+            with self.subTest(output=output):
+                result = self.run_launcher("19", SPLASH_QWEN36_IQ3_MAX_TOKENS=str(output))
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                config = json.loads(self.config.read_text())
+                model = config["provider"]["local-llama"]["models"][alias]
+                self.assertEqual(model["limit"]["output"], output)
+                self.assertEqual(config["compaction"]["buffer"], output)
+                self.assertEqual(model["variants"]["bounded-compaction"]["max_tokens"], min(2048, output))
+        result = self.run_launcher("19", SPLASH_QWEN36_IQ3_MAX_CONTEXT="4K")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        config = json.loads(self.config.read_text())
+        model = config["provider"]["local-llama"]["models"][alias]
+        self.assertEqual(model["limit"], {"context": 2048, "output": 1024})
+        self.assertEqual(config["compaction"]["buffer"], 1024)
 
 
 if __name__ == "__main__":

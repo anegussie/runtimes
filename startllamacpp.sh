@@ -13,6 +13,16 @@ LFM_8B_MODEL="$HOME/.lmstudio/models/unsloth/LFM2.5-8B-A1B-GGUF/LFM2.5-8B-A1B-UD
 BONSAI_27B_MODEL="$HOME/.lmstudio/models/prism-ml/Ternary-Bonsai-2-27B-gguf/Ternary-Bonsai-2-27B-PTQ1_0.gguf"
 SPLASH_BONSAI_MODEL_ID="prism-ml/Ternary-Bonsai-2-27B-gguf:PTQ1_0"
 SPLASH_BONSAI_ALIAS="bonsai-27b-splash"
+SPLASH_BONSAI_DISPLAY_NAME="Ternary Bonsai 2 27B PTQ1_0 via Splash (non-thinking, int8 KV)"
+SPLASH_QWEN36_IQ3_MODEL_ID="unsloth/Qwen3.6-35B-A3B-GGUF:UD-IQ3_XXS"
+SPLASH_QWEN36_IQ3_MAX_CONTEXT="${SPLASH_QWEN36_IQ3_MAX_CONTEXT:-80K}"
+SPLASH_QWEN36_IQ3_OPENCODE_CONTEXT="${SPLASH_QWEN36_IQ3_OPENCODE_CONTEXT:-auto}"
+splash_qwen36_iq3_default_output=0
+[[ -n "${SPLASH_QWEN36_IQ3_MAX_TOKENS:-}" ]] || splash_qwen36_iq3_default_output=1
+SPLASH_QWEN36_IQ3_MAX_TOKENS="${SPLASH_QWEN36_IQ3_MAX_TOKENS:-4096}"
+SPLASH_QWEN36_IQ3_MAX_CACHE_DISK="${SPLASH_QWEN36_IQ3_MAX_CACHE_DISK:-2G}"
+SPLASH_QWEN36_IQ3_PERSISTENT_CACHE="${SPLASH_QWEN36_IQ3_PERSISTENT_CACHE:-1}"
+SPLASH_QWEN36_IQ3_CACHE_DIR="${SPLASH_QWEN36_IQ3_CACHE_DIR:-$HOME/Library/Caches/Splash/qwen36-option19-iq3-xxs}"
 SPLASH_BONSAI_MAX_CONTEXT="${SPLASH_BONSAI_MAX_CONTEXT:-24K}"
 SPLASH_BONSAI_OPENCODE_CONTEXT="${SPLASH_BONSAI_OPENCODE_CONTEXT:-auto}"
 splash_bonsai_default_output=0
@@ -21,6 +31,7 @@ SPLASH_BONSAI_MAX_TOKENS="${SPLASH_BONSAI_MAX_TOKENS:-4096}"
 SPLASH_BONSAI_MAX_CACHE_DISK="${SPLASH_BONSAI_MAX_CACHE_DISK:-8G}"
 SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT="${SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT:-60}"
 SPLASH_BONSAI_PREFILL_CHUNK_TOKENS="${SPLASH_BONSAI_PREFILL_CHUNK_TOKENS:-512}"
+SPLASH_BONSAI_STATE_FORMAT="${SPLASH_BONSAI_STATE_FORMAT:-bf16}"
 SPLASH_BONSAI_MAX_ACTIVE_REQUESTS="${SPLASH_BONSAI_MAX_ACTIVE_REQUESTS:-1}"
 SPLASH_BONSAI_STARTUP_RETRY_DELAY="${SPLASH_BONSAI_STARTUP_RETRY_DELAY:-30}"
 SPLASH_BONSAI_STARTUP_MAX_RETRIES="${SPLASH_BONSAI_STARTUP_MAX_RETRIES:-2}"
@@ -161,6 +172,12 @@ print_models() {
   echo "   Memory pressure monitor: Splash controls admission/recovery; 24K requires room for other apps"
   echo "   Source: ${SPLASH_BONSAI_MODEL_ID}"
   echo "   Monitor: bash "${RUNTIME_ROOT}/scripts/monitorsplash.sh" --once (or --report 24)"
+  echo "19) Qwen3.6 35B A3B UD-IQ3_XXS - Splash SSD expert streaming (downloads on first run)${splash_status}"
+  echo "   ${SPLASH_QWEN36_IQ3_MAX_CONTEXT} server context | up to ${SPLASH_QWEN36_IQ3_MAX_TOKENS} worker output tokens (parent up to 2048) | 8 GiB Metal budget | automatic expert RAM cache / SSD reads"
+  echo "   INT8 KV | BF16 state | 512-token prefill chunks | one active request | reasoning off | DFlash2"
+  echo "   Vision: at most 1,048,576 resized pixels per image (4096 patches; about 1024x1024)"
+  echo "   Source: ${SPLASH_QWEN36_IQ3_MODEL_ID}"
+  echo "   Separate option-19 prefix cache: ${SPLASH_QWEN36_IQ3_MAX_CACHE_DISK} | persistent: ${SPLASH_QWEN36_IQ3_PERSISTENT_CACHE}"
 }
 
 # Check length before arithmetic so huge decimal overrides cannot wrap.
@@ -316,11 +333,11 @@ prepare_splash_run() {
 
   mkdir -p "$log_dir"
   run_id="$(date '+%Y%m%d-%H%M%S')"
-  SPLASH_RUN_LOG="$log_dir/bonsai-27b-splash-$run_id.log"
+  SPLASH_RUN_LOG="$log_dir/${SPLASH_BONSAI_ALIAS}-$run_id.log"
   : > "$SPLASH_RUN_LOG"
   export SPLASH_TELEMETRY_PATH="${SPLASH_TELEMETRY_PATH:-$SPLASH_RUN_LOG.jsonl}"
   ln -sfn "$SPLASH_RUN_LOG" "$log_dir/splash-latest.log"
-  ln -sfn "$SPLASH_RUN_LOG" "$log_dir/bonsai-27b-splash-latest.log"
+  ln -sfn "$SPLASH_RUN_LOG" "$log_dir/${SPLASH_BONSAI_ALIAS}-latest.log"
   echo "Run log: $SPLASH_RUN_LOG"
   echo "Status: http://${HOST}:${PORT}/status"
   echo "Press Ctrl-C in this Terminal to stop it."
@@ -583,8 +600,9 @@ sync_opencode_splash() {
 
   temp_path="$(mktemp "${config_path}.tmp.XXXXXX")"
   if ! jq --arg model "$model_id" \
+    --arg alias "$SPLASH_BONSAI_ALIAS" \
+    --arg display_name "$SPLASH_BONSAI_DISPLAY_NAME" \
     --arg base_url "http://${HOST}:${PORT}/v1" \
-    --arg opencode_config_dir "$(dirname "$config_path")" \
     --argjson context "$SPLASH_BONSAI_OPENCODE_CONTEXT" \
     --argjson output "$SPLASH_BONSAI_MAX_TOKENS" \
     '.provider["local-llama"].options.baseURL = $base_url |
@@ -594,11 +612,6 @@ sync_opencode_splash() {
        if (.value | type) == "object" and ((.value.model // "") | startswith("local-llama/"))
        then .value.model = $model else . end
      )) |
-     .agent |= with_entries(
-       if .key == "router" or .key == "general" or .key == "long_analysis" or
-          .key == "context_worker" or .key == "general_worker"
-       then .value.reasoningEffort = "none" else . end
-     ) |
      .agent.router.tools.question = true |
      .agent.router.permission.question = "allow" |
      .agent.router.temperature = 0.7 |
@@ -611,6 +624,11 @@ sync_opencode_splash() {
      .agent.context_worker.top_p = 0.80 |
      .agent.general_worker.temperature = (.agent.general_worker.temperature // 0.7) |
      .agent.general_worker.top_p = 0.80 |
+     .agent |= with_entries(
+       if .key == "router" or .key == "general" or .key == "long_analysis" or
+          .key == "context_worker" or .key == "general_worker"
+       then .value.reasoningEffort = "none" else . end
+     ) |
      .compaction = ((.compaction // {}) + {
        auto: true, keep: {tokens: ([1536, (($context - $output) / 2 | floor)] | min)}, buffer: $output
      }) |
@@ -619,17 +637,25 @@ sync_opencode_splash() {
      .experimental = ((.experimental // {}) + {subagent_depth: 1}) |
      del(.subagent_depth) |
      .tool_output = ((.tool_output // {}) + {max_lines: 100, max_bytes: 8192}) |
-     .provider["local-llama"].models["bonsai-27b-splash"] = {
-       name: "Ternary Bonsai 2 27B PTQ1_0 via Splash (non-thinking, int8 KV)",
-       limit: {context: $context, output: $output}
-     }' "$config_path" >"$temp_path"; then
+     .provider["local-llama"].models[$alias] |= ((. // {}) + {
+       name: $display_name,
+       limit: ((.limit // {}) + {context: $context, output: $output})
+     }) |
+     if $alias == "qwen3.6-35b-a3b-iq3-xxs-splash" then
+       .provider["local-llama"].models[$alias].attachment = true |
+       .provider["local-llama"].models[$alias].modalities = {input: ["text", "image"], output: ["text"]} |
+       .provider["local-llama"].models[$alias].variants["bounded-compaction"] |= ((. // {}) + {
+         max_tokens: ([2048, $output] | min), reasoning_effort: "none",
+         chat_template_kwargs: ((.chat_template_kwargs // {}) + {enable_thinking: false})
+       })
+     else . end' "$config_path" >"$temp_path"; then
     rm -f "$temp_path"
     echo "Failed to update OpenCode model selection." >&2
     return 1
   fi
   chmod 600 "$temp_path"
   mv "$temp_path" "$config_path"
-  echo "OpenCode model synchronized: $model_id (Splash, PTQ1_0, int8 KV)"
+  echo "OpenCode model synchronized: $model_id (Splash, int8 KV)"
 }
 
 stop_llamacpp() {
@@ -711,7 +737,7 @@ usage() {
 Usage:
   startllamacpp.sh                  Select a model, or choose 9 to stop serving
   startllamacpp.sh --watch [1-7|10] Start a watchdog-managed server
-  startllamacpp.sh --direct [1-8|10|14] Start the selected server without the watchdog
+  startllamacpp.sh --direct [1-8|10|14|19] Start the selected server without the watchdog
   startllamacpp.sh --hermes [1-7]  Start a model and its matching Hermes profile
   startllamacpp.sh --list           List model choices
 
@@ -770,32 +796,32 @@ if (( DIRECT_LAUNCH == 1 || HERMES_LAUNCH == 1 )) && [[ -n "$DIRECT_CHOICE" ]]; 
   choice="$DIRECT_CHOICE"
 else
   print_models
-  if ! read -r -p "Enter choice (1-10 or 14; 9 stops): " choice; then
+  if ! read -r -p "Enter choice (1-10, 14 or 19; 9 stops): " choice; then
     echo "No model choice received." >&2
     exit 2
   fi
 fi
 
 case "$choice" in
-  1|2|3|4|5|6|7|8|10|14) ;;
+  1|2|3|4|5|6|7|8|10|14|19) ;;
   9)
     stop_llamacpp
     exit $?
     ;;
   *)
-    echo "Invalid choice: $choice (expected 1-10 or 14; 9 stops)." >&2
+    echo "Invalid choice: $choice (expected 1-10, 14 or 19; 9 stops)." >&2
     exit 2
     ;;
 esac
 
-if [[ "$choice" == "8" || "$choice" == "10" || "$choice" == "14" ]]; then
+if [[ "$choice" == "8" || "$choice" == "10" || "$choice" == "14" || "$choice" == "19" ]]; then
   if (( HERMES_LAUNCH == 1 )); then
-    echo "Options 8, 10, and 14 do not use hermeslocal profiles; run them from the interactive menu or with --direct." >&2
+    echo "Options 8, 10, 14 and 19 do not use hermeslocal profiles; run them from the interactive menu or with --direct." >&2
     exit 2
   fi
   # Keep the reasoning-only profile direct; MTP option 10 is supervised by the
   # watchdog unless the caller explicitly requests --direct.
-  if [[ "$choice" == "8" || "$choice" == "14" ]]; then
+  if [[ "$choice" == "8" || "$choice" == "14" || "$choice" == "19" ]]; then
     DIRECT_LAUNCH=1
   fi
 fi
@@ -1308,21 +1334,45 @@ case "$choice" in
       --log-level INFO
     ;;
 
-  14)
+  14|19)
+    splash_model_args=()
+    splash_vision_args=(--language-only)
+    if [[ "$choice" == "19" ]]; then
+      SPLASH_BONSAI_MODEL_ID="$SPLASH_QWEN36_IQ3_MODEL_ID"
+      SPLASH_BONSAI_ALIAS="qwen3.6-35b-a3b-iq3-xxs-splash"
+      SPLASH_BONSAI_DISPLAY_NAME="Qwen3.6 35B A3B UD-IQ3_XXS via Splash SSD expert streaming"
+      SPLASH_BONSAI_MAX_CONTEXT="$SPLASH_QWEN36_IQ3_MAX_CONTEXT"
+      SPLASH_BONSAI_OPENCODE_CONTEXT="$SPLASH_QWEN36_IQ3_OPENCODE_CONTEXT"
+      SPLASH_BONSAI_MAX_TOKENS="$SPLASH_QWEN36_IQ3_MAX_TOKENS"
+      splash_bonsai_default_output="$splash_qwen36_iq3_default_output"
+      SPLASH_BONSAI_MAX_CACHE_DISK="$SPLASH_QWEN36_IQ3_MAX_CACHE_DISK"
+      SPLASH_BONSAI_PERSISTENT_CACHE="$SPLASH_QWEN36_IQ3_PERSISTENT_CACHE"
+      SPLASH_BONSAI_CACHE_DIR="$SPLASH_QWEN36_IQ3_CACHE_DIR"
+      SPLASH_BONSAI_STATE_FORMAT=bf16
+      SPLASH_BONSAI_PREFILL_CHUNK_TOKENS=512
+      SPLASH_BONSAI_MAX_ACTIVE_REQUESTS=1
+      splash_model_args=(--expert-memory auto --max-memory 8G)
+    fi
+    if [[ "$choice" == "19" ]]; then
+      splash_vision_args=(--max-image-pixels 1048576)
+    fi
+    splash_context_max=24576
+    [[ "$choice" != "19" ]] || splash_context_max=81920
+    splash_client_context_max="$((splash_context_max - 2048))"
     if ! splash_context_limit="$(splash_context_tokens "$SPLASH_BONSAI_MAX_CONTEXT")" ||
-       (( splash_context_limit < 4096 || splash_context_limit > 24576 )); then
-      echo "SPLASH_BONSAI_MAX_CONTEXT must be 4096-24576 tokens (e.g. 16K or 24K)." >&2
+       (( splash_context_limit < 4096 || splash_context_limit > splash_context_max )); then
+      echo "Splash context must be 4096-${splash_context_max} tokens for option $choice." >&2
       exit 1
     fi
     if [[ "$SPLASH_BONSAI_OPENCODE_CONTEXT" == "auto" ]]; then
       SPLASH_BONSAI_OPENCODE_CONTEXT="$((splash_context_limit - 2048))"
     fi
-    if ! splash_uint_in_range "$SPLASH_BONSAI_OPENCODE_CONTEXT" 2 22528 ||
+    if ! splash_uint_in_range "$SPLASH_BONSAI_OPENCODE_CONTEXT" 2 "$splash_client_context_max" ||
        (( SPLASH_BONSAI_OPENCODE_CONTEXT >= splash_context_limit )); then
-      echo "SPLASH_BONSAI_OPENCODE_CONTEXT must be auto or 2-22528 tokens, smaller than the server context." >&2
+      echo "SPLASH_BONSAI_OPENCODE_CONTEXT must be auto or 2-${splash_client_context_max} tokens for option $choice, smaller than the server context." >&2
       exit 1
     fi
-    # Preserve small-context launches while giving the normal 24K profile
+    # Preserve small-context launches while giving the normal profile
     # enough output for complete tool arguments. Explicit overrides stay exact.
     if (( splash_bonsai_default_output && SPLASH_BONSAI_OPENCODE_CONTEXT <= SPLASH_BONSAI_MAX_TOKENS )); then
       SPLASH_BONSAI_MAX_TOKENS="$((SPLASH_BONSAI_OPENCODE_CONTEXT / 2))"
@@ -1335,6 +1385,10 @@ case "$choice" in
       echo "SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT must be 1-4294967295 seconds." >&2
       exit 1
     fi
+    case "$SPLASH_BONSAI_STATE_FORMAT" in
+      fp32|bf16) ;;
+      *) echo "SPLASH_BONSAI_STATE_FORMAT must be fp32 or bf16." >&2; exit 1 ;;
+    esac
     if ! splash_uint_in_range "$SPLASH_BONSAI_PREFILL_CHUNK_TOKENS" 128 2048 ||
        (( SPLASH_BONSAI_PREFILL_CHUNK_TOKENS % 128 != 0 )); then
       echo "SPLASH_BONSAI_PREFILL_CHUNK_TOKENS must be a multiple of 128 in [128, 2048]." >&2
@@ -1377,6 +1431,9 @@ case "$choice" in
     done
     prepare_splash_run
     sync_opencode_splash
+    if [[ "$choice" == "19" ]]; then
+      printf 'Vision enabled: up to 1048576 resized pixels / 4096 patches per image (about 1024x1024).\n' | timestamp_log_stream | tee -a "$SPLASH_RUN_LOG"
+    fi
     printf 'Native inference concurrency: %s (FIFO queue across clients; no worker tool-call budget)\n' "$SPLASH_BONSAI_MAX_ACTIVE_REQUESTS" | timestamp_log_stream | tee -a "$SPLASH_RUN_LOG"
     printf 'Memory safety: run ONE OpenCode job at a time; multiple chats create queue waits and memory replay. Close unused memory-heavy apps before long jobs.\n' | timestamp_log_stream | tee -a "$SPLASH_RUN_LOG"
     printf 'Launcher: model=%s alias=%s binary=%s server_context=%s client_context=%s output=%s reasoning=none kv=int8 prefill_chunk=%s cache_disk=%s cache_mode=%s resource_wait=%ss host=%s port=%s\n' \
@@ -1411,14 +1468,16 @@ case "$choice" in
         --served-model-name "$SPLASH_BONSAI_ALIAS" \
         --host "$HOST" \
         --port "$PORT" \
-        --language-only \
+        "${splash_vision_args[@]}" \
         --default-reasoning-effort none \
         --kv-format int8 \
+        --state-format "$SPLASH_BONSAI_STATE_FORMAT" \
         --prefill-chunk-tokens "$SPLASH_BONSAI_PREFILL_CHUNK_TOKENS" \
         --resource-wait-timeout "$SPLASH_BONSAI_RESOURCE_WAIT_TIMEOUT" \
         --max-active-requests "$SPLASH_BONSAI_MAX_ACTIVE_REQUESTS" \
         --max-context "$SPLASH_BONSAI_MAX_CONTEXT" \
         --max-cache-disk "$splash_cache_disk_limit" \
+        ${splash_model_args[@]+"${splash_model_args[@]}"} \
         ${splash_cache_args[@]+"${splash_cache_args[@]}"} \
         >&3 2>&1 &
       splash_server_pid=$!
