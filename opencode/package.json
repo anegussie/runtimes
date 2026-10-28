@@ -1,10 +1,10 @@
 {
   "type": "module",
   "scripts": {
-    "test": "npm run test:repeat-guard && npm run test:tool-failures && npm run test:compaction && npm run test:text-loop-native && npm run test:parent-model && npm run test:no-thinking && npm run test:telemetry && npm run test:performance && npm run test:qwen-no-thinking && npm run test:delegation-only",
+    "test": "npm run test:repeat-guard && npm run test:loop-handoff && npm run test:tool-failures && npm run test:compaction && npm run test:text-loop-native && npm run test:parent-model && npm run test:no-thinking && npm run test:telemetry && npm run test:performance && npm run test:qwen-no-thinking && npm run test:delegation-only",
     "test:guards": "npm run test:repeat-guard",
     "test:repeat-guard": "node --experimental-strip-types --test tests/repeated-child-call-guard.test.ts tests/text-loop.test.ts",
-    "test:loop-handoff": "node tests/native-loop-handoff.mjs",
+    "test:loop-handoff": "node tests/native-loop-handoff.mjs && LOOP_PATTERN=overlap node tests/native-loop-handoff.mjs",
     "test:tool-failures": "node --experimental-strip-types --test tests/tool-failure-recovery.test.ts tests/router-tool-recovery.test.ts && node tests/tool-failure-e2e.test.mjs",
     "test:compaction": "node --experimental-strip-types --test tests/concise-compaction.test.ts",
     "test:text-loop-native": "node tests/text-loop-e2e.test.mjs",

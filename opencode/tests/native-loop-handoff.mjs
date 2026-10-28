@@ -7,16 +7,19 @@ import http from "node:http"
 
 // Exercise native OpenCode with deterministic model responses and isolated
 // state. This never sends an inference request to the user's Splash server.
+const overlap = process.env.LOOP_PATTERN === "overlap"
+const pluginRoot = process.env.LOOP_PLUGIN_DIR || resolve("plugins")
 const root = await mkdtemp(join(tmpdir(), "opencode-native-loop-"))
 const configDir = join(root, "config", "opencode")
 await mkdir(configDir, { recursive: true })
 await mkdir(join(configDir, "plugins"), { recursive: true })
-for (const name of ["repeated-child-call-guard.ts", "read-window-default.ts", "lib"]) await cp(resolve("plugins", name), join(configDir, "plugins", name), { recursive: true })
+for (const name of ["repeated-child-call-guard.ts", "read-window-default.ts", "lib"]) await cp(resolve(pluginRoot, name), join(configDir, "plugins", name), { recursive: true })
 const source = join(root, "tutorial.md")
-await writeFile(source, "# Example 1\nAn integrating factor is missing.\n")
+await writeFile(source, overlap ? "# Example 1\nAn integrating factor is missing.\n" + Array.from({ length: 28 }, (_, i) => `Stable source line ${i + 3}.`).join("\n") + "\n" : "# Example 1\nAn integrating factor is missing.\n")
 let childCalls = 0
 let parentCalls = 0
 let parentContext = ""
+let warningSeen = false
 let toolsSeen = []
 const server = http.createServer(async (req, res) => {
   let body = ""
@@ -34,13 +37,18 @@ const server = http.createServer(async (req, res) => {
   let content
   let call
   if (worker) {
+    warningSeen ||= JSON.stringify(payload.messages).includes("REVIEW_EVIDENCE_STALLED")
     childCalls++
-    if (childCalls <= 4) call = { name: "read", input: { path: source, limit: 22 } }
+    if (overlap && childCalls <= 16) {
+      call = childCalls === 1 ? { name: "read", input: { path: source, offset: 1, limit: 20 } }
+        : childCalls % 2 === 0 ? { name: "grep", input: { path: source, pattern: ["factor", "Example", "missing", "factor|Example"][Math.floor(childCalls / 2) % 4], literal: false } }
+        : { name: "read", input: { path: source, offset: 2 + Math.floor(childCalls / 2) % 7, limit: 9 } }
+    } else if (!overlap && childCalls <= 4) call = { name: "read", input: { path: source, limit: 22 } }
     else content = "STATUS: PARTIAL. Unexpectedly continued beyond the repeated-read guard."
   } else if (++parentCalls === 1) {
     call = { name: names.includes("subagent") ? "subagent" : "task", input: names.includes("subagent")
-      ? { agent: "context_worker", description: "Reproduce cyclic reread", prompt: `Read only ${source}. Return the known missing integrating-factor finding.` }
-      : { subagent_type: "context_worker", description: "Reproduce cyclic reread", prompt: `Read only ${source}. Return the known missing integrating-factor finding.` } }
+      ? { agent: "context_worker", description: "Reproduce cyclic reread", prompt: overlap ? `OBJECTIVE: Review Example 1 and find the missing integrating-factor reasoning.\nTARGET: ${source} lines 1-20\nDONE WHEN: Return evidence and any missing verification.\nOUT OF SCOPE: edits or writes.` : `Read only ${source}. Return the known missing integrating-factor finding.` }
+      : { subagent_type: "context_worker", description: "Reproduce cyclic reread", prompt: overlap ? `OBJECTIVE: Review Example 1 and find the missing integrating-factor reasoning.\nTARGET: ${source} lines 1-20\nDONE WHEN: Return evidence and any missing verification.\nOUT OF SCOPE: edits or writes.` : `Read only ${source}. Return the known missing integrating-factor finding.` } }
   } else {
     parentContext = JSON.stringify(payload.messages)
     content = "STATUS: PARTIAL. Repeated-read loop stopped. No edits or checks completed."
@@ -73,12 +81,14 @@ const timer = setTimeout(() => child.kill("SIGTERM"), 30000)
 const code = await new Promise(resolve => child.on("exit", resolve))
 clearTimeout(timer)
 await new Promise(resolve => server.close(resolve))
-await writeFile(join(root, "run.json"), JSON.stringify({ code, childCalls, parentCalls, toolsSeen, stdout, stderr, parentContext }, null, 2))
+await writeFile(join(root, "run.json"), JSON.stringify({ code, childCalls, parentCalls, toolsSeen, stdout, stderr, parentContext, warningSeen }, null, 2))
 console.log(`Native fixture artifacts: ${root}`)
 assert.equal(code, 0, stderr.slice(-2500) || stdout.slice(-2500))
-assert.equal(childCalls, 4, `unexpected worker calls; tools=${JSON.stringify(toolsSeen)}`)
+if (overlap) assert.ok(childCalls <= 12, `review stagnation continued for ${childCalls} calls instead of stopping unchanged evidence`)
+else assert.equal(childCalls, 4, `unexpected worker calls; tools=${JSON.stringify(toolsSeen)}`)
+if (overlap) assert.ok(warningSeen, "worker did not receive a recovery warning before cancellation")
 assert.equal(parentCalls, 2)
-assert.ok(parentContext.includes("CHILD_LOOP_ABORTED") && parentContext.includes("repeated-read loop stopped"), "Native parent did not receive the loop reason")
+assert.ok(parentContext.includes("CHILD_LOOP_ABORTED") && parentContext.includes(overlap ? "review stagnation" : "repeated-read loop stopped"), "Native parent did not receive the loop reason")
 assert.match(parentContext, /STATUS: PARTIAL/)
 assert.doesNotMatch(stdout, /"name":"question"/)
-console.log("Native OpenCode: fourth repeated read interrupted child; parent received explicit partial loop handoff.")
+console.log(overlap ? "Native OpenCode: overlapping review research stopped with factual PARTIAL handoff." : "Native OpenCode: fourth repeated read interrupted child; parent received explicit partial loop handoff.")

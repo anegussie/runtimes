@@ -33,6 +33,103 @@ async function runtime(parent = true, failure?: string) {
   return { id, hooks, call, interrupts }
 }
 
+async function review(r: Awaited<ReturnType<typeof runtime>>, path: string, objective = "Review the filtering behavior") {
+  const event = { sessionID: r.id, messages: [{ role: "user", content: [{ type: "text", text:
+    `OBJECTIVE: ${objective}\nTARGET: ${path} lines 1-100\nDONE WHEN: Return findings and missing verification.` }] }] }
+  await r.hooks.context(event)
+  return JSON.stringify(event.messages)
+}
+async function reviewFile(r: Awaited<ReturnType<typeof runtime>>) {
+  const path = join(process.env.OPENCODE_PROGRESS_TEST_DIR!, `${r.id}.md`)
+  await writeFile(path, Array.from({ length: 100 }, (_, i) => `source ${i + 1}`).join("\n"))
+  await review(r, path)
+  return path
+}
+const readRange = (r: Awaited<ReturnType<typeof runtime>>, path: string, start: number, end: number, metadata: any = {}) =>
+  r.call("read", { path, offset: start, limit: end - start + 1 },
+    Array.from({ length: end - start + 1 }, (_, i) => `${start + i}: source ${start + i}`).join("\n") +
+      `\n[Output truncated. Continue reading with offset: ${end + 1}]`,
+    { returnedStart: start, returnedEnd: end, partialLine: false, byteLimited: false, truncated: true, ...metadata })
+const unchanged = (r: Awaited<ReturnType<typeof runtime>>, path: string, i: number) => i % 2
+  ? r.call("grep", { path, pattern: `rephrased-${i}`, literal: false }, `Found 1 matches\n${path}:\n  Line 1: source 1`, { matches: 1, truncated: false })
+  : readRange(r, path, 2 + i, 3 + i)
+
+test("review warns on unchanged overlap/search evidence and stops only continued stagnation", async () => {
+  const r = await runtime(), path = await reviewFile(r)
+  await readRange(r, path, 1, 30)
+  for (let i = 0; i < 4; i++) await unchanged(r, path, i)
+  assert.match(await review(r, path), /REVIEW_EVIDENCE_STALLED/)
+  assert.deepEqual(r.interrupts, [])
+  for (let i = 4; i < 6; i++) await unchanged(r, path, i)
+  await assert.rejects(unchanged(r, path, 6), /CHILD_LOOP_ABORTED: review stagnation/)
+  assert.deepEqual(r.interrupts, [r.id])
+  const part = { type: "tool-result", name: "subagent", result: { type: "error-text", value: `Subagent cancelled (sessionID: ${r.id})` } }
+  await r.hooks.context({ messages: [{ content: [part] }] })
+  assert.match(part.result.value, /review stagnation/)
+  assert.match(part.result.value, /did not authorize edits/)
+  assert.match(part.result.value, /LAST COMPLETED TOOL/)
+})
+
+test("review has no total tool budget and accepts new read ranges and match locations", async () => {
+  const r = await runtime(), path = await reviewFile(r)
+  for (let i = 1; i <= 25; i++) {
+    await readRange(r, path, i, i)
+    await r.call("grep", { path, pattern: `fresh-${i}`, literal: false }, `${path}:${50 + i}: new match`)
+  }
+  assert.deepEqual(r.interrupts, [])
+  assert.doesNotMatch(await review(r, path), /REVIEW_EVIDENCE_STALLED/)
+})
+
+test("grep locations do not claim that the full source line was delivered", async () => {
+  const r = await runtime(), path = await reviewFile(r)
+  await readRange(r, path, 1, 30)
+  await r.call("grep", { path, pattern: "line-90", literal: false }, `${path}:90: short match snippet`)
+  await readRange(r, path, 2, 3)
+  await r.call("grep", { path, pattern: "rephrased-90", literal: false }, `${path}:90: short match snippet`)
+  await readRange(r, path, 4, 5)
+  await readRange(r, path, 90, 90)
+  assert.doesNotMatch(await review(r, path), /REVIEW_EVIDENCE_STALLED/)
+})
+
+test("source changes, a new assigned review lens, and compaction allow necessary rereads", async () => {
+  for (const reset of ["revision", "lens", "compaction"]) {
+    const r = await runtime(), path = await reviewFile(r)
+    await readRange(r, path, 1, 30)
+    for (let i = 0; i < 4; i++) await unchanged(r, path, i)
+    if (reset === "revision") await writeFile(path, "changed source revision\n")
+    if (reset === "lens") await review(r, path, "Review accessibility instead of filtering")
+    if (reset === "compaction") { await r.hooks.compaction({ sessionID: r.id }); await review(r, path) }
+    await readRange(r, path, 5, 6)
+    assert.deepEqual(r.interrupts, [], reset)
+    assert.doesNotMatch(await review(r, path, reset === "lens" ? "Review accessibility instead of filtering" : undefined), /REVIEW_EVIDENCE_STALLED/, reset)
+  }
+})
+
+test("partial delivery and truncated search results do not prove review stagnation", async () => {
+  for (const partial of ["byteLimited", "partialLine", "grep"]) {
+    const r = await runtime(), path = await reviewFile(r)
+    await readRange(r, path, 1, 30)
+    for (let i = 0; i < 4; i++) await unchanged(r, path, i)
+    if (partial === "grep") await r.call("grep", { path, pattern: "partial" }, "No matches found", { matches: 0, truncated: true })
+    else await readRange(r, path, 10, 11, { [partial]: true })
+    assert.doesNotMatch(await review(r, path), /REVIEW_EVIDENCE_STALLED/)
+    assert.deepEqual(r.interrupts, [])
+  }
+})
+
+test("behavioral checks reset research stagnation and implementation tasks are excluded", async () => {
+  const r = await runtime(), path = await reviewFile(r)
+  await readRange(r, path, 1, 30)
+  for (let i = 0; i < 4; i++) await unchanged(r, path, i)
+  await r.call("shell", { command: "node check.cjs" }, { stdout: "Behavior verified", exit: 0 })
+  assert.doesNotMatch(await review(r, path), /REVIEW_EVIDENCE_STALLED/)
+  for (const objective of ["Review and fix the filtering behavior", "Review the filtering; implement corrections"]) {
+    await review(r, path, objective)
+    for (let i = 0; i < 10; i++) await unchanged(r, path, i)
+  }
+  assert.deepEqual(r.interrupts, [])
+})
+
 test("replays cyclic rereads through child cancellation into the parent model context", async () => {
   const r = await runtime()
   const path = join(process.env.OPENCODE_PROGRESS_TEST_DIR!, "guide.md")
