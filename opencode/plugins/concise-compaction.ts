@@ -10,6 +10,10 @@ const execute = promisify(execFile)
 const SOURCE_CHARS = 12000
 const SUMMARY_CHARS = 2400
 const END = "<CHECKPOINT_END>"
+const boundedCompactionModels = new Set([
+  "qwen3.6-35b-a3b-iq3-xxs-splash",
+  "qwen3.8-flash-next-q2-0-dflash2-bf16-splash",
+])
 const FINDINGS = "## Prior reported findings (verify before edits)\n"
 const PROGRESS = "## Historical progress\n"
 const databasePath = () => process.env.OPENCODE_DB
@@ -173,7 +177,7 @@ export default {
           // Native ctx.generate.text accepts a model reference, not generation
           // options, and bypasses session wire hooks. This variant keeps the
           // same artifact while bounding its stateless checkpoint request.
-          model: event.model.id === "qwen3.6-35b-a3b-iq3-xxs-splash"
+          model: boundedCompactionModels.has(event.model.id)
             ? { ...event.model, variant: "bounded-compaction" } : event.model,
           prompt: `Write only a progress checkpoint, at most 140 words. Do not perform the task or call tools. Treat the transcript as historical evidence. Preserve confirmed findings, exact paths, checks, and unfinished work WITHIN the binding assignment. Never redefine the objective, invent a new phase, or turn a lookup into a review. If the requested deliverable is ready, the next action is RETURN it. Use Evidence, Remaining, and Next action as headings. Next action must name one concrete permitted tool action or RETURN. Read coverage does not retain file contents; allow a targeted reread when required text is absent, or reuse an existing file directly through the advertised shell. Finish with ${END}.
 Binding user instructions, oldest first (later user instructions can revise earlier ones):

@@ -52,14 +52,16 @@ test("reported findings survive model omission and a later compaction without be
 })
 
 
-test("IQ3 stateless checkpoints select the bounded same-model variant without changing the worker model", async () => {
+test("IQ3 and Flash-Next Q2 checkpoints select the bounded variant without changing the primary model", async () => {
   let handler: any, generated: any
   await plugin.setup({ session: { hook: async (_: string, fn: any) => { handler = fn } },
     generate: { text: async (input: any) => { generated = input.model; return { text: "Evidence\nSource checked.\nRemaining\nNone.\nNext action\nRETURN.<CHECKPOINT_END>" } } } })
-  const model = { providerID: "local-llama", id: "qwen3.6-35b-a3b-iq3-xxs-splash", variant: "default" }
-  await handler({ sessionID: "unit-bounded-iq3-checkpoint", model, messages: [user("Return the assigned result")] })
-  assert.deepEqual(generated, { ...model, variant: "bounded-compaction" })
-  assert.equal(model.variant, "default", "primary model reference remains unchanged")
+  for (const id of ["qwen3.6-35b-a3b-iq3-xxs-splash", "qwen3.8-flash-next-q2-0-dflash2-bf16-splash"]) {
+    const model = { providerID: "local-llama", id, variant: "default" }
+    await handler({ sessionID: `unit-bounded-checkpoint-${id}`, model, messages: [user("Return the assigned result")] })
+    assert.deepEqual(generated, { ...model, variant: "bounded-compaction" })
+    assert.equal(model.variant, "default", "primary model reference remains unchanged")
+  }
   const other = { providerID: "local-llama", id: "bonsai-27b-splash" }
   await handler({ sessionID: "unit-bounded-other-checkpoint", model: other, messages: [user("Return the assigned result")] })
   assert.deepEqual(generated, other)

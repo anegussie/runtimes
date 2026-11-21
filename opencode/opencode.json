@@ -318,6 +318,38 @@
               }
             }
           }
+        },
+        "qwen3.8-flash-next-q2-0-dflash2-bf16-splash": {
+          "name": "Qwen3.8 Flash-Next GSQ-RCO Q2_0 with local BF16 DFlash2 draft via Splash",
+          "limit": {
+            "context": 131072,
+            "output": 16384,
+            "input": 114688
+          },
+          "reasoning": true,
+          "options": {
+            "reasoning_effort": "xhigh",
+            "chat_template_kwargs": {
+              "enable_thinking": true
+            }
+          },
+          "variants": {
+            "bounded-compaction": {
+              "max_tokens": 2048,
+              "reasoning_effort": "none",
+              "chat_template_kwargs": {
+                "enable_thinking": false
+              }
+            }
+          },
+          "modalities": {
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         }
       }
     }
